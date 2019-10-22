@@ -18,6 +18,8 @@ date: 2019-10-22
 
 &#160; &#160; &#160; &#160;也就是说，我们只要把文章写成[Markdown](https://en.wikipedia.org/wiki/Markdown)格式的文件，Hexo就能够生成我们的博客站网页。如果把这些网页放到服务器上，就能实现从互联网访问我们的博客的功能了。当然除此之外，Hexo也有其他功能，如部署、插件等，但是*one step at a time*，先尝试一下Hexo的基本功能吧。
 
+<!--more-->
+
 ## Hexo的安装与基本使用
 
 &#160; &#160; &#160; &#160;Hexo是基于Node.js的，所以要先安装Node.js。这个过程比较简单（Windows系统下可以在[官网](https://nodejs.org/en/)下载安装包，MacOS推荐使用Homebrew安装，Linux下也可以使用相应的包管理器安装）。安装好Node.js后，Hexo的安装只需要一条命令就可以了：
@@ -98,4 +100,4 @@ $ git clone https://github.com/theme-next/hexo-theme-next themes/next
 
 #### NexT主题的配置
 
-NexT主题也支持一些配置项，它的配置文件在该主题的目录下。
+&#160; &#160; &#160; &#160;NexT主题也支持一些配置项，它的配置文件在该主题的目录下。这里可以设置的项包括作者头像、社交网络地址、邮箱地址等，除此以外还有侧边栏的目录设置等都可以进行个性化配置。

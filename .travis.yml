@@ -15,7 +15,7 @@ after_script:
   - git config user.email"lk0219@foxmail.com"
   - git add .
   - git commit -m "$TRAVIS_BUILD_NUMBER"
-  - git push --force --set-upstream --quiet "https://nuimrfSUqU:${CO_TOKEN}@e.coding.net/litiezhu/litiezhu.coding.me.git":master master
+  - git push --force --set-upstream --quiet "https://nuimrfSUqU:${CO_TOKEN}@e.coding.net/litiezhu/litiezhu.coding.me.git" master
   - rm -rf ./.git
   - cd ..
 

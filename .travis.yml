@@ -16,7 +16,7 @@ after_script:
   - git add .
   - git commit -m "$TRAVIS_BUILD_NUMBER"
   - git push --force --set-upstream --quiet "https://nuimrfSUqU:${CO_TOKEN}@e.coding.net/litiezhu/litiezhu.coding.me.git":master master
- - rm -rf ./.git
+  - rm -rf ./.git
   - cd ..
 
 deploy:

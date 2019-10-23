@@ -14,11 +14,11 @@ after_script:
   - git config user.name "litiezhu"
   - git config user.email"lk0219@foxmail.com"
   - git add .
-  - git git commit -m "$TRAVIS_BUILD_NUMBER"
+  - git commit -m "$TRAVIS_BUILD_NUMBER"
   - git push --force --quiet "https://nuimrfSUqU:${CO_TOKEN}@e.coding.net/litiezhu/litiezhu.coding.me.git"master:master
   - rm -rf ./.git
   - cd ..
-  
+
 deploy:
   provider: pages
   skip-cleanup: true

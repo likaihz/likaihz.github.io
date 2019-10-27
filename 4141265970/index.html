@@ -61,7 +61,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;4141265970&#x2F;init-page.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;4141265970&#x2F;project-structure.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;4141265970&#x2F;default-next.png">
-<meta property="og:updated_time" content="2019-10-23T08:33:41.465Z">
+<meta property="og:updated_time" content="2019-10-27T06:32:12.308Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;4141265970&#x2F;hexo-version.png">
   <link rel="canonical" href="http://yoursite.com/4141265970/">
@@ -209,7 +209,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-23 08:33:41" itemprop="dateModified" datetime="2019-10-23T08:33:41+00:00">2019-10-23</time>
+                <time title="修改时间：2019-10-27 06:32:12" itemprop="dateModified" datetime="2019-10-27T06:32:12+00:00">2019-10-27</time>
               </span>
 
           
@@ -283,6 +283,18 @@
 
         
 
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/212335613/" rel="prev" title="个人博客建站实录2：部署在Github上">
+                  个人博客建站实录2：部署在Github上 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
       </footer>
     
   </article>
@@ -295,6 +307,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
         </div>
           
@@ -335,7 +348,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -433,6 +446,24 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo: 'likaihz.github.io',
+      owner: 'likaihz',
+      admin: ['likaihz'],
+      id: '778822d25ef77169eb4bc9e657bfd37b',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
 
 </body>
 </html>

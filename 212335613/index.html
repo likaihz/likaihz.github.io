@@ -50,27 +50,30 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Tiezhu Blog">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+  <meta name="description" content="部署网站与Github Pages服务部署网站&amp;#160; &amp;#160; &amp;#160; &amp;#160;在前一篇博文个人博客建站实录1：Hexo的安装与配置中构建好的Hexo项目还是一个只能在本地访问的网站，本质上来说只是生成了一些网页文件，如果想要成为一个供别人访问的博客站点，就需要将网站部署到服务器上。所谓的部署网站简单来说就是指把网站的资源（包括网页、图片等文件）放在服务器上，这样所有人只要通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="个人博客建站实录2：部署在Github上">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;212335613&#x2F;index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
+<meta property="og:description" content="部署网站与Github Pages服务部署网站&amp;#160; &amp;#160; &amp;#160; &amp;#160;在前一篇博文个人博客建站实录1：Hexo的安装与配置中构建好的Hexo项目还是一个只能在本地访问的网站，本质上来说只是生成了一些网页文件，如果想要成为一个供别人访问的博客站点，就需要将网站部署到服务器上。所谓的部署网站简单来说就是指把网站的资源（包括网页、图片等文件）放在服务器上，这样所有人只要通过">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-27T06:32:12.312Z">
 <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/212335613/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Tiezhu Blog</title>
+  <title>个人博客建站实录2：部署在Github上 | Tiezhu Blog</title>
   
 
 
@@ -167,10 +170,10 @@
             
 
   <div class="posts-expand">
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/212335613/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -184,8 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/212335613/" class="post-title-link" itemprop="url">个人博客建站实录2：部署在Github上</a>
+          个人博客建站实录2：部署在Github上
         </h1>
 
         <div class="post-meta">
@@ -216,96 +218,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="部署网站与Github-Pages服务"><a href="#部署网站与Github-Pages服务" class="headerlink" title="部署网站与Github Pages服务"></a>部署网站与Github Pages服务</h2><h3 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h3><p>&#160; &#160; &#160; &#160;在前一篇博文<a href="https://blog.litiezhu.cn/4141265970/" target="_blank" rel="noopener">个人博客建站实录1：Hexo的安装与配置</a>中构建好的Hexo项目还是一个只能在本地访问的网站，本质上来说只是生成了一些网页文件，如果想要成为一个供别人访问的博客站点，就需要将网站部署到服务器上。所谓的部署网站简单来说就是指把网站的资源（包括网页、图片等文件）放在服务器上，这样所有人只要通过互联网就可以访问到我们的博客站点了。可以看出来，最简单的部署办法就是购买服务器（或者云服务器），那么就只需要将生成好的文件上传到服务器。这种方法虽然简单，但是要钱，其实还是有一些免费的方法的，只是实现起来有些复杂，但是没关系，贫穷催人勤奋，我还是用免费的方法把。</p>
+        <h2 id="部署网站与Github-Pages服务"><a href="#部署网站与Github-Pages服务" class="headerlink" title="部署网站与Github Pages服务"></a>部署网站与Github Pages服务</h2><h3 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h3><p>&#160; &#160; &#160; &#160;在前一篇博文<a href="https://blog.litiezhu.cn/4141265970/" target="_blank" rel="noopener">个人博客建站实录1：Hexo的安装与配置</a>中构建好的Hexo项目还是一个只能在本地访问的网站，本质上来说只是生成了一些网页文件，如果想要成为一个供别人访问的博客站点，就需要将网站部署到服务器上。所谓的部署网站简单来说就是指把网站的资源（包括网页、图片等文件）放在服务器上，这样所有人只要通过互联网就可以访问到我们的博客站点了。可以看出来，最简单的部署办法就是购买服务器（或者云服务器），那么就只需要将生成好的文件上传到服务器。这种方法虽然简单，但是要钱，其实还是有一些免费的方法的，只是实现起来有些复杂，但是没关系，贫穷催人勤奋，我还是用免费的方法把。</p>
 <h3 id="Github-Pages服务"><a href="#Github-Pages服务" class="headerlink" title="Github Pages服务"></a>Github Pages服务</h3><p>&#160; &#160; &#160; &#160;代码托管平台Github就提供了这样一项免费服务——<a href="https://pages.github.com" target="_blank" rel="noopener">Github Pages</a>，能够满足我们的静态页面建站需求，简单来说就是Github允许我们吧生成的站点文件放在它的服务器上并提供相应的网址，这个功能正好适用于建设博客网站。使用Github Pages服务的方式非常简单。首先在Github上新建一个项目，项目名称为username.github.io，其中username为自己在Github上的用户名。</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/4141265970/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="我叫李铁柱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiezhu Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/4141265970/" class="post-title-link" itemprop="url">个人博客建站实录1：Hexo的安装与配置</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-22 00:00:00" itemprop="dateCreated datePublished" datetime="2019-10-22T00:00:00+00:00">2019-10-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-27 06:32:12" itemprop="dateModified" datetime="2019-10-27T06:32:12+00:00">2019-10-27</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="个人博客站与Hexo"><a href="#个人博客站与Hexo" class="headerlink" title="个人博客站与Hexo"></a>个人博客站与Hexo</h2><h3 id="为什么选择个人博客站"><a href="#为什么选择个人博客站" class="headerlink" title="为什么选择个人博客站"></a>为什么选择个人博客站</h3><p>&#160; &#160; &#160; &#160;个人建站确实有一些缺点，比如要花一些不必要的时间在站点的建设上，以及功能上会有一定的限制等。但是最终还是选择了尝试个人建站，是因为有一些不可忽视的优点：一是资源管理形式上的自由和统一，所有的博文都自然地以文件形式保存，不用担心以后的迁移问题；二是版权问题，如果在博客平台上写，无法保证平台不会滥用，与其发生版权纠纷后再去扯皮，还不如从一开始就避免这种可能；最后一点也算是强行优点，作为技术人员，花时间在这种“技术周边”上应该不亏吧。</p>
-<h3 id="如何将博文转换为网页"><a href="#如何将博文转换为网页" class="headerlink" title="如何将博文转换为网页"></a>如何将博文转换为网页</h3><p>&#160; &#160; &#160; &#160;博客大部分的功能其实都是静态网页，能够做到把我们写的文章在浏览器上显示就可以了，交互上的需求还是比较弱的，所以从理论上来说，我们可以自己写前端代码，把每一篇博文的内容排好版，再做一些链接，然后把这一堆静态的HTML文件放在服务器上就能够实现个人建站的需求了。</p>
-<p>&#160; &#160; &#160; &#160;但是！重复造轮子是不可取的，除非专职前端方向，否则手撸一个个人博客的框架是很不明智也很浪费时间的，所以我们就需要一个这样的框架，能够让我们专注于写博文本身，至于把文章转换为静态的网页文件，甚至是部署到服务器上这些工作，就让框架去完成吧。<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a>就是这样一个框架：</p>
-<blockquote>
-<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;也就是说，我们只要把文章写成<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener">Markdown</a>格式的文件，Hexo就能够生成我们的博客站网页。如果把这些网页放到服务器上，就能实现从互联网访问我们的博客的功能了。当然除此之外，Hexo也有其他功能，如部署、插件等，但是<em>one step at a time</em>，先尝试一下Hexo的基本功能吧。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/4141265970/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/4141265970/" rel="next" title="个人博客建站实录1：Hexo的安装与配置">
+                  <i class="fa fa-chevron-left"></i> 个人博客建站实录1：Hexo的安装与配置
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
       </footer>
+    
   </article>
   
   
@@ -313,12 +252,10 @@
 
   </div>
 
-  
-
-
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
         </div>
           
@@ -343,6 +280,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#部署网站与Github-Pages服务"><span class="nav-number">1.</span> <span class="nav-text">部署网站与Github Pages服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#部署网站"><span class="nav-number">1.1.</span> <span class="nav-text">部署网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Github-Pages服务"><span class="nav-number">1.2.</span> <span class="nav-text">Github Pages服务</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -457,6 +395,23 @@
 
   
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo: 'likaihz.github.io',
+      owner: 'likaihz',
+      admin: ['likaihz'],
+      id: '41364bdbc50c35de912c0c3bb2208394',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
 
 </body>
 </html>

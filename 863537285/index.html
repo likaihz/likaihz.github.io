@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="最近在看CS224N，本文是第一周的阅读任务之一(原文链接)，以下是全文翻译。 &amp;#8195;&amp;#8195;该教程讲解了Word2Vec中的Skip-Gram神经网络结构，教程的目标是深入讲解细节。 模型&amp;#8195;&amp;#8195;Skip-Gram神经网络模型的基本形式非常简单，如果从细节上的调整和优化开始解释则会显得有些混乱。 &amp;#8195;&amp;#8195;我们先从一个整体的视角去考虑，Word">
+<meta name="keywords" content="翻译,NLP,word2vec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Word2Vec教程： Skip-Gram模型">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;index.html">
+<meta property="og:site_name" content="Tiezhu Blog">
+<meta property="og:description" content="最近在看CS224N，本文是第一周的阅读任务之一(原文链接)，以下是全文翻译。 &amp;#8195;&amp;#8195;该教程讲解了Word2Vec中的Skip-Gram神经网络结构，教程的目标是深入讲解细节。 模型&amp;#8195;&amp;#8195;Skip-Gram神经网络模型的基本形式非常简单，如果从细节上的调整和优化开始解释则会显得有些混乱。 &amp;#8195;&amp;#8195;我们先从一个整体的视角去考虑，Word">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;training-samples.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;arch.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;matrix.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;multiply.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;carweights.png">
+<meta property="og:updated_time" content="2019-11-05T12:34:12.256Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;863537285&#x2F;training-samples.png">
+  <link rel="canonical" href="http://yoursite.com/863537285/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Word2Vec教程： Skip-Gram模型 | Tiezhu Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tiezhu Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/863537285/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Word2Vec教程： Skip-Gram模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-05 20:16:50 / 修改时间：12:34:12" itemprop="dateCreated datePublished" datetime="2019-11-05T20:16:50+00:00">2019-11-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近在看CS224N，本文是第一周的阅读任务之一(<a href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/" target="_blank" rel="noopener">原文链接</a>)，以下是全文翻译。</p>
+<p>&#8195;&#8195;该教程讲解了Word2Vec中的Skip-Gram神经网络结构，教程的目标是深入讲解细节。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>&#8195;&#8195;Skip-Gram神经网络模型的基本形式非常简单，如果从细节上的调整和优化开始解释则会显得有些混乱。</p>
+<p>&#8195;&#8195;我们先从一个整体的视角去考虑，Word2Vec使用了机器学习中比较常见的的一个技巧，一般来说我们训练一个具有单个隐藏层的简单神经网络来执行特定任务，但是在训练出模型后并不会使用该神经网络来执行该任务，我们要的只是神经网络中隐藏层的权重——这些权重实际上就是我们想要得到的“词向量”。</p>
+<p>&#8195;&#8195;在无监督的特征学习中我们也见过该技巧，即训练自动编码器在隐藏层中压缩输入向量，然后将其解压缩回输出层中的原始向量。训练它之后，可以剥离输出层（解压步骤），而仅使用隐藏层-这是学习良好图像特征而无需标记训练数据的技巧。</p>
+<a id="more"></a>
+
+<h2 id="虚设的任务"><a href="#虚设的任务" class="headerlink" title="虚设的任务"></a>虚设的任务</h2><p>&#8195;&#8195;那么我们现在需要讨论这个“虚设”的任务，即以该任务为目标构建神经网络并在完成后再回过头来看看这个神经网络如何间接地给出我们真正想要的词向量。</p>
+<p>&#8195;&#8195;我们将训练神经网络达到以下目的（译者注：即定义该虚设任务）：给定句子中的一个词（输入词），查看附近的词语并随机选择一个。神经网络将告诉我们词汇集中每个词成为我们选择的“附近单词”的可能性。</p>
+<blockquote>
+<p>当我提到“附近的词”时，实际上指的是算法中的一个名为“窗口大小”的参数。一般来说窗口大小设为5，即中心词之前的5个词和之后的5个词（一共10个词）</p>
+</blockquote>
+<p>&#8195;&#8195;输出概率将与找到输入单词附近的每个词汇单词的可能性有关。 例如，如果给已训练的网络输入单词“Soviet”，那么“Union”和“Russia”这样的单词的输出概率就会比“watermelon”和“kangaroo”这样的无关单词的输出概率高得多。</p>
+<p>&#8195;&#8195;我们将通过向神经网络提供训练文档中找到的单词对来训练神经网络。 下面的示例显示了一些从句子“The quick brown fox jumps over the lazy dog.”中获取的训练示例（单词对），我仅以2小窗口为例。以蓝色突出显示的单词是输入单词。</p>
+<img src="/863537285/training-samples.png" class="" title="training-samples">
+
+<p>&#8195;&#8195;网络将从每个配对出现的次数中学习统计信息。那么举例来说，相比（“Soviet”，“Sasquatch”）网络可能会获得更多的（“Soviet”，“Union”）训练样本。训练结束后，如果输入“Soviet”一词，则“Union”或“Russia”的概率要比“Sasquatch”的概率高得多。</p>
+<h2 id="模型细节"><a href="#模型细节" class="headerlink" title="模型细节"></a>模型细节</h2><p>&#8195;&#8195;那么这一切是如何表示的呢？</p>
+<p>&#8195;&#8195;首先，我们不能以字符串形式向神经网络输入单词，因此我们需要一种将单词表示给网络的方法。为此，我们首先从训练文档中构建词汇集——假设我们有大小为10000个词汇集。</p>
+<p>&#8195;&#8195;我们将把“ants”之类的输入词表示为一个one-hot向量。此向量将包含10,000个分量（每个分量对应词汇中的一个词），我们将在与“ants”对应的位置置“ 1”，在所有其他位置置0。</p>
+<p>&#8195;&#8195;网络的输出是单个向量（也具有10,000个分量），表示的是词汇表中的其他每一个词是上下文词的概率。</p>
+<p>&#8195;&#8195;以下是我们的神经网络的结构</p>
+<img src="/863537285/arch.png" class="" title="arch">
+
+<p>&#8195;&#8195;隐藏层神经元上没有激活函数，但是输出神经元使用softmax。我们稍后会再讨论。</p>
+<p>&#8195;&#8195;当用单词对训练此网络时，输入是代表输入单词的one-hot向量，训练输出也是代表输出单词的one-hot向量。但是，当使用经过训练的网络预测时，输出向量实际上将是概率分布（即一堆浮点值，而不是one-hot向量）。</p>
+<h2 id="隐藏层"><a href="#隐藏层" class="headerlink" title="隐藏层"></a>隐藏层</h2><p>&#8195;&#8195;对于我们的示例，我们要学习的词向量有300维。因此，隐藏层将由权重矩阵表示，该矩阵具有10,000行（每一行对应词汇表中的一个单词）和300列（每个隐藏神经元一个）。</p>
+<blockquote>
+<p>Google在Google新闻数据集（可以从<a href="https://code.google.com/archive/p/word2vec/" target="_blank" rel="noopener">此处</a>下载）上训练的已发布模型中使用了300个特征。特征的数量是需要根据实际应用调整的“超参数”（即，尝试不同的值并查看产生最佳结果的参数）。</p>
+</blockquote>
+<p>&#8195;&#8195;如果再看一下此权重矩阵的行，这些实际上就是我们的单词向量。</p>
+<img src="/863537285/matrix.png" class="" title="matrix">
+
+<p>&#8195;&#8195;因此，所有这一切的最终目标实际上只是学习此隐藏层权重矩阵——训练完成后，我们将丢弃输出层。</p>
+<p>&#8195;&#8195;现在我们再回到模型的定义中。</p>
+<p>&#8195;&#8195;你可能会问自己：“那个one-hot向量几乎全为零……这有什么作用？”如果您将一个1x10,000的one-hot向量乘以10,000x300矩阵，它的结果实际上就是在one-hot向量中为“1”那一行所对应的矩阵行，下面的例子可以更直观地看出。</p>
+<img src="/863537285/multiply.png" class="" title="multiply">
+
+<p>&#8195;&#8195;这意味着该模型的隐藏层实际上只是用作查找表，隐藏层的输出只是输入单词的“单词向量”。</p>
+<h2 id="输出层"><a href="#输出层" class="headerlink" title="输出层"></a>输出层</h2><p>&#8195;&#8195;隐藏层将表示“ants”的1x300词向量送入输出层，输出层是softmax回归分类器，<a href="http://ufldl.stanford.edu/tutorial/supervised/SoftmaxRegression/" target="_blank" rel="noopener">这里</a>有一个关于Softmax回归的深入教程，教程的要点是每个输出神经元（每个神经元代表词汇集中的一个单词）将产生0到1之间的输出，所有这些输出值的总和为1。</p>
+<p>&#8195;&#8195;具体来说，每个输出神经元都有一个权重向量，该向量与隐藏层的单词向量相乘，然后将函数exp（x）应用于结果。最后，为了使输出总和为1，我们将这个结果除以所有10,000个输出节点的结果之和。</p>
+<p>&#8195;&#8195;下面是计算单词“ car”的输出神经元输出的示例。</p>
+<img src="/863537285/carweights.png" class="" title="carweights">
+
+<blockquote>
+<p>注意，神经网络对输出词相对于输入词在语料中位置的距离一无所知。对于输入单词前后的单词，它不会学习不同的概率集。举例来说，如果在我们的训练语料库中，每一次出现单词“York”，其前面一个单词总是“New”，即根据训练数据，“New”将在“ York”附近的可能性为100％。但是，如果我们在“York”附近选择10个单词(译者注：即前文提到的窗口大小为5)，并随机选择其中一个，那么选到“New”的可能性并不是100％因为可能在附近选择了其他单词。</p>
+</blockquote>
+<h2 id="直觉推断"><a href="#直觉推断" class="headerlink" title="直觉推断"></a>直觉推断</h2><p>&#8195;&#8195;下面你准备好对这个网络进行一些更有意思的探索了吗？</p>
+<p>&#8195;&#8195;如果两个不同的词具有非常相似的“上下文”（上下文指它们周围可能出现的词），那么我们的模型需要为这两个词输出非常接近的结果。直觉来说，如果两个词的的词向量相似，则网络为这两个单词输出上下文的概率分布也是比较相似的。因此，如果两个单词具有相似的上下文，则我们的网络将为这两个单词学习相似的单词向量。</p>
+<p>&#8195;&#8195;两个单词具有相似的上下文是什么意思？我想你会同意“智能”和“智能”等同义词具有非常相似的上下文。或者，相关的词（例如“引擎”和“变速器”）也可能具有相似的上下文。</p>
+<p>&#8195;&#8195;这也可以为您处理词干（stemming）——网络可能会为“ant”和“ants”学习相似的词向量，因为它们应该具有相似的上下文。</p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>&#8195;&#8195;你可能已经注意到，skip-gram神经网络包含大量权重。我们的示例中有300个特征和10,000个单词，隐藏层和输出层中的权重均为3,000,000，在如此大型的数据集上进行训练的代价很大，因此word2vec的作者进行了许多调整以使训练可行，这些将在本教程的<a href="http://mccormickml.com/2017/01/11/word2vec-tutorial-part-2-negative-sampling/" target="_blank" rel="noopener">第2部分</a>中介绍。</p>
+<h2 id="其他资料"><a href="#其他资料" class="headerlink" title="其他资料"></a>其他资料</h2><p>&#8195;&#8195;您是否知道word2vec模型也可以应用于非文本数据，以用于推荐系统和广告定位？ 您可以从一系列用户操作中学习向量，而不是从一系列单词中学习向量。在我的<a href="http://mccormickml.com/2018/06/15/applying-word2vec-to-recommenders-and-advertising/" target="_blank" rel="noopener">新文章</a>中阅读有关此内容的更多信息。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag"># 翻译</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
+              <a href="/tags/word2vec/" rel="tag"># word2vec</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/212335613/" rel="next" title="个人博客建站实录2：部署在Github上">
+                  <i class="fa fa-chevron-left"></i> 个人博客建站实录2：部署在Github上
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚设的任务"><span class="nav-number">2.</span> <span class="nav-text">虚设的任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型细节"><span class="nav-number">3.</span> <span class="nav-text">模型细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐藏层"><span class="nav-number">4.</span> <span class="nav-text">隐藏层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出层"><span class="nav-number">5.</span> <span class="nav-text">输出层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直觉推断"><span class="nav-number">6.</span> <span class="nav-text">直觉推断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后续"><span class="nav-number">7.</span> <span class="nav-text">后续</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他资料"><span class="nav-number">8.</span> <span class="nav-text">其他资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
+    src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">我叫李铁柱</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/likaihz" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:likaihz@126.com" title="E-Mail &amp;rarr; mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo: 'likaihz.github.io',
+      owner: 'likaihz',
+      admin: ['likaihz'],
+      id: '9f8bcf163b013aa01bebda182efac959',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

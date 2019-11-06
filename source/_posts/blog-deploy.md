@@ -3,6 +3,9 @@ title: 个人博客建站实录2：部署在Github上
 abbrlink: 212335613
 date: 2019-10-23 19:41:41
 tags:
+- 原创
+- 博客
+- 周边
 ---
 
 ## 部署网站与Github Pages服务

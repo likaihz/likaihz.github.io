@@ -8,7 +8,7 @@ branches:
     - source # build master branch only
 script:
   - npm install hexo-generator-sitemap --save-dev
-  - npm install hexo-generator-baidusitemap --save-dev
+  - npm install hexo-generator-baidu-sitemap --save-dev
   - hexo generate # generate static files
 after_script:
   - cd ./public

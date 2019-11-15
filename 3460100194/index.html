@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
@@ -60,7 +60,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3460100194&#x2F;training_data.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3460100194&#x2F;subsample_func_plot.png">
-<meta property="og:updated_time" content="2019-11-14T12:33:47.609Z">
+<meta property="og:updated_time" content="2019-11-15T07:53:40.077Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3460100194&#x2F;training_data.png">
   <link rel="canonical" href="https://blog.litiezhu.cn/3460100194/">
@@ -127,12 +127,12 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,10 +244,8 @@
 </ol>
 <p>&#8195;&#8195;值得注意的是，对频繁出现的单词进行二次采样和应用负采样不仅减轻了训练过程的计算负担，而且还改善了其产生的单词向量的质量。</p>
 <a id="more"></a>
-
 <h2 id="二次采样常见词"><a href="#二次采样常见词" class="headerlink" title="二次采样常见词"></a>二次采样常见词</h2><p>&#8195;&#8195;在本教程的第1部分中，我展示了如何从源文本创建训练样本，但是在这里我再描述一次。下面的示例显示了一些从句子“The quick brown fox jumps over the lazy dog”中生成的训练示例（单词对），我们取窗口大小为2为例，以蓝色突出显示的单词是输入单词。</p>
 <img src="/3460100194/training_data.png" class="" title="training_data">
-
 <p>&#8195;&#8195;对于像“the”一样的常见词存在以下两个问题：</p>
 <ol>
 <li>当查看单词对（“fox”，“the”）时我们并不能获知很多有关“fox”的含义，因为“the”出现在几乎每个单词的上下文中。</li>
@@ -264,10 +262,8 @@
 <p>&#8195;&#8195;$w_i$是一个词语，$z(w_i)$是语料库中该单词占单词总数的比例。例如，如果单词“peanut”在大小为10亿个单词的语料库中出现了1000次，则z（“peanut”）= 1E-6。</p>
 <p>&#8195;&#8195;代码中还有一个名为“sample”的参数，用于控制发生多少次采样，默认值为0.001。较小的“sample”值表示保留单词的可能性较小。</p>
 <p>&#8195;&#8195;$P(w_i)$表示保留该词的概率:</p>
-<p>$$P(w_i) = (\sqrt{\frac{z(w_i)}{0.001}}+1) \cdot \frac{0.001}{z(w_i)}$$</p>
-<p>该函数的形状如下图：</p>
+<script type="math/tex; mode=display">P(w_i) = (\sqrt{\frac{z(w_i)}{0.001}}+1) \cdot \frac{0.001}{z(w_i)}</script><p>该函数的形状如下图：</p>
 <img src="/3460100194/subsample_func_plot.png" class="" title="subsample_func_plot">
-
 <p>任何单词都不应该占语料库的很大一部分，因此我们希望查看在x轴上很小的值。</p>
 <p>&#8195;&#8195;这是此函数中的一些有趣的要点（再次使用默认样本值0.001）。</p>
 <ul>
@@ -295,7 +291,9 @@
 <p>&#8195;&#8195;回顾一下，我们模型的输出层的权重矩阵为300x10,000。因此，我们将更新正词（“quick”）的权重，再加上要输出0的5个其他词的权重。总共6个输出神经元，1,800个权重值，这仅占输出层3M权重的0.06％！</p>
 <p>&#8195;&#8195;在隐藏层中，无论是否使用负采样，仅更新输入单词的权重。</p>
 <h3 id="选择负样本"><a href="#选择负样本" class="headerlink" title="选择负样本"></a>选择负样本</h3><p>&#8195;&#8195;使用“unigram distribution”选择“负样本”，其中更频繁的词更有可能被选为负样本。</p>
-<p>&#8195;&#8195;例如，假设你把整个训练语料库看作一个单词列表，并且您从列表中随机选择了5个词作为负样本。在这种情况下，选择“ couch”一词的概率等于“couch”在语料库中出现的次数除以语料库中单词词库的总数，由以下等式表示：<br>$$P(w_i)=\frac{f(w_i)}{\sum_{j=0}^{n}(f(w_j))}$$<br>作者在论文中指出，他们对该等式进行了多种尝试，其中效果最好的是使用词语计数的3/4次幂：<br>$$P(w_i)=\frac{f(w_i)^{3/4}}{\sum_{j=0}^{n}(f(w_j)^{3/4})}$$<br>对一些样本值进行探索后你会发现，与原始的等式相比，该等式倾向于增加不经常出现的单词的概率，而减少频繁出现的单词的概率。</p>
+<p>&#8195;&#8195;例如，假设你把整个训练语料库看作一个单词列表，并且您从列表中随机选择了5个词作为负样本。在这种情况下，选择“ couch”一词的概率等于“couch”在语料库中出现的次数除以语料库中单词词库的总数，由以下等式表示：</p>
+<script type="math/tex; mode=display">P(w_i)=\frac{f(w_i)}{\sum_{j=0}^{n}(f(w_j))}</script><p>作者在论文中指出，他们对该等式进行了多种尝试，其中效果最好的是使用词语计数的3/4次幂：</p>
+<script type="math/tex; mode=display">P(w_i)=\frac{f(w_i)^{3/4}}{\sum_{j=0}^{n}(f(w_j)^{3/4})}</script><p>对一些样本值进行探索后你会发现，与原始的等式相比，该等式倾向于增加不经常出现的单词的概率，而减少频繁出现的单词的概率。</p>
 <p>&#8195;&#8195;用C代码实现此选择的方式很有趣。代码中有一个包含100M个元素的大型数组（被称为unigram表），他们用词汇表中每个单词的索引多次填充该表，那么单词索引在表中出现的次数就等于$P(w_i)$*表大小。然后，要需要选择一个负样本时，只需生成一个介于0到100M之间的随机整数，然后使用表中该索引处的单词即可。因为概率较高的单词在表格中出现的次数更多，所以更有可能选择这些单词。</p>
 <h2 id="单词对和“短语”"><a href="#单词对和“短语”" class="headerlink" title="单词对和“短语”"></a>单词对和“短语”</h2><p>&#8195;&#8195;word2vec的第二篇论文还包括另一项值得讨论的创新。作者指出，像“Boston Globe”（报纸）这样的词对与单独的“Boston”和“Globe”具有不同的含义。因此，可以将“Boston Globe”视为一个单独的词并用其特有的词向量表示。</p>
 <p>&#8195;&#8195;您可以在他们发布的模型中查看结果，该模型已经过Google新闻数据集中1000亿个单词的训练。在模型中增加了短语，使词汇量扩充到300万个单词！<br>如果你对他们的训练结果感兴趣，可以查看我的<a href="http://mccormickml.com/2016/04/12/googles-pretrained-word2vec-model-in-python/" target="_blank" rel="noopener">这篇文章</a>,也可以在<a href="https://github.com/chrisjmccormick/inspect_word2vec/tree/master/vocabulary" target="_blank" rel="noopener">这里</a>浏览他们的词汇。</p>
@@ -400,7 +398,7 @@
         <a href="https://github.com/likaihz" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:likaihz@126.com" title="E-Mail &amp;rarr; mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="/mailto:likaihz@126.com" title="E-Mail &amp;rarr; mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
       </span>
   </div>
 
@@ -487,6 +485,7 @@
   
       
 <script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0';
 
   MathJax.Hub.Config({
     tex2jax: {
@@ -495,6 +494,7 @@
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
     },
     TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
       equationNumbers: {
         autoNumber: 'AMS'
       }
@@ -527,7 +527,7 @@
   });
 </script>
 <script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+  NexT.utils.getScript('//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML', () => {
     MathJax.Hub.Typeset();
   }, window.MathJax);
 </script>
@@ -554,7 +554,7 @@
     });
     gitalk.render('gitalk-container');
   }, window.Gitalk);
-</script>
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>

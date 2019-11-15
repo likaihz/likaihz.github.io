@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
@@ -62,7 +62,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;4141265970&#x2F;init-page.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;4141265970&#x2F;project-structure.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;4141265970&#x2F;default-next.png">
-<meta property="og:updated_time" content="2019-11-14T12:33:47.605Z">
+<meta property="og:updated_time" content="2019-11-15T07:53:40.073Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;4141265970&#x2F;hexo-version.png">
   <link rel="canonical" href="https://blog.litiezhu.cn/4141265970/">
@@ -129,12 +129,12 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,32 +244,26 @@
 </blockquote>
 <p>&#160; &#160; &#160; &#160;也就是说，我们只要把文章写成<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener">Markdown</a>格式的文件，Hexo就能够生成我们的博客站网页。如果把这些网页放到服务器上，就能实现从互联网访问我们的博客的功能了。当然除此之外，Hexo也有其他功能，如部署、插件等，但是<em>one step at a time</em>，先尝试一下Hexo的基本功能吧。</p>
 <a id="more"></a>
-
 <h2 id="Hexo的安装与基本使用"><a href="#Hexo的安装与基本使用" class="headerlink" title="Hexo的安装与基本使用"></a>Hexo的安装与基本使用</h2><p>&#160; &#160; &#160; &#160;Hexo是基于Node.js的，所以要先安装Node.js。这个过程比较简单（Windows系统下可以在<a href="https://nodejs.org/en/" target="_blank" rel="noopener">官网</a>下载安装包，MacOS推荐使用Homebrew安装，Linux下也可以使用相应的包管理器安装）。安装好Node.js后，Hexo的安装只需要一条命令就可以了：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 <p>等待进度走完后，在终端上执行以下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo version</span><br></pre></td></tr></table></figure>
 <p>如果能正确显示版本信息，就说明安装成功了。</p>
 <img src="/4141265970/hexo-version.png" class="" title="hexo-version">
-
 <h2 id="生成Hexo项目"><a href="#生成Hexo项目" class="headerlink" title="生成Hexo项目"></a>生成Hexo项目</h2><p>&#160; &#160; &#160; &#160;Hexo安装完成后，就可以生成一个Hexo项目了，首先执行命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br></pre></td></tr></table></figure>
-
-<p>把其中&lt;folder&gt;替换成项目的名称，Hexo就会在当前目录下生成一个文件夹，名为&lt;folder&gt;，这就是Hexo项目目录。然后执行以下命令进入项目目录并安装依赖：</p>
+<p>把其中\<folder>替换成项目的名称，Hexo就会在当前目录下生成一个文件夹，名为\<folder>，这就是Hexo项目目录。然后执行以下命令进入项目目录并安装依赖：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
-
 <p>等待进度走完后执行以下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>Hexo就将生成的静态网页文件部署到本地并启动服务器，在浏览器上访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>就可以查看，站内已经生成了一个默认的第一篇博文Hello World，其中包含了一些指向官方文档的教程。此时生成的网页还是没有经过任何设置的，所有的配置项都还是默认值。其实Hexo还是提供了很多个性化配置，可以按照喜好进行选择。关闭终端（命令提示符窗口）可以关闭本地服务器。</p>
 <img src="/4141265970/init-page.png" class="" title="init-page">
-
 <h2 id="Hexo的配置"><a href="#Hexo的配置" class="headerlink" title="Hexo的配置"></a>Hexo的配置</h2><h3 id="Hexo项目结构"><a href="#Hexo项目结构" class="headerlink" title="Hexo项目结构"></a>Hexo项目结构</h3><p>&#160; &#160; &#160; &#160;在配置Hexo之前，首先要了解Hexo项目的结构，初始的项目结构如图所示：</p>
 <img src="/4141265970/project-structure.png" class="" title="project-structure">
-
 <ul>
 <li>node_modules: 是Node.js的一些模块，还有安装的插件也在该目录下</li>
 <li>scaffolds: 模版文件夹，当新建文章时，会根据该目录下的模版来建立文件。</li>
-<li>source: 存放用户资源的文件夹。除 _posts 文件夹之外，开头命名为 _ (下划线)的文件 / 文件夹和隐藏的文件将会被忽略。Markdown 和 HTML 文件会被解析并放到 public 文件夹，而其他文件会被拷贝过去。</li>
+<li>source: 存放用户资源的文件夹。除 <em>posts 文件夹之外，开头命名为 </em> (下划线)的文件 / 文件夹和隐藏的文件将会被忽略。Markdown 和 HTML 文件会被解析并放到 public 文件夹，而其他文件会被拷贝过去。</li>
 <li>themes: 主题文件夹。Hexo 会根据主题来生成静态页面。</li>
 <li>_config.yml: 网站的配置信息，可以在此配置大部分的参数。</li>
 <li>package.json: 应用程序的信息。EJS, Stylus 和 Markdown renderer等模块已默认安装，可以自由移除。</li>
@@ -280,10 +274,8 @@
 <h3 id="选择一个酷炫的主题"><a href="#选择一个酷炫的主题" class="headerlink" title="选择一个酷炫的主题"></a>选择一个酷炫的主题</h3><p>&#160; &#160; &#160; &#160;项目建立时默认的主题名为landscape，在themes文件夹下可以找到该主题。虽然这个主题已经是不错的了，但是有别的选择当然更好。官网上提供了许多优秀的<a href="https://hexo.io/themes/" target="_blank" rel="noopener">主题</a>，这里用一个我比较喜欢的主题<a href="https://theme-next.org" target="_blank" rel="noopener">NexT</a>作为示例。</p>
 <h4 id="安装并启用NexT"><a href="#安装并启用NexT" class="headerlink" title="安装并启用NexT"></a>安装并启用NexT</h4><p>&#160; &#160; &#160; &#160;首先在我们的Hexo项目中下载该主题，在项目目录下执行以下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-
 <p>主题资源就下载到themes文件夹下了，下一步就是要在项目中启用该主题，只需在项目配置文件（即前文提到的_config.yml）中找到theme这一项，将默认值landscape改为next。再次启动Hexo的本地服务器就可以看到已经应用了新的主题。</p>
 <img src="/4141265970/default-next.png" class="" title="default-next">
-
 <h4 id="NexT主题的配置"><a href="#NexT主题的配置" class="headerlink" title="NexT主题的配置"></a>NexT主题的配置</h4><p>&#160; &#160; &#160; &#160;NexT主题也支持一些配置项，它的配置文件在该主题的目录下。这里可以设置的项包括作者头像、社交网络地址、邮箱地址等，除此以外还有侧边栏的目录设置等都可以进行个性化配置。</p>
 
     </div>
@@ -381,7 +373,7 @@
         <a href="https://github.com/likaihz" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:likaihz@126.com" title="E-Mail &amp;rarr; mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="/mailto:likaihz@126.com" title="E-Mail &amp;rarr; mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
       </span>
   </div>
 
@@ -487,7 +479,7 @@
     });
     gitalk.render('gitalk-container');
   }, window.Gitalk);
-</script>
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>

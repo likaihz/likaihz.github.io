@@ -50,17 +50,21 @@
   };
 </script>
 
-  <meta name="description" content="信息熵，Information entropy熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。 信息量&amp;#160; &amp;#160; &amp;#160; &amp;#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一">
-<meta name="keywords" content="机器学习">
+  <meta name="description" content="&amp;#8195;&amp;#8195;斯坦福深度自然语言处理课程CS224N Lecture 6课程笔记，Language Models and Recurrent Neural Networks. 语言模型，Language Model&amp;#8195;&amp;#8195;语言模型是用来预测“下一个词”的模型。即给模型输入一个词语序列，输出应该是下一个词（的概率分布）。对这个问题进行形式化的描述如下：  给定一个词">
+<meta name="keywords" content="笔记,NLP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从信息熵到交叉熵">
-<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2352984677&#x2F;index.html">
+<meta property="og:title" content="CS224N笔记-语言模型与循环神经网络">
+<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3906993302&#x2F;index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
-<meta property="og:description" content="信息熵，Information entropy熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。 信息量&amp;#160; &amp;#160; &amp;#160; &amp;#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一">
+<meta property="og:description" content="&amp;#8195;&amp;#8195;斯坦福深度自然语言处理课程CS224N Lecture 6课程笔记，Language Models and Recurrent Neural Networks. 语言模型，Language Model&amp;#8195;&amp;#8195;语言模型是用来预测“下一个词”的模型。即给模型输入一个词语序列，输出应该是下一个词（的概率分布）。对这个问题进行形式化的描述如下：  给定一个词">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3906993302&#x2F;rnn.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3906993302&#x2F;tagging.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3906993302&#x2F;sentence.png">
 <meta property="og:updated_time" content="2019-12-07T07:04:17.429Z">
 <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://blog.litiezhu.cn/2352984677/">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3906993302&#x2F;rnn.png">
+  <link rel="canonical" href="https://blog.litiezhu.cn/3906993302/">
 
 
 <script id="page-configurations">
@@ -74,7 +78,7 @@
   };
 </script>
 
-  <title>从信息熵到交叉熵 | Tiezhu Blog</title>
+  <title>CS224N笔记-语言模型与循环神经网络 | Tiezhu Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
     <script>
@@ -194,7 +198,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2352984677/">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3906993302/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/hailhydra.jpg">
@@ -207,7 +211,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          从信息熵到交叉熵
+          CS224N笔记-语言模型与循环神经网络
         </h1>
 
         <div class="post-meta">
@@ -217,7 +221,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-11-15 14:57:22" itemprop="dateCreated datePublished" datetime="2019-11-15T14:57:22+00:00">2019-11-15</time>
+              <time title="创建时间：2019-12-06 15:15:46" itemprop="dateCreated datePublished" datetime="2019-12-06T15:15:46+00:00">2019-12-06</time>
             </span>
 
           
@@ -231,26 +235,84 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="信息熵，Information-entropy"><a href="#信息熵，Information-entropy" class="headerlink" title="信息熵，Information entropy"></a>信息熵，Information entropy</h2><p>熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。</p>
-<h3 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h3><p>&#160; &#160; &#160; &#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一个或多个事件。那么不严谨地说，一条信息描述的事件越多么，其信息量越大；再进一步说，当信息描述的事件发生的可能性越小时，其信息量越大。这个原理比较复杂，不过可以从直觉上进行简单的解释，因为在一个事件系统中，当一个可能性很小的事件发生时，其一般都产生于多个前提条件，因此描述了该事件的信息也可以认为携带了其前提条件的信息，因此信息量较大。举例来说，在当前时空下，有两条信息分别描述了事件A：“中国队获得2022年世界杯冠军。”和事件B：“德国队获得2022年世界杯冠军。”，显然（？）事件A的可能性很小，那么这条信息就包含了中国队经过换教练、换主力队员，国内足球运动改革等等举措以及天大的运气最终获得冠军。而描述事件B的信息就简单的多，常规操作就可以。</p>
+        <p>&#8195;&#8195;斯坦福深度自然语言处理课程CS224N Lecture 6课程笔记，Language Models and Recurrent Neural Networks.</p>
+<h2 id="语言模型，Language-Model"><a href="#语言模型，Language-Model" class="headerlink" title="语言模型，Language Model"></a>语言模型，Language Model</h2><p>&#8195;&#8195;<strong>语言模型</strong>是用来预测“下一个词”的模型。即给模型输入一个词语序列，输出应该是下一个词（的概率分布）。对这个问题进行形式化的描述如下：</p>
+<blockquote>
+<p>给定一个词语序列$x^{(1)}, x^{(2)},…,x^{(t)}$，计算下一个词$x^{(t+1)}$的概率分布：</p>
+<script type="math/tex; mode=display">
+P(x^{(t+1)}|x^{(t)},...,x^{(1)}) \tag{1}</script><p>其中$x^{(t+1)}$可以是词汇表 $V$ 中的任意一个词。</p>
+</blockquote>
+<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：$x^{(1)},…,x^{(T)}$，其出现的概率是：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^{(T)}|x^{(T-1)},...,x^{(1)}) \tag{2} \\
+&=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},...,x^{(1)}) \tag{3}
+\end{align}</script><p>$(3)$中的概率就是由语言模型给出的。</p>
 <a id="more"></a>
-<p>&#160; &#160; &#160; &#160;所以从直觉上来说，当信息描述的事件发生的可能性越小时，其信息量就越大（当然上面的推理过程并不严谨）；那么信息量应该和事件发生的概率有关。假设$X$是一个离散型随机变量，$p(x)$是其概率分布函数，那么可以定义事件$X = x_0$的信息量为：</p>
+<h2 id="n-gram语言模型"><a href="#n-gram语言模型" class="headerlink" title="n-gram语言模型"></a>n-gram语言模型</h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><ul>
+<li>假设：$x^{(t+1)}$的概率分布仅与其前$n-1$个词有关</li>
+<li>那么就可以得到其概率分布为：</li>
+</ul>
 <script type="math/tex; mode=display">
-I(x_0) = -\log(p(x_0))</script><h3 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h3><p>&#160; &#160; &#160; &#160;有了信息量的概念后，就可以定义信息熵了。根据Boltzmann’s H-theorem，香农把随机变量X的信息量的期望定义为熵值H，记X的值域为$\chi={x_1, x_2, …, x_n}$，那么有：</p>
+\begin{align}
+P(x^{(t+1)}|x^{(t)},...,x^{(1)})&=P(x^{(t+1)}|x^{(t)},...,x^{(t-n+2)}) \tag{4} \\
+&=\frac{P(x^{(t+1)},x^{(t)},...,x^{(t-n+2)})}{P(x^{(t)},...,x^{(t-n+2)})}\tag{5} \\
+&\approx \frac{count(x^{(t+1)},x^{(t)},...,x^{(t-n+2)})}{count(x^{(t)},...,x^{(t-n+2)})}\tag{6}
+\end{align}</script><h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
+<li><p>模型缺陷1：稀疏性问题</p>
+<ul>
+<li>公式$(6)$中，如果某个词序列在语料库中从来没有出现过，那么分子可能为0。为了解决这个问题，可以在每个计数值上加一个很小的平滑量（smoothing value）。</li>
+<li>分母也可能为0（即在语料库中未出现过这样的上文），为了解决该问题，可以缩小上文的长度。</li>
+</ul>
+</li>
+<li><p>模型缺陷2：容量问题</p>
+<ul>
+<li>模型需要计算并保存在语料库中出现的所有n-gram，那么随着n的增长，模型的大小也快速增长。</li>
+</ul>
+</li>
+</ul>
+<h2 id="固定窗口大小的神经网络语言模型"><a href="#固定窗口大小的神经网络语言模型" class="headerlink" title="固定窗口大小的神经网络语言模型"></a>固定窗口大小的神经网络语言模型</h2><ul>
+<li>基本假设与n-gram模型类似，预测某个位置的词的概率分布只与前n个词有关。</li>
+<li>构建一个基本的多层感知机(MLP)，输入前n个词，输出为下一个词。</li>
+<li>仍存在问题。。。</li>
+</ul>
+<h2 id="循环神经网络，Recurrent-Neural-Network"><a href="#循环神经网络，Recurrent-Neural-Network" class="headerlink" title="循环神经网络，Recurrent Neural Network"></a>循环神经网络，Recurrent Neural Network</h2><h3 id="模型-1"><a href="#模型-1" class="headerlink" title="模型"></a>模型</h3><ul>
+<li>基本做法：重复地调用相同的权重矩阵。</li>
+<li>RNN的基本结构及展开结构如下图</li>
+</ul>
+<img src="/3906993302/rnn.png" class="" title="rnn">
+<p>可以看到，其基本结构就类似一个一维的多层感知机，每层有各自的权重矩阵。区别在于，隐藏层有两个输入来源——输入层的激活输出和上一个时间步的隐藏层激活输出，（$W_e$和$W_h$是各自的权重矩阵。）</p>
+<h3 id="Pros-and-cons"><a href="#Pros-and-cons" class="headerlink" title="Pros and cons"></a>Pros and cons</h3><ul>
+<li>优点<ul>
+<li>可以处理任意长度的输入</li>
+<li>理论上来说，计算每一步的输出时都是基于前面所有的信息</li>
+<li>模型的大小不会随着输入增长而变大</li>
+<li>因为使用的是同一个权重矩阵，因此处理输入时是类似的</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>循环计算非常慢</li>
+<li>实践中，很难使用到很多步之前的信息。</li>
+</ul>
+</li>
+</ul>
+<h2 id="评价语言模型"><a href="#评价语言模型" class="headerlink" title="评价语言模型"></a>评价语言模型</h2><ul>
+<li>标准的语言模型评价指标——perplextiy，该指标越小，模型表现越好。</li>
+</ul>
 <script type="math/tex; mode=display">
-H(X) = - \sum_{i=1}^{n}p(x_i)\log(p(x_i))</script><p>$H(x)$就被称为随机变量$X$的熵，表示随机变量不确定性的度量，是对所有可能发生的事件产生的信息量的期望。<br>从公式可得，随机变量的取值个数越多，状态数也就越多，信息熵就越大，混乱程度就越大。当随机分布为均匀分布时，熵最大，且$0 \le H(X) \le \log n$。并且由于信息熵仅于变量分布有关，因此也可以记为$H(P)$</p>
-<h2 id="相对熵（KL散度）"><a href="#相对熵（KL散度）" class="headerlink" title="相对熵（KL散度）"></a>相对熵（KL散度）</h2><p>&#160; &#160; &#160; &#160;相对熵（relative entropy）又称为KL散度（Kullback-Leibler divergence, KLD），它是两个概率分布$P$和$Q$的差别的非对称性的度量。从信息角度来说，KLD(P||Q)表示用$P$描述分布时，相对用$Q$描述分布的信息增量。在机器学习中，$P$表示样本的真实分布，$Q$表示模型所预测的分布，那么如果用P来描述样本分布，就不存在信息上的差异（因为P就是样本的实际分布）；但是如果用Q来描述，虽然已经近似，但是信息量仍然不足，需要一些额外的“信息增量”才能完美描述分布。训练过程实际就是缩小这一点“信息增量”的过程。</p>
-<p>&#160; &#160; &#160; &#160;KL散度的计算公式：</p>
-<script type="math/tex; mode=display">
-D_{KL}(P||Q)=\sum_{i=1}^{n}p(x_i)\log(\frac{p(x_i)}{q(x_i)})</script><p>KL散度的值越小，P和Q两种分布就越接近，在机器学习中，也就是训练出的Q模型越接近实际分布P。</p>
-<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><p>&#160; &#160; &#160; &#160;从相对熵的定义中可以看出，相对熵值越小，表示P和Q两种分布越接近，那么相对熵就可以作为机器学习的训练目标——即训练过程以最小化该值为目标。但是最小化相对熵还不是最简形式，对相对熵的计算公式简单变形：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-D_{KL}(P||Q) &= \sum_{i=1}^{n}p(x_i)\log(p(x_i))-\sum_{i=1}^{n}p(x_i)\log(q(x_i))\\
- &= -H(P)+[-\sum_{i=1}^{n}p(x_i)\log(q(x_i))]
-\end{split}</script><p>可以看到，等式的前半部分是P分布的信息熵，其不会改变，所以在训练的过程中，只要取等式的后半部分作为目标函数。对这一部分定义为交叉熵：</p>
-<script type="math/tex; mode=display">
-H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
+\prod_{t=1}^{T}(\frac{1}{P_{LM}(x^{(t+1)}|x^{(t)},...,x^{(1)})})^{1/T}</script><h2 id="RNN的应用"><a href="#RNN的应用" class="headerlink" title="RNN的应用"></a>RNN的应用</h2><h3 id="打标签"><a href="#打标签" class="headerlink" title="打标签"></a>打标签</h3><ul>
+<li>如词性分类、命名体识别等</li>
+</ul>
+<img src="/3906993302/tagging.png" class="" title="tagging">
+<h3 id="句子（文本）分类"><a href="#句子（文本）分类" class="headerlink" title="句子（文本）分类"></a>句子（文本）分类</h3><ul>
+<li>如情感分类等</li>
+<li>在RNN的输出层后再加一层，用于将RNN的输出做编码</li>
+</ul>
+<img src="/3906993302/sentence.png" class="" title="sentence">
+<h3 id="作为编码模块"><a href="#作为编码模块" class="headerlink" title="作为编码模块"></a>作为编码模块</h3><ul>
+<li>利用RNN为一条文本编码，用编码后的结果参与后续神经网络的计算</li>
+</ul>
+
     </div>
 
     
@@ -259,24 +321,22 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/NLP/" rel="tag"># NLP</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/3460100194/" rel="next" title="Word2Vec Tutorial Part 2 - Negative Sampling">
-                  <i class="fa fa-chevron-left"></i> Word2Vec Tutorial Part 2 - Negative Sampling
+                <a href="/2352984677/" rel="next" title="从信息熵到交叉熵">
+                  <i class="fa fa-chevron-left"></i> 从信息熵到交叉熵
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/3906993302/" rel="prev" title="CS224N笔记-语言模型与循环神经网络">
-                  CS224N笔记-语言模型与循环神经网络 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -316,7 +376,7 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#信息熵，Information-entropy"><span class="nav-number">1.</span> <span class="nav-text">信息熵，Information entropy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信息量"><span class="nav-number">1.1.</span> <span class="nav-text">信息量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息熵"><span class="nav-number">1.2.</span> <span class="nav-text">信息熵</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相对熵（KL散度）"><span class="nav-number">2.</span> <span class="nav-text">相对熵（KL散度）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵"><span class="nav-number">3.</span> <span class="nav-text">交叉熵</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型，Language-Model"><span class="nav-number">1.</span> <span class="nav-text">语言模型，Language Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#n-gram语言模型"><span class="nav-number">2.</span> <span class="nav-text">n-gram语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型"><span class="nav-number">2.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺陷"><span class="nav-number">2.2.</span> <span class="nav-text">缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#固定窗口大小的神经网络语言模型"><span class="nav-number">3.</span> <span class="nav-text">固定窗口大小的神经网络语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环神经网络，Recurrent-Neural-Network"><span class="nav-number">4.</span> <span class="nav-text">循环神经网络，Recurrent Neural Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型-1"><span class="nav-number">4.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pros-and-cons"><span class="nav-number">4.2.</span> <span class="nav-text">Pros and cons</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评价语言模型"><span class="nav-number">5.</span> <span class="nav-text">评价语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN的应用"><span class="nav-number">6.</span> <span class="nav-text">RNN的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#打标签"><span class="nav-number">6.1.</span> <span class="nav-text">打标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#句子（文本）分类"><span class="nav-number">6.2.</span> <span class="nav-text">句子（文本）分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为编码模块"><span class="nav-number">6.3.</span> <span class="nav-text">作为编码模块</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -497,7 +557,7 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
       repo: 'likaihz.github.io',
       owner: 'likaihz',
       admin: ['likaihz'],
-      id: '64c3d3c7ed8df018aea809e4c5dd595e',
+      id: '3671a9a9ad9f60313555e75ee959cc65',
         language: '',
       distractionFreeMode: 'true'
     });

@@ -5,23 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
-  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+<link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
 <script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
+    hostname: new URL('https://blog.litiezhu.cn').hostname,
     root: '/',
     scheme: 'Gemini',
-    version: '7.4.1',
+    version: '7.7.0',
     exturl: false,
     sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
     copycode: {"enable":false,"show_result":false,"style":null},
@@ -31,6 +32,7 @@
     mediumzoom: false,
     lazyload: false,
     pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"nav":null},
     algolia: {
       appID: '',
       apiKey: '',
@@ -40,13 +42,7 @@
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
     path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: '复制',
-      copy_success: '复制成功',
-      copy_failure: '复制失败'
-    },
-    sidebarPadding: 40
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
   };
 </script>
 
@@ -56,7 +52,8 @@
 <meta property="og:site_name" content="Tiezhu Blog">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://blog.litiezhu.cn/">
+
+<link rel="canonical" href="https://blog.litiezhu.cn/">
 
 
 <script id="page-configurations">
@@ -64,9 +61,7 @@
   CONFIG.page = {
     sidebar: "",
     isHome: true,
-    isPost: false,
-    isPage: false,
-    isArchive: false
+    isPost: false
   };
 </script>
 
@@ -74,8 +69,7 @@
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
     <script>
-      var host = window.location.hostname;
-      if (host !== "localhost" || !true) {
+      if (CONFIG.hostname === location.hostname) {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -93,8 +87,6 @@
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
-
-
 
 
 
@@ -193,7 +185,7 @@
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3906993302/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hailhydra.jpg">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
       <meta itemprop="name" content="我叫李铁柱">
       <meta itemprop="description" content="">
     </span>
@@ -270,7 +262,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2352984677/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hailhydra.jpg">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
       <meta itemprop="name" content="我叫李铁柱">
       <meta itemprop="description" content="">
     </span>
@@ -336,7 +328,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3460100194/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hailhydra.jpg">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
       <meta itemprop="name" content="我叫李铁柱">
       <meta itemprop="description" content="">
     </span>
@@ -409,7 +401,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/863537285/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hailhydra.jpg">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
       <meta itemprop="name" content="我叫李铁柱">
       <meta itemprop="description" content="">
     </span>
@@ -478,7 +470,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/212335613/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hailhydra.jpg">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
       <meta itemprop="name" content="我叫李铁柱">
       <meta itemprop="description" content="">
     </span>
@@ -537,7 +529,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/4141265970/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/hailhydra.jpg">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
       <meta itemprop="name" content="我叫李铁柱">
       <meta itemprop="description" content="">
     </span>
@@ -610,6 +602,28 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
           </div>
           
 
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
         </div>
           
   
@@ -638,8 +652,8 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
-    src="/images/hailhydra.jpg">
+    <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
+      src="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
   <p class="site-author-name" itemprop="name">我叫李铁柱</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -660,10 +674,10 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/likaihz" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:likaihz@126.com" title="E-Mail &amp;rarr; mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="/mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
       </span>
   </div>
 
@@ -686,16 +700,16 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.1
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -707,29 +721,21 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
 
 
 
-
-
-
-
-        
       </div>
     </footer>
   </div>
 
   
-  <script src="/lib/anime.min.js?v=3.1.0"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
-<script src="/js/schemes/pisces.js?v=7.4.1"></script>
-<script src="/js/next-boot.js?v=7.4.1"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
 
 
 
   
-
-
-
 
 
 
@@ -795,13 +801,21 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
   NexT.utils.getScript('//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML', () => {
     MathJax.Hub.Typeset();
   }, window.MathJax);
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script>
 
     
 
   
-
-  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'https://blog.litiezhu.cn/',]
+      });
+      });
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 </body>

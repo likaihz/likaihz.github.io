@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://blog.litiezhu.cn').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="问题建模动态连通性问题&amp;#160; &amp;#160; &amp;#160; &amp;#160;对于一类问题，问题的输入是一些对象两两之间的“相连关系”，并且这种“相连关系”是一种等价关系，即它具有以下性质：  自反性：任何对象和其自身都是相连的； 对称性：如果p和q是相连的，那么q和p也是相连的； 传递性：如果p和q是相连的，q和r是相连的，那么p和r也是相连的。  &amp;#160; &amp;#160; &amp;#160; &amp;#1">
+<meta name="keywords" content="LeetCode,算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法笔记：并查集（union-find算法）">
+<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2158068979&#x2F;index.html">
+<meta property="og:site_name" content="Tiezhu Blog">
+<meta property="og:description" content="问题建模动态连通性问题&amp;#160; &amp;#160; &amp;#160; &amp;#160;对于一类问题，问题的输入是一些对象两两之间的“相连关系”，并且这种“相连关系”是一种等价关系，即它具有以下性质：  自反性：任何对象和其自身都是相连的； 对称性：如果p和q是相连的，那么q和p也是相连的； 传递性：如果p和q是相连的，q和r是相连的，那么p和r也是相连的。  &amp;#160; &amp;#160; &amp;#160; &amp;#1">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2158068979&#x2F;connectivity.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2158068979&#x2F;quick-union.png">
+<meta property="og:updated_time" content="2020-02-11T13:34:23.171Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2158068979&#x2F;connectivity.png">
+
+<link rel="canonical" href="https://blog.litiezhu.cn/2158068979/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>算法笔记：并查集（union-find算法） | Tiezhu Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-151746522-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?340027755bae6497ffdf645b2ca071db";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tiezhu Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2158068979/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法笔记：并查集（union-find算法）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-11 21:28:08" itemprop="dateCreated datePublished" datetime="2020-02-11T21:28:08+00:00">2020-02-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="问题建模"><a href="#问题建模" class="headerlink" title="问题建模"></a>问题建模</h2><h3 id="动态连通性问题"><a href="#动态连通性问题" class="headerlink" title="动态连通性问题"></a>动态连通性问题</h3><p>&#160; &#160; &#160; &#160;对于一类问题，问题的输入是一些对象两两之间的“相连关系”，并且这种“相连关系”是一种等价关系，即它具有以下性质：</p>
+<ul>
+<li>自反性：任何对象和其自身都是相连的；</li>
+<li>对称性：如果p和q是相连的，那么q和p也是相连的；</li>
+<li>传递性：如果p和q是相连的，q和r是相连的，那么p和r也是相连的。</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;那么我们可以把相连的对象划分为一个<strong>等价类</strong>。问题的目标是根据输入的所有相连关系，将对象空间划分为多个等价类，并能够判断任意两个对象是否属于同一个等价类。这个问题称为<strong>动态连通性问题</strong>，动态连通性问题有以下现实场景的应用：</p>
+<ul>
+<li>网络：输入的对象表示一个大型计算机网络中的计算机，相连关系表示计算机之间的连接，那么只有属于同一个等价类的两台计算机才能相互通信；或者也可以是社交网络，即对象是人，相连关系表示人之间的朋友关系，那么可以将人划分为“朋友圈”(即等价类)。</li>
+<li>数学集合：抽象地说，可以将相连关系看作“属于同一个集合”。</li>
+</ul>
+<a id="more"></a>
+<p>将问题抽象完成后，引入一些术语：将对象称为<strong>触点</strong>，将相连关系称为<strong>连接</strong>，将等价类称为<strong>连通分量</strong>或者简称<strong>分量</strong>。为了描述方便，直接$0$到$N-1$的整数表示$N$个触点。</p>
+<img src="/2158068979/connectivity.png" class="" title="connectivity">
+<h3 id="算法API"><a href="#算法API" class="headerlink" title="算法API"></a>算法API</h3><p>&#160; &#160; &#160; &#160;将动态连通性问题的解决抽象为一份API：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UF</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 以整数标识（0到N-1）初始化N个触点</span></span><br><span class="line">    UF(<span class="keyword">int</span> N);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在p和q之间添加连接</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// p所在的分量（分量也由整数表示），要保证当参数属于同一个分量时，返回值应该相等。</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断p和q是否在同一个分量中</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 连通分量的数量</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">count</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现时要注意以下要点：</p>
+<ul>
+<li>所有的对象是用0到N-1表示的</li>
+<li>连通分量也用整数表示，一般来说可以用该分量中任意一个对象来表示。</li>
+</ul>
+<p>为了实现上述功能，我们用一个整数数组id[]来记录所有的对象所属的分量。即id[p]表示的是对象p所属的连通分量。那么有以下实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UF</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] id;</span><br><span class="line">    <span class="comment">// 记录分量的个数</span></span><br><span class="line">    <span class="keyword">private</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UF</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 初始化时，所有触点都是一个独立的分量</span></span><br><span class="line">        count = n;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="comment">// 所有触点都构成了一个只含有它自己的分量，因此将id[i]的值初始化为i</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> count; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中find()和union()两个方法有不同的实现。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="quick-find算法"><a href="#quick-find算法" class="headerlink" title="quick-find算法"></a>quick-find算法</h3><p>&#160; &#160; &#160; &#160;这种方法是要保证当且仅当id[p]等于id[p]时，p和q是属于同一个分量的。此时实现如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> id[p];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> pId = find(p);</span><br><span class="line">    <span class="keyword">int</span> qId = find(q);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 只有在p和q不属于同一个分量时才需要执行</span></span><br><span class="line">    <span class="keyword">if</span>(pId != qId) &#123;</span><br><span class="line">        <span class="comment">// 将所有与p同一分量的触点所属的分量修改为q所属的分量</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; id.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(id[i] == pId) &#123;</span><br><span class="line">                id[i] = qId;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        count--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分析：</p>
+<ul>
+<li>find()操作的时间复杂度为$O(1)$，因为只需要访问一次id数组</li>
+<li>union()操作的时间复杂度为$O(N)$，因为每一个合并都需要遍历整个id数组</li>
+<li>如果有M对连接，那么构建出所有的分量的时间复杂度为$O(MN)$。</li>
+</ul>
+<h3 id="quick-union算法"><a href="#quick-union算法" class="headerlink" title="quick-union算法"></a>quick-union算法</h3><p>&#160; &#160; &#160; &#160;这种方法不需要保证同一个分量中的触点的id值相同，id[]值只是同一个分量中另一个触点（或者也可以是触点自身），此时每一个分量中必定有一个触点的id值是指向自身的，这个触点就可以被认为是该分量的“根触点”，用以代表整个分量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(p != id[p]) p = id[p];</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将p和q的根触点统一</span></span><br><span class="line">    <span class="keyword">int</span> pRoot = find(p);</span><br><span class="line">    <span class="keyword">int</span> qRoot = find(q);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(pRoot != qRoot) &#123;</span><br><span class="line">        id[pRoot] = qRoot;</span><br><span class="line">        count --;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方法其实是用一棵树来表示一个分量，整个id数组用父连接的形式表现了一片森林。</p>
+<img src="/2158068979/quick-union.png" class="" title="quick-union">
+<p>分析：</p>
+<ul>
+<li>最好情况下，find()操作的时间复杂度是$O(1)$，最坏情况下，find()操作的时间复杂度是$O(N)$</li>
+<li>union()操作的时间复杂度应该与find()操作是一致的。</li>
+</ul>
+<h3 id="加权quick-union算法"><a href="#加权quick-union算法" class="headerlink" title="加权quick-union算法"></a>加权quick-union算法</h3><p>为了防止最坏情况的出现，需要对quick-union算法进行优化，在quick-union算法中，union()操作是随意的将一棵树连接到另一棵树，改进的方法就是记录每一棵树的大小并总是将较小的树连接到较大的树上。这种方法称为加权quick-union算法。这项改动需要添加一个数组和一些代码来记录树中的节点树。实现如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightedQuickUnionUF</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeightedQuickUnionUF</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        count = n;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) id[i] = i;</span><br><span class="line">        size = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) size[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> count; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(p != id[p]) p = id[p];</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = find(p);</span><br><span class="line">        <span class="keyword">int</span> j = find(q);</span><br><span class="line">        <span class="keyword">if</span>(i == j) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(size[i] &lt; size[j]) &#123;</span><br><span class="line">            id[i] = j;</span><br><span class="line">            size[j] += size[i];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            id[j] = i;</span><br><span class="line">            size[i] += size[j];</span><br><span class="line">        &#125;</span><br><span class="line">        count--;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>分析：</p>
+<ul>
+<li>对于$N$个触点，该算法构造的森林中任意的节点的深度最多为$\log{N}$</li>
+<li>find()操作的时间复杂度为$O(\log{N})$，union()操作的时间复杂度为$O(\log{N})$</li>
+<li>对于$N$个触点，$M$对连接，那么构建出所有的分量的时间复杂度为$O(M\log{N})$</li>
+<li>路径压缩：如果需要进一步优化，可以在检查节点的同时将它直接连接到根节点。该过程称为<strong>路径压缩</strong></li>
+</ul>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><blockquote>
+<p>&#160; &#160; &#160; &#160;<a href="https://leetcode-cn.com/problems/friend-circles/" target="_blank" rel="noopener">(LeetCode. 547)</a>班上有 N 名学生。其中有些人是朋友，有些则不是。他们的友谊具有是传递性。如果已知 A 是 B 的朋友，B 是 C 的朋友，那么我们可以认为 A 也是 C 的朋友。所谓的朋友圈，是指所有朋友的集合。<br>&#160; &#160; &#160; &#160;给定一个 N * N 的矩阵 M，表示班级中学生之间的朋友关系。如果M[i][j] = 1，表示已知第 i 个和 j 个学生互为朋友关系，否则为不知道。你必须输出所有学生中的已知的朋友圈总数。</p>
+<p>示例1:</p>
+<blockquote>
+<p><strong>输入</strong>:<br>[[1,1,0],<br> [1,1,0],<br> [0,0,1]]<br><strong>输出</strong>: 2<br>说明：已知学生0和学生1互为朋友，他们在一个朋友圈。<br>第2个学生自己在一个朋友圈。所以返回2。</p>
+</blockquote>
+<p>示例2:</p>
+<blockquote>
+<p><strong>输入</strong>:<br>[[1,1,0],<br> [1,1,1],<br> [0,1,1]]<br><strong>输出</strong>: 1<br><strong>说明</strong>：已知学生0和学生1互为朋友，学生1和学生2互为朋友，所以学生0和学生2也是朋友，所以他们三个在一个朋友圈，返回1。</p>
+</blockquote>
+<p><strong>注意：</strong></p>
+<ol>
+<li>N 在[1,200]的范围内。</li>
+<li>对于所有学生，有M[i][i] = 1。</li>
+<li>如果有M[i][j] = 1，则有M[j][i] = 1。</li>
+</ol>
+</blockquote>
+<p>题解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findCircleNum</span><span class="params">(<span class="keyword">int</span>[][] M)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = M.length;</span><br><span class="line">        UF uf = <span class="keyword">new</span> UF(n);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i+<span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(M[i][j] == <span class="number">1</span>) &#123;</span><br><span class="line">                    uf.union(i, j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uf.count();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">UF</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] id;</span><br><span class="line">        <span class="keyword">int</span>[] size;</span><br><span class="line">        <span class="keyword">int</span> count;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">UF</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">            id = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) id[i] = i;</span><br><span class="line">            size = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) size[i] = <span class="number">1</span>;</span><br><span class="line">            count = n;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> count;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (p != id[p]) p = id[p];</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> pRoot = find(p);</span><br><span class="line">            <span class="keyword">int</span> qRoot = find(q);</span><br><span class="line">            <span class="keyword">if</span>(pRoot == qRoot) <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">if</span>(size[pRoot] &lt; size[qRoot]) &#123;</span><br><span class="line">                id[pRoot] = qRoot;</span><br><span class="line">                size[qRoot] += size[pRoot];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                id[qRoot] = pRoot;</span><br><span class="line">                size[pRoot] += size[qRoot];</span><br><span class="line">            &#125;</span><br><span class="line">            count--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/3906993302/" rel="prev" title="CS224N笔记-语言模型与循环神经网络">
+      <i class="fa fa-chevron-left"></i> CS224N笔记-语言模型与循环神经网络
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题建模"><span class="nav-number">1.</span> <span class="nav-text">问题建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#动态连通性问题"><span class="nav-number">1.1.</span> <span class="nav-text">动态连通性问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法API"><span class="nav-number">1.2.</span> <span class="nav-text">算法API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#quick-find算法"><span class="nav-number">2.1.</span> <span class="nav-text">quick-find算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quick-union算法"><span class="nav-number">2.2.</span> <span class="nav-text">quick-union算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权quick-union算法"><span class="nav-number">2.3.</span> <span class="nav-text">加权quick-union算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例题"><span class="nav-number">3.</span> <span class="nav-text">例题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
+      src="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+  <p class="site-author-name" itemprop="name">我叫李铁柱</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo: 'likaihz.github.io',
+      owner: 'likaihz',
+      admin: ['likaihz'],
+      id: 'bccd5838d2d99dd61ec223363025ae4d',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -187,6 +187,76 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3697256296/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/3697256296/" class="post-title-link" itemprop="url">算法笔记：动态规划（1）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-18 22:35:05" itemprop="dateCreated datePublished" datetime="2020-02-18T22:35:05+00:00">2020-02-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="何时能够使用动态规划"><a href="#何时能够使用动态规划" class="headerlink" title="何时能够使用动态规划"></a>何时能够使用动态规划</h2><p>&#160; &#160; &#160; &#160;动态规划（Dynamic Programming, DP）与其说是一种算法，更准确地说是一种解决问题的思维方式，因为其并没有对所有相关问题抽象出一种通用的算法程序，而是要在解题时根据具体的问题运用动态规划的思想进行问题的建模并编码求解。因此在理解动态规划解题之前，首先要了解什么样的问题能够用动态规划的思想解决。</p>
+<p>&#160; &#160; &#160; &#160; 本质上来说，动态规划是一种更高效的递归算法的实现，所以在学习动态规划之前要对递归算法有比较深刻的理解。</p>
+<blockquote>
+<p>在用朴素递归解决问题时，首先将目标问题分解成多个子问题，而在解决这些子问题时又被分解成更小的子问题……如此重复，直到分解到递归的边界为止。在分解过程中，同一个子问题可能会被多次重复解决。</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160; 动态规划的思想就是，每解决一个子问题，都将该子问题的结果保存起来，则每个子问题只需要被解决一次。那么，哪些递归算法可以用动态规划的思想去实现呢？最简单的方法就是看朴素递归的算法有没有将同一个子问题一次次重复计算（可以画一个简单的递归树，能够很直观地发现，如果同一个子问题在树中不断出现，并且不止一次地出现在非叶节点上，那么就可以判断该子问题被重复计算了）。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/3697256296/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2158068979/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -742,7 +812,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

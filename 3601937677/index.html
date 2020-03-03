@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://blog.litiezhu.cn').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="JVM的垃圾收集器（Garbage Collector）管理的是Java堆和方法区的垃圾回收。 GC需要完成三件事：哪些内存需要回收（即判定垃圾）？什么时候回收？如何回收（垃圾收集算法）？">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM笔记2：垃圾收集器">
+<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3601937677&#x2F;index.html">
+<meta property="og:site_name" content="Tiezhu Blog">
+<meta property="og:description" content="JVM的垃圾收集器（Garbage Collector）管理的是Java堆和方法区的垃圾回收。 GC需要完成三件事：哪些内存需要回收（即判定垃圾）？什么时候回收？如何回收（垃圾收集算法）？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3601937677&#x2F;jvm2-gc-sweep.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3601937677&#x2F;jvm2-gc-copying.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3601937677&#x2F;jvm2-gc-compact.png">
+<meta property="og:updated_time" content="2020-03-03T14:57:35.087Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;3601937677&#x2F;jvm2-gc-sweep.png">
+
+<link rel="canonical" href="https://blog.litiezhu.cn/3601937677/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>JVM笔记2：垃圾收集器 | Tiezhu Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-151746522-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?340027755bae6497ffdf645b2ca071db";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tiezhu Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3601937677/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM笔记2：垃圾收集器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-16 20:41:41" itemprop="dateCreated datePublished" datetime="2019-07-16T20:41:41+00:00">2019-07-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>JVM的垃圾收集器（Garbage Collector）管理的是<strong>Java堆</strong>和<strong>方法区</strong>的垃圾回收。</li>
+<li>GC需要完成三件事：哪些内存需要回收（即判定垃圾）？什么时候回收？如何回收（垃圾收集算法）？</li>
+</ul>
+<a id="more"></a>
+<h2 id="垃圾判定算法"><a href="#垃圾判定算法" class="headerlink" title="垃圾判定算法"></a>垃圾判定算法</h2><h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><ul>
+<li>对指向对象的引用进行计数，当计数器值归零时则删除该对象。</li>
+<li>但是当出现循环引用时，相关的对象永远无法被判定为垃圾。</li>
+</ul>
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>&#160; &#160; &#160; &#160;该算法基本思路如下：</p>
+<ul>
+<li>选定一系列对象作为根对象“GC Roots”，根据引用关系向下搜索，搜索走过的路径称为“引用链”</li>
+<li>如果某个对象到“GC Roots”之间没有任何引用链相连，则证明此对象是不可能再被使用的</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;固定选为“GC Roots”的对象有以下几类：</p>
+<ul>
+<li>在虚拟机栈中引用的对象。（局部变量、临时变量等）</li>
+<li>在方法区中类静态变量和常量引用的对象</li>
+<li>在本地方法栈中JNI（即本地方法）引用的对象</li>
+<li>JVM内部的引用</li>
+<li>所有被同步锁持有的对象</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;除此以外，不同的垃圾收集器还有自己的选择。</p>
+<blockquote>
+<p><strong>引用的类型</strong>：无论哪一种垃圾判定算法都与引用有关，在JDK1.2版本之后扩充了引用的概念：</p>
+<ul>
+<li>强引用：即平时最常见的引用关系，有强引用的对象一定不会被回收</li>
+<li>软引用：在首次回收后如果还没有足够的内存，才会回收只有软引用的对象（<code>SoftReference</code>类）</li>
+<li>弱引用：比软引用更弱，在垃圾收集器开始工作时，无论内存是否足够，只有弱引用的对象都会被回收（<code>WeakReference</code>类）</li>
+<li>虚引用：最弱的引用关系，甚至无法从虚引用获取对象实例，更无法对对象的生存时间构成影响。（<code>PhantomReference</code>类）</li>
+</ul>
+</blockquote>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="分代收集理论"><a href="#分代收集理论" class="headerlink" title="分代收集理论"></a>分代收集理论</h3><p>&#160; &#160; &#160; &#160;当前商业虚拟机的垃圾收集器大部分都基于“分代收集（Generational Collection）”的理论。分代收集理论基于以下假说：</p>
+<ol>
+<li>弱分代假说（Weak Generational Hypothesis）:绝大多数对象都是朝生夕灭的。</li>
+<li>强分代假说（Strong Generational Hypothesis）:熬过越多次垃圾收集过程的对象就越难以消亡。</li>
+<li>跨代引用假说（Intergenerational Reference Hypothesis）:跨代引用相对于同代引用来说仅占极少数。</li>
+</ol>
+<p>&#160; &#160; &#160; &#160;基于以上假说的垃圾收集器会将其管理的内存划分为不同的区域，并根据各区域的特点以不同的频率各自执行不同的<strong>垃圾收集算法</strong>。具体来说，至少会有“新生代（Young Generation）”和“老年代（Old Generation）”两类区域。在新生代中，每次垃圾收集时都会有大批对象被回收，存活的少量对象会逐渐被移动到老年代中。据此可以总结以下特点：</p>
+<ul>
+<li>新生代中的大部分对象都很容易被回收，因此需要以较高的频率执行垃圾收集算法；同时每次垃圾收集后的新生代区域中的对象会很稀疏。</li>
+<li>老年代中的大部分对象难以消亡，因此垃圾回收的频率比较低；并且每次垃圾收集后会产生较小的碎片。</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;因此在不同的区域中需要执行不同的垃圾收集算法。常见的垃圾收集算法有以下几种。</p>
+<h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><ul>
+<li>标记-清除（Mark-Sweep）算法是最早最基础的垃圾收集算法（算法示意图如下）</li>
+<li><strong>过程</strong>：第一阶段根据垃圾判定算法标记出需要回收（或需要存活）的对象；第二阶段清除（或保留）被标记的对象。</li>
+<li><strong>缺点</strong>：一是执行效率不稳定，容易随着对象数量增长而降低；二是内存会产生较多的碎片，导致触发过多不必要的GC动作。</li>
+</ul>
+<img src="/3601937677/jvm2-gc-sweep.png" class="" title="jvm2-gc-sweep">
+<h3 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h3><h4 id="半区复制，Semispace-Copying"><a href="#半区复制，Semispace-Copying" class="headerlink" title="半区复制，Semispace Copying"></a>半区复制，Semispace Copying</h4><ul>
+<li><strong>过程</strong>：将内存分为大小相等的两半，每次只使用其中一半。当执行垃圾收集时，就把仍存活的对象依次复制到另一半，再把已使用过的一半直接清理掉。</li>
+<li><strong>缺点</strong>：一是如果内存中多数对象是存活的，就会产生大量的复制开销；二是可用内存缩小了一半。</li>
+</ul>
+<img src="/3601937677/jvm2-gc-copying.png" class="" title="jvm2-gc-copying">
+<h4 id="Appel式回收"><a href="#Appel式回收" class="headerlink" title="Appel式回收"></a>Appel式回收</h4><blockquote>
+<p>根据IBM一项研究，新生代中的对象98%都熬不过第一轮收集，因此并不需要按照半区复制中1:1的比例来划分新生代的内存空间。</p>
+</blockquote>
+<ul>
+<li>为了优化半区复制的空间代价，可以将新生代分为一块较大的<strong>Eden空间</strong>和两块较小的<strong>Survivor空间</strong>。每次分配内存只使用Eden和其中一块Survivor，垃圾收集时将所有的存活对象复制到另一块Survivor中，然后清理掉已使用的两块空间。</li>
+<li>HotSpot虚拟机默认的Eden和Survivor大小比例为8:1，即只有10%的空间是被浪费的。</li>
+<li>如果垃圾收集后有大于10%的对象存活，需要依赖其他内存区域（实际上大多就是老年代）保存多出来的存活对象。</li>
+</ul>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><ul>
+<li>由于标记-复制算法需要其他内存区域的担保，因此老年代不能直接用这种算法。标记-整理（Mark-Compact）算法就是针对老年代提出的。</li>
+<li><strong>过程</strong>：标记阶段后，让所有存活的对象向内存空间的一端移动。</li>
+<li><strong>缺点</strong>：与简单的标记-清除算法比，移动操作有较重的负担，会延长GC的延迟。（相应的，由于没有碎片，内存分配会更加简单）。</li>
+<li>Compromise：在老年代上，平时多数时间都采用标记-清除算法；直到内存空间的碎片化程度已经大到影响对象分配时，在采用标记-整理算法收集一次以清理碎片。</li>
+</ul>
+<img src="/3601937677/jvm2-gc-compact.png" class="" title="jvm2-gc-compact">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2415743415/" rel="prev" title="JVM笔记1：Java内存区域">
+      <i class="fa fa-chevron-left"></i> JVM笔记1：Java内存区域
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/4141265970/" rel="next" title="个人博客建站实录1：Hexo的安装与配置">
+      个人博客建站实录1：Hexo的安装与配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾判定算法"><span class="nav-number">1.</span> <span class="nav-text">垃圾判定算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引用计数算法"><span class="nav-number">1.1.</span> <span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">1.2.</span> <span class="nav-text">可达性分析算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">2.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集理论"><span class="nav-number">2.1.</span> <span class="nav-text">分代收集理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">2.2.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-复制算法"><span class="nav-number">2.3.</span> <span class="nav-text">标记-复制算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#半区复制，Semispace-Copying"><span class="nav-number">2.3.1.</span> <span class="nav-text">半区复制，Semispace Copying</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Appel式回收"><span class="nav-number">2.3.2.</span> <span class="nav-text">Appel式回收</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">2.4.</span> <span class="nav-text">标记-整理算法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
+      src="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+  <p class="site-author-name" itemprop="name">我叫李铁柱</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo: 'likaihz.github.io',
+      owner: 'likaihz',
+      admin: ['likaihz'],
+      id: '6535ab725d2dde01621f36b352dba15a',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

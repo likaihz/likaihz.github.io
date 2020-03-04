@@ -58,7 +58,7 @@ protected native Object clone() throws CloneNotSupportedException;
 ```
 
 &#160; &#160; &#160; &#160;创建并返回该对象的拷贝，“拷贝”的准确含义与该对象的类型有关。通常来说，该方法应该使得`x.clone() != x`，`x.clone().getClass() == x.getClass()`，`x.clone().equals(x)`的结果均为`true`，但是并不是强制的要求。
-&#160; &#160; &#160; &#160;该方法对对象实现的应该是“浅拷贝(shallow copy)”，而非“深拷贝（deep copy）”
+&#160; &#160; &#160; &#160;该方法对对象实现的是“浅拷贝(shallow copy)”，而非“深拷贝（deep copy）”
 * 浅拷贝：对基本数据类型进行值传递，对引用数据类型进行引用传递般的拷贝，此为浅拷贝。
 * 深拷贝：对基本数据类型进行值传递，对引用数据类型，创建一个新的对象，并复制其内容，此为深拷贝。
 

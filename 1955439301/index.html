@@ -46,20 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="运行时数据区域&amp;#160; &amp;#160; &amp;#160; &amp;#160;在Java程序运行时，Java虚拟机将其管理的内存划分为不同的运行时数据区域：">
-<meta name="keywords" content="JVM">
+  <meta name="description" content="String、StringBuilder和StringBuffer的区别     String StringBuilder StringBuffer     是否可变 不可变 可变 可变   线程安全 安全1 不安全 安全   拼接方法 + 或 concat方法 append方法 append方法   拼接性能 最差2 最好 中间3   适用情况 很少字符串操作 单线程大量字符串操作 多线程大量字">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM笔记1：Java内存区域">
-<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2415743415&#x2F;index.html">
+<meta property="og:title" content="Java笔记2：String，StringBuilder，StringBuffer">
+<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;1955439301&#x2F;index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
-<meta property="og:description" content="运行时数据区域&amp;#160; &amp;#160; &amp;#160; &amp;#160;在Java程序运行时，Java虚拟机将其管理的内存划分为不同的运行时数据区域：">
+<meta property="og:description" content="String、StringBuilder和StringBuffer的区别     String StringBuilder StringBuffer     是否可变 不可变 可变 可变   线程安全 安全1 不安全 安全   拼接方法 + 或 concat方法 append方法 append方法   拼接性能 最差2 最好 中间3   适用情况 很少字符串操作 单线程大量字符串操作 多线程大量字">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2415743415&#x2F;jvm-runtimedata.png">
 <meta property="og:updated_time" content="2020-03-04T11:38:20.084Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2415743415&#x2F;jvm-runtimedata.png">
 
-<link rel="canonical" href="https://blog.litiezhu.cn/2415743415/">
+<link rel="canonical" href="https://blog.litiezhu.cn/1955439301/">
 
 
 <script id="page-configurations">
@@ -71,7 +69,7 @@
   };
 </script>
 
-  <title>JVM笔记1：Java内存区域 | Tiezhu Blog</title>
+  <title>Java笔记2：String，StringBuilder，StringBuffer | Tiezhu Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
     <script>
@@ -193,7 +191,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2415743415/">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1955439301/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
@@ -206,7 +204,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          JVM笔记1：Java内存区域
+          Java笔记2：String，StringBuilder，StringBuffer
         </h1>
 
         <div class="post-meta">
@@ -216,7 +214,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-15 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-15T00:00:00+00:00">2019-07-15</time>
+              <time title="创建时间：2019-07-03 13:24:32" itemprop="dateCreated datePublished" datetime="2019-07-03T13:24:32+00:00">2019-07-03</time>
             </span>
 
           
@@ -230,72 +228,79 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h2><p>&#160; &#160; &#160; &#160;在Java程序运行时，Java虚拟机将其管理的内存划分为不同的运行时数据区域：</p>
-<img src="/2415743415/jvm-runtimedata.png" class="" title="jvm-runtimedata">
-<a id="more"></a>
-<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>&#160; &#160; &#160; &#160;如果对计算机组成有所了解的话，应该很容易理解程序计数器(PC)，可以认为其中的数据就是下一条指令的地址（字节码行号），在当前指令执行完毕后，JVM会根据PC中的数据找到下一条指令。除此以外，在当前线程被中断后恢复时，JVM也要根据PC中的值恢复现场。该内存区域并没有规定任何OOM的情况。</p>
-<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p>&#160; &#160; &#160; &#160;在一个线程中，每当开始执行一个普通的Java方法时，虚拟机会为该线程创建一个<strong>栈帧（Stack Frame）</strong>，并将其放入该线程所属的虚拟机栈中。当该方法执行完成后，对应的栈帧就会出栈。<br>&#160; &#160; &#160; &#160;栈帧中保存了方法的局部变量表、操作数栈、动态连接、方法出口等信息。</p>
-<ul>
-<li>局部变量表：存放方法参数和方法内部定义的局部变量。该表的容量以变量槽（Variable Slot）为单位，一个变量槽能够存放一个boolean、btye、char、short、int、float、reference或returnAddress类型的数据，而一个变量槽的实际内存大小取决于处理器、操作系统和虚拟机的实现。</li>
-<li>操作数栈：用于执行过程中保存操作数和结果。如做算数运算时存放操作数，或者在调用其他方法时存放参数。</li>
-<li>动态连接：运行时常量池中有一部分方法的引用在运行时才转化为直接引用，这部分的引用就称为动态连接。、</li>
-<li>方法出口：也叫方法返回地址。即该方法在执行完毕后，下一条应该执行的指令的地址。</li>
-</ul>
-<p>&#160; &#160; &#160; &#160;该区域有两种可能的异常状况：</p>
-<ul>
-<li>如果线程请求的栈深度大于虚拟机所允许的深度，抛出StackOverFlow异常</li>
-<li>如果虚拟机栈容量可以动态扩展，当栈扩展时无法申请到足够的内存会抛出OutOfMemeoryError异常</li>
-</ul>
-<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>&#160; &#160; &#160; &#160;本地方法栈的作用与虚拟机栈很相似，区别在于当执行的方法是本地方法时，栈帧会被压入本地方法栈。甚至有的虚拟机在实现时直接将其与虚拟机栈合并。</p>
-<h2 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h2><p>&#160; &#160; &#160; &#160;Java堆用来存放几乎所有的对象实例，所有线程共享这一区域。垃圾收集器（Garbage Collector）管理的就是Java堆中的对象。</p>
-<p>&#160; &#160; &#160; &#160;Java堆可以被实现为固定大小，也可以是可扩展的。如果Java堆的空间已不够用，并且也无法扩展时，JVM会抛出OutOfMemoryError异常。</p>
-<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>&#160; &#160; &#160; &#160;方法区用于存储被虚拟机加载的类型信息、常量、静态变量、即时编译器变异后的代码缓存等数据，所有线程共享这一区域。</p>
-<p>&#160; &#160; &#160; &#160;其中，类型信息包含：类的元信息（类的完整名称，修饰符，父类，接口等），类型的常量池，字段信息，方法信息，类变量，指向加载器的引用，指向Class实例的引用等。</p>
-<p>&#160; &#160; &#160; &#160;如果方法区无法满足新的内存分配需求时，将抛出OutOfMemoryError异常。</p>
-<h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>&#160; &#160; &#160; &#160;运行时常量池是方法区的一部分，用于存放编译时期产生的各种字面量（常量）与符号引用。这些常量在编译时期由编译器生成在Class文件中的常量池表中，JVM在运行时将其复制到运行时常量池中。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div class="table-container">
+        <h2 id="String、StringBuilder和StringBuffer的区别"><a href="#String、StringBuilder和StringBuffer的区别" class="headerlink" title="String、StringBuilder和StringBuffer的区别"></a>String、StringBuilder和StringBuffer的区别</h2><div class="table-container">
 <table>
 <thead>
 <tr>
-<th>数据区域</th>
-<th>存放内容</th>
-<th>产生时期/销毁时期</th>
-<th>可扩展</th>
-<th>异常状况</th>
+<th></th>
+<th>String</th>
+<th>StringBuilder</th>
+<th>StringBuffer</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>程序计数器</td>
-<td>下一条指令“地址”</td>
-<td>线程生成/线程销毁</td>
-<td>不可扩展</td>
-<td>无 </td>
+<td>是否可变</td>
+<td>不可变</td>
+<td>可变</td>
+<td>可变</td>
 </tr>
 <tr>
-<td>虚拟机栈</td>
-<td>栈帧</td>
-<td>线程生成/线程销毁</td>
-<td>允许扩展</td>
-<td>StackOverflowError, OutOfMemoryError </td>
+<td>线程安全</td>
+<td>安全<sup>1</sup></td>
+<td>不安全</td>
+<td>安全</td>
 </tr>
 <tr>
-<td>Java堆</td>
-<td>对象实例</td>
-<td>虚拟机启动/虚拟机关闭</td>
-<td>允许扩展</td>
-<td>OutOfMemoryError </td>
+<td>拼接方法</td>
+<td><code>+</code> 或 <code>concat</code>方法</td>
+<td><code>append</code>方法</td>
+<td><code>append</code>方法</td>
 </tr>
 <tr>
-<td>方法区（包括运行时常量池）</td>
-<td>已加载的类信息，静态变量等（常量保存在运行时常量池中）</td>
-<td>虚拟机启动/虚拟机关闭</td>
-<td>允许扩展</td>
-<td>OutOfMemoryError </td>
+<td>拼接性能</td>
+<td>最差<sup>2</sup></td>
+<td>最好</td>
+<td>中间<sup>3</sup></td>
+</tr>
+<tr>
+<td>适用情况</td>
+<td>很少字符串操作</td>
+<td>单线程大量字符串操作</td>
+<td>多线程大量字符串操作</td>
 </tr>
 </tbody>
 </table>
 </div>
+<a id="more"></a>
+<ol>
+<li>不可变对象天然是线程安全的，因为其只可读，不可写。</li>
+<li>在拼接两个<code>String</code>对象时，会创建一个新的<code>String</code>对象保存拼接的结果，因此性能较差，并且会产生较多的内存垃圾。而如果拼接的都是字符串字面量，会在编译时期优化。</li>
+<li><code>StringBuffer</code>由于要保证线程安全，因此比<code>StringBuilder</code>的性能差。</li>
+</ol>
+<h2 id="String类的不可变性"><a href="#String类的不可变性" class="headerlink" title="String类的不可变性"></a>String类的不可变性</h2><h3 id="如何保证不可变性"><a href="#如何保证不可变性" class="headerlink" title="如何保证不可变性"></a>如何保证不可变性</h3><p>&#160; &#160; &#160; &#160;ava中<code>String</code>类的源码前两行如下（版本是jdk_1.8.0_221）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在Java9以前字符串采用<code>char[]</code>数组来保存字符，因此字符串的每个字符占2字节；从Java9开始，字符串采用<code>byte[]</code>数组再加一个encoding-flag字段来保存字符，因此Java9的字符串更加节省空间。</p>
+</blockquote>
+<p>&#160;&#160;&#160;&#160;Java通过以下措施联合保证了<code>String</code>类的不可变性：</p>
+<ul>
+<li>用<code>final</code>修饰value成员字段，保证其不被修改为其他数组对象。</li>
+<li><code>String</code>类的所有方法都不会修改value字段中的任何元素。</li>
+<li>用<code>final</code>修饰<code>String</code>类，将其设计为不可继承的，保证了value字段不会被子类获取到。</li>
+</ul>
+<h3 id="不可变性的优点"><a href="#不可变性的优点" class="headerlink" title="不可变性的优点"></a>不可变性的优点</h3><ul>
+<li>字符串不变保证了哈希值不变，因此<code>String</code>类中缓存了哈希值，当字符串对象作为<code>HashMap</code>的键时，能够提高效率。</li>
+<li>字符串对象作为Java中非常常见的对象，针对字符串对象的空间优化能够大幅降低JVM的内存开销。其不变性让<strong>字符串常量池（String Pool）</strong>成为可能：<ul>
+<li>采用字面值的方式创建一个字符串时（如<code>String str = &quot;aaa&quot;;</code>），JVM首先会去字符串池中查找是否存在”aaa”这个对象，如果不存在，则在字符串池中创建”aaa”这个对象，然后将池中”aaa”这个对象的引用地址返回给字符串常量str，这样str会指向池中”aaa”这个字符串对象；如果存在，则不创建任何对象，直接将池中”aaa”这个对象的地址返回，赋给字符串常量。</li>
+<li>采用new关键字新建一个字符串对象时（如<code>String str2 = new String(&quot;aaa&quot;)</code>），JVM首先在字符串池中查找有没有”aaa”这个字符串对象，如果有，则不在池中再去创建”aaa”这个对象了，直接在堆中创建一个”aaa”字符串对象，然后将堆中的这个”aaa”对象的地址返回赋给引用str2；如果没有，则首先在字符串池中创建一个”aaa”字符串对象，然后再在堆中创建一个”aaa”字符串对象，然后将堆中这个”aaa”字符串对象的地址返回赋给str2引用。</li>
+<li>字符串的常量池能够减少相同字符串的重复创建，优化空间。</li>
+</ul>
+</li>
+<li>不可变对象是线程安全的，同一个字符串实例可以被多个线程共享。</li>
+<li>类加载器要用到字符串，不可变性提供了安全性，以便正确的类被加载。</li>
+</ul>
+<p>&#160;&#160;&#160;&#160;总的来说，字符串的不可变设计是考虑到效率和安全性的。</p>
 
     </div>
 
@@ -305,7 +310,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/JVM/" rel="tag"># JVM</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
           </div>
 
         
@@ -314,12 +319,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/1955439301/" rel="prev" title="Java笔记2：String，StringBuilder，StringBuffer">
-      <i class="fa fa-chevron-left"></i> Java笔记2：String，StringBuilder，StringBuffer
+    <a href="/3140146257/" rel="prev" title="Java笔记1：Object类源码">
+      <i class="fa fa-chevron-left"></i> Java笔记1：Object类源码
     </a></div>
       <div class="post-nav-item">
-    <a href="/3601937677/" rel="next" title="JVM笔记2：垃圾收集器">
-      JVM笔记2：垃圾收集器 <i class="fa fa-chevron-right"></i>
+    <a href="/2415743415/" rel="next" title="JVM笔记1：Java内存区域">
+      JVM笔记1：Java内存区域 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -381,7 +386,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时数据区域"><span class="nav-number">1.</span> <span class="nav-text">运行时数据区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序计数器"><span class="nav-number">2.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">3.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地方法栈"><span class="nav-number">4.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java堆"><span class="nav-number">5.</span> <span class="nav-text">Java堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法区"><span class="nav-number">6.</span> <span class="nav-text">方法区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时常量池"><span class="nav-number">6.1.</span> <span class="nav-text">运行时常量池</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#String、StringBuilder和StringBuffer的区别"><span class="nav-number">1.</span> <span class="nav-text">String、StringBuilder和StringBuffer的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String类的不可变性"><span class="nav-number">2.</span> <span class="nav-text">String类的不可变性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何保证不可变性"><span class="nav-number">2.1.</span> <span class="nav-text">如何保证不可变性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不可变性的优点"><span class="nav-number">2.2.</span> <span class="nav-text">不可变性的优点</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -505,7 +510,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'likaihz.github.io',
       owner: 'likaihz',
       admin: ['likaihz'],
-      id: '33f518968e254ec972906e882edfd498',
+      id: '8f22e8814abd0398d838d19aede3a326',
         language: '',
       distractionFreeMode: true
     });

@@ -8,7 +8,7 @@ date: 2019-07-04 15:12:09
 
 ## Java集合
 
-&#160;&#160;&#160;&#160;Java中集合类主要用于保存、盛装其他类型的数据，因此集合类也称为容器类。所有的集合类都位于`java.util`包下，容器类只能保存引用类型。Java中的集合类主要有两个接口：`Collection`和`Map`，本文主要讨论`Collection`接口。`Collection`接口的继承数如下：
+&#160;&#160;&#160;&#160;Java中集合类主要用于保存、盛装其他类型的数据，因此集合类也称为容器类。所有的集合类都位于`java.util`包下，容器类只能保存引用类型。Java中的集合类主要有两个接口：`Collection`和`Map`，本文主要讨论`Collection`接口。`Collection`接口的继承树如下：
 
 {% asset_img Collection.png Collection %}
 

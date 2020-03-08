@@ -12,6 +12,8 @@ date: 2019-07-04 15:12:09
 
 {% asset_img Collection.png Collection %}
 
+<!--more-->
+
 ## Set接口
 
 * Set接口与Collection基本相同，没有提供额外的方法

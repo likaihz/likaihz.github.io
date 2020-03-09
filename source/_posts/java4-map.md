@@ -16,7 +16,7 @@ date: 2019-07-05 19:46:02
 
 可以看到，`Map`的子类层次与`Set`很像，`Set`接口下有`HashSet`，`LinkedHashSet`，`SorterdSet`，`TreeSet`，`EnumSet`；相应的，`Map`接口下有`HashMap`，`LinkedHashMap`，`SortedMap`，`TreeMap`，`EnumMap`。`Map`的这些实现类中key集的存储形式和对应的`Set`中的元素的存储形式完全相同。
 
-> 实际上，从源码看，Java是先实现了`Map`，然后通过包装一个所有value都为`null`的`Map`就实现了`Set`
+> 实际上，从源码看，Java是先实现了`Map`，然后通过包装一个所有value都为一个空对象的`Map`就实现了`Set`
 
 ## Java8改进的HashMap和Hashtable实现类
 

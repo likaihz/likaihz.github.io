@@ -15,10 +15,36 @@
 
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
+
 <script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://blog.litiezhu.cn').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
 
   <meta name="description" content="最近在看CS224N，本文是第一周的阅读任务之一(原文链接)，以下是全文翻译。 &amp;#8195;&amp;#8195;该教程讲解了Word2Vec中的Skip-Gram神经网络结构，教程的目标是深入讲解细节。 模型&amp;#8195;&amp;#8195;Skip-Gram神经网络模型的基本形式非常简单，如果从细节上的调整和优化开始解释则会显得有些混乱。 &amp;#8195;&amp;#8195;我们先从一个整体的视角去考虑，Word">
 <meta name="keywords" content="NLP,翻译,word2vec">
@@ -33,7 +59,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;863537285&#x2F;matrix.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;863537285&#x2F;multiply.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;863537285&#x2F;carweights.png">
-<meta property="og:updated_time" content="2020-03-09T02:22:34.652Z">
+<meta property="og:updated_time" content="2020-03-09T02:21:53.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;863537285&#x2F;training-samples.png">
 
@@ -44,8 +70,8 @@
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
-    isPost : true
+    isHome: false,
+    isPost: true
   };
 </script>
 
@@ -106,14 +132,6 @@
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
   <div class="site-meta">
 
     <div>
@@ -126,8 +144,11 @@
         <p class="site-subtitle">Be perfect.</p>
   </div>
 
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
 </div>
@@ -312,7 +333,7 @@
 
 <script>
   window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
+    let activeClass = CONFIG.comments.activeClass;
     if (CONFIG.comments.storage) {
       activeClass = localStorage.getItem('comments_active') || activeClass;
     }
@@ -420,7 +441,7 @@
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -494,12 +515,12 @@
 NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
     var gitalk = new Gitalk({
-      clientID    : 'd1ec07d70ba69c8b5706',
+      clientID: 'd1ec07d70ba69c8b5706',
       clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
-      repo        : 'likaihz.github.io',
-      owner       : 'likaihz',
-      admin       : ['likaihz'],
-      id          : '9f8bcf163b013aa01bebda182efac959',
+      repo: 'likaihz.github.io',
+      owner: 'likaihz',
+      admin: ['likaihz'],
+      id: '9f8bcf163b013aa01bebda182efac959',
         language: '',
       distractionFreeMode: true
     });

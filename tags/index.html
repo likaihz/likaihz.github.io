@@ -15,43 +15,17 @@
 
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
-
 <script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    hostname: new URL('https://blog.litiezhu.cn').hostname,
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.7.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    comments: {"style":"tabs","active":null,"storage":true,"nav":null},
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
-  };
-</script>
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="tags">
 <meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;tags&#x2F;index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-09T02:21:53.246Z">
+<meta property="og:updated_time" content="2020-03-09T14:54:33.955Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://blog.litiezhu.cn/tags/">
@@ -61,8 +35,8 @@
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: false,
-    isPost: false
+    isHome : false,
+    isPost : false
   };
 </script>
 
@@ -124,6 +98,14 @@
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
   <div class="site-meta">
 
     <div>
@@ -136,11 +118,8 @@
         <p class="site-subtitle">Be perfect.</p>
   </div>
 
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
   </div>
 </div>
@@ -210,10 +189,10 @@
       <div class="post-body">
           <div class="tag-cloud">
             <div class="tag-cloud-title">
-              目前共计 12 个标签
+              目前共计 13 个标签
             </div>
             <div class="tag-cloud-tags">
-              <a href="/tags/JVM/" style="font-size: 24px; color: #4f4f4f">JVM</a> <a href="/tags/Java/" style="font-size: 30px; color: #111">Java</a> <a href="/tags/LeetCode/" style="font-size: 24px; color: #4f4f4f">LeetCode</a> <a href="/tags/NLP/" style="font-size: 24px; color: #4f4f4f">NLP</a> <a href="/tags/word2vec/" style="font-size: 18px; color: #8e8e8e">word2vec</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 18px; color: #8e8e8e">博客</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 18px; color: #8e8e8e">原创</a> <a href="/tags/%E5%91%A8%E8%BE%B9/" style="font-size: 18px; color: #8e8e8e">周边</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">机器学习</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #ccc">笔记</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 24px; color: #4f4f4f">算法</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 18px; color: #8e8e8e">翻译</a>
+              <a href="/tags/JVM/" style="font-size: 24px; color: #4f4f4f">JVM</a> <a href="/tags/Java/" style="font-size: 30px; color: #111">Java</a> <a href="/tags/LeetCode/" style="font-size: 24px; color: #4f4f4f">LeetCode</a> <a href="/tags/NLP/" style="font-size: 24px; color: #4f4f4f">NLP</a> <a href="/tags/word2vec/" style="font-size: 18px; color: #8e8e8e">word2vec</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 18px; color: #8e8e8e">博客</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 18px; color: #8e8e8e">原创</a> <a href="/tags/%E5%91%A8%E8%BE%B9/" style="font-size: 18px; color: #8e8e8e">周边</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12px; color: #ccc">机器学习</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 18px; color: #8e8e8e">源码</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #ccc">笔记</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 24px; color: #4f4f4f">算法</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 18px; color: #8e8e8e">翻译</a>
             </div>
           </div>
         
@@ -235,7 +214,7 @@
 
 <script>
   window.addEventListener('tabs:register', () => {
-    let activeClass = CONFIG.comments.activeClass;
+    let { activeClass } = CONFIG.comments;
     if (CONFIG.comments.storage) {
       activeClass = localStorage.getItem('comments_active') || activeClass;
     }
@@ -293,14 +272,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -342,7 +321,7 @@
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
   </div>
 
         

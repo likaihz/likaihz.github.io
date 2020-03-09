@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="基本数据模型&amp;#160;&amp;#160;&amp;#160;&amp;#160;在HashMap的实现中，最基本的数据模型有两个，分别是用来表示一个键值对的类Node&amp;lt;K, V&amp;gt;和用于保存所有键值对的数组transient Node&amp;lt;K,V&amp;gt;[] table;。Node&amp;lt;K, V&amp;gt;的部分定义如下： 12345678static class Node&amp;lt;K,V&amp;gt; imple">
+<meta name="keywords" content="Java,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java笔记4.1：HashMap源码探索">
+<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;487642189&#x2F;index.html">
+<meta property="og:site_name" content="Tiezhu Blog">
+<meta property="og:description" content="基本数据模型&amp;#160;&amp;#160;&amp;#160;&amp;#160;在HashMap的实现中，最基本的数据模型有两个，分别是用来表示一个键值对的类Node&amp;lt;K, V&amp;gt;和用于保存所有键值对的数组transient Node&amp;lt;K,V&amp;gt;[] table;。Node&amp;lt;K, V&amp;gt;的部分定义如下： 12345678static class Node&amp;lt;K,V&amp;gt; imple">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;487642189&#x2F;hashmap.png">
+<meta property="og:updated_time" content="2020-03-09T14:54:33.947Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;487642189&#x2F;hashmap.png">
+
+<link rel="canonical" href="https://blog.litiezhu.cn/487642189/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Java笔记4.1：HashMap源码探索 | Tiezhu Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-151746522-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?340027755bae6497ffdf645b2ca071db";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Tiezhu Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Be perfect.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/487642189/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java笔记4.1：HashMap源码探索
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-06 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-06T00:00:00+00:00">2019-07-06</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="基本数据模型"><a href="#基本数据模型" class="headerlink" title="基本数据模型"></a>基本数据模型</h2><p>&#160;&#160;&#160;&#160;在<code>HashMap</code>的实现中，最基本的数据模型有两个，分别是用来表示一个键值对的类<code>Node&lt;K, V&gt;</code>和用于保存所有键值对的数组<code>transient Node&lt;K,V&gt;[] table;</code>。<code>Node&lt;K, V&gt;</code>的部分定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> hash;</span><br><span class="line">        <span class="keyword">final</span> K key;</span><br><span class="line">        V value;</span><br><span class="line">        Node&lt;K,V&gt; next;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// methods</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>在向<code>HashMap</code>中添加键值对时，会先根据key的哈希值进行再一次的哈希运算，得到该键值对在<code>table</code>中的位置（源码中对<code>table</code>中的一个位置称为一个桶，bucket）。该过程不可避免地会产生哈希冲突，即出现计算出的位置上已经有其他键值对存在的情况。为了兼顾时间性能与空间性能，<code>HashMap</code>采用了以下两个主要的优化手段：</p>
+<ul>
+<li>适当的时机<strong>扩容</strong>以降低冲突：当向表中插入的键值对太多时，发生哈希冲突的概率会提高。因此在<code>HashMap</code>中的键值对数量超过阈值时进行扩容与重新哈希。</li>
+<li>当“桶”中对象数太多时，用红黑树组织。<code>HashMap</code>采用的解决冲突的办法是拉链法，即将新的值仍然插入到该位置，形成一个链表。如果链表过长，会产生性能问题，因此从jdk1.8开始，又引入了红黑树，即当某个位置上的链表长度超过阈值时，将链表改造为一棵红黑树，这个过程称为“<strong>树化</strong>”。树化过程中，<code>Node</code>对象将变为<code>HashMap.TreeNode</code>类型(是<code>Node</code>的子类)</li>
+</ul>
+<p>&#160;&#160;&#160;&#160;综上，<code>HashMap</code>内部的结构如下：</p>
+<img src="/487642189/hashmap.png" class="" title="hashmap">
+<h2 id="哈希与扩容"><a href="#哈希与扩容" class="headerlink" title="哈希与扩容"></a>哈希与扩容</h2><h3 id="哈希值计算——为什么要右移16位？"><a href="#哈希值计算——为什么要右移16位？" class="headerlink" title="哈希值计算——为什么要右移16位？"></a>哈希值计算——为什么要右移16位？</h3><p>&#160;&#160;&#160;&#160;<code>HashMap</code>中会根据key对象的hashCode重新计算哈希值，计算哈希值的方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> h;</span><br><span class="line">        <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>从中可以得到以下两方面的信息：</p>
+<ul>
+<li><code>HashMap</code>是允许<code>null</code>作为key的，并且<code>null</code>的哈希为0</li>
+<li>一般的key在进行计算哈希时，用其哈希值右移16位的结果与其自身做按位异或。</li>
+</ul>
+<p>&#160;&#160;&#160;&#160;注释中简单解释了采用这种哈希函数的原因，大意是说寻址计算时，能够参与到计算的有效二进制位仅仅是右侧和数组长度值对应的那几位，意味着发生冲突的几率会高。通过移位和异或运算让hashCode的高位能够参与到寻址计算中。采用这种方式是为了在性能、实用性、分布质量上取得一个平衡。有很多hashCode算法都已经是分布合理的了，并且大量冲突时，还可以通过树结构来解决查询性能问题。</p>
+<h3 id="容量与寻址——为什么是2的次方？"><a href="#容量与寻址——为什么是2的次方？" class="headerlink" title="容量与寻址——为什么是2的次方？"></a>容量与寻址——为什么是2的次方？</h3><p>&#160;&#160;&#160;&#160;<code>HashMap</code>中根据哈希结果计算数组下标（寻址）的方法如下：<code>hash &amp; (capacity-1)</code>，其中hash是重新计算过的hash值，capacity是<code>table</code>的长度。由于<code>HashMap</code>的实现确保了<code>capacity</code>是2的次幂，此时<code>hash &amp; (capacity-1)</code>的运算效果等同于<code>hash % capacity</code>，而位运算的效率高，这样的写法能够提高寻址的性能。</p>
+<blockquote>
+<p>这也很好理解，例如length为16时，其二进制为00010000，那么length-1的二进制为00001111，与hash做按位与计算时，结果就是只留下低4位的值，屏蔽了高位，也即是height%length的结果。</p>
+</blockquote>
+<p>&#160;&#160;&#160;&#160;扩容相关的方法<code>resize()</code>中的部分代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Node&lt;K,V&gt;[] resize() &#123;</span><br><span class="line">    Node&lt;K,V&gt;[] oldTab = table;</span><br><span class="line">    <span class="keyword">int</span> oldCap = (oldTab == <span class="keyword">null</span>) ? <span class="number">0</span> : oldTab.length;</span><br><span class="line">    <span class="keyword">int</span> oldThr = threshold;</span><br><span class="line">    <span class="keyword">int</span> newCap, newThr = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (oldCap &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (oldCap &gt;= MAXIMUM_CAPACITY) &#123;</span><br><span class="line">            threshold = Integer.MAX_VALUE;</span><br><span class="line">            <span class="keyword">return</span> oldTab;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((newCap = oldCap &lt;&lt; <span class="number">1</span>) &lt; MAXIMUM_CAPACITY &amp;&amp;</span><br><span class="line">                    oldCap &gt;= DEFAULT_INITIAL_CAPACITY)</span><br><span class="line">            newThr = oldThr &lt;&lt; <span class="number">1</span>; <span class="comment">// double threshold</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (oldThr &gt; <span class="number">0</span>) <span class="comment">// initial capacity was placed in threshold</span></span><br><span class="line">            newCap = oldThr;</span><br><span class="line">    <span class="keyword">else</span> &#123;               <span class="comment">// zero initial threshold signifies using defaults</span></span><br><span class="line">        newCap = DEFAULT_INITIAL_CAPACITY;</span><br><span class="line">        newThr = (<span class="keyword">int</span>)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newThr == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">float</span> ft = (<span class="keyword">float</span>)newCap * loadFactor;</span><br><span class="line">            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY ?</span><br><span class="line">                      (<span class="keyword">int</span>)ft : Integer.MAX_VALUE);</span><br><span class="line">        &#125;</span><br><span class="line">        threshold = newThr;</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"rawtypes"</span>,<span class="string">"unchecked"</span>&#125;)</span><br><span class="line">        Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])<span class="keyword">new</span> Node[newCap];</span><br><span class="line">        table = newTab;</span><br><span class="line">    <span class="comment">// something else...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在构造<code>HashMap</code>时，<code>table</code>为<code>null</code>，只有在第一次向表中放入对象时才会触发<code>resize()</code>方法，构建一个容量为16（即代码中的<code>DEFAULT_INITIAL_CAPACITY</code>）的数组。</li>
+<li>每一次触发扩容时，都会将数组的大小扩充为原来的两倍。这就保证了数组的大小一定是2的次幂。</li>
+</ul>
+<h2 id="扩容与负载因子"><a href="#扩容与负载因子" class="headerlink" title="扩容与负载因子"></a>扩容与负载因子</h2><h3 id="何时触发扩容"><a href="#何时触发扩容" class="headerlink" title="何时触发扩容"></a>何时触发扩容</h3><p>&#160;&#160;&#160;&#160;在向表中添加键值对时，如果表内已有的键值对数量大于阈值<code>threshold</code>，就会触发一次扩容，扩容的过程上文已有简述。</p>
+<h3 id="负载因子"><a href="#负载因子" class="headerlink" title="负载因子"></a>负载因子</h3><p>&#160;&#160;&#160;&#160;<code>HashMap</code>中有一个字段为<code>loadFactor</code>，称为负载因子，阈值的计算就是依赖于负载因子。<code>threshold = capacity * loadFactor</code>。如果<code>HashMap</code> 在构造时没有指定负载因子，默认的负载因子为0.75。如果扩容因子越大，意味着哈希表越满，碰撞的概率也就越大，发生碰撞后的代价也更大，结果导致效率大打折扣。因此扩容因子取0.75也是一个空间换时间的考虑。</p>
+<h2 id="树化"><a href="#树化" class="headerlink" title="树化"></a>树化</h2><p>&#160;&#160;&#160;&#160;前面已经提到过树化的概念，即当table中某个位置出现了太多的冲突时，就要将该位置上的元素由链表排列改为按红黑树排列，以提高查找性能。在<code>HashMap</code>中，这个阈值默认为8。</p>
+<blockquote>
+<p>在链表查找时，时间复杂度为为$O(n)$，而在红黑树上进行查找时，时间复杂度为$O(\log n)$</p>
+</blockquote>
+<h3 id="为什么不直接用红黑树？"><a href="#为什么不直接用红黑树？" class="headerlink" title="为什么不直接用红黑树？"></a>为什么不直接用红黑树？</h3><p>&#160;&#160;&#160;&#160;对于这一点，源码注释用也有提到，因为在用红黑树组织对象时，树的节点所用的类为<code>HashMap.TreeNode</code>，该类的大小几乎为其祖先类<code>HashMap.Node</code>的两倍，而在链表很小的时候，其实其查找性能的差异并不是特别大，因此这是一个空间换时间的决定。</p>
+<h3 id="为什么树化的默认阈值为8？"><a href="#为什么树化的默认阈值为8？" class="headerlink" title="为什么树化的默认阈值为8？"></a>为什么树化的默认阈值为8？</h3><p>&#160;&#160;&#160;&#160;源码的注释中有提到，假设hashCode真的分布很均匀，那么数组中每个位置出现的对象数符合泊松分布，在负载因子为0.75的前提下，分布为：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>频数</th>
+<th>概率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0.60653066</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0.30326533</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.07581633</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.01263606</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.00157952</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0.00015795</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0.00001316</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0.00000094</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0.00000006</td>
+</tr>
+<tr>
+<td>大于8</td>
+<td>小于一千万分之一</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>可见其实当阈值定为8时，需要树化的概率已经相当低了，大于8的概率更是低到可以忽略不及。因此阈值取8已经有很好的时间和空间性能了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E6%BA%90%E7%A0%81/" rel="tag"># 源码</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2366166279/" rel="prev" title="Java笔记4：Map接口">
+      <i class="fa fa-chevron-left"></i> Java笔记4：Map接口
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2415743415/" rel="next" title="JVM笔记1：Java内存区域">
+      JVM笔记1：Java内存区域 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据模型"><span class="nav-number">1.</span> <span class="nav-text">基本数据模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希与扩容"><span class="nav-number">2.</span> <span class="nav-text">哈希与扩容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希值计算——为什么要右移16位？"><span class="nav-number">2.1.</span> <span class="nav-text">哈希值计算——为什么要右移16位？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容量与寻址——为什么是2的次方？"><span class="nav-number">2.2.</span> <span class="nav-text">容量与寻址——为什么是2的次方？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩容与负载因子"><span class="nav-number">3.</span> <span class="nav-text">扩容与负载因子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#何时触发扩容"><span class="nav-number">3.1.</span> <span class="nav-text">何时触发扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#负载因子"><span class="nav-number">3.2.</span> <span class="nav-text">负载因子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树化"><span class="nav-number">4.</span> <span class="nav-text">树化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么不直接用红黑树？"><span class="nav-number">4.1.</span> <span class="nav-text">为什么不直接用红黑树？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么树化的默认阈值为8？"><span class="nav-number">4.2.</span> <span class="nav-text">为什么树化的默认阈值为8？</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
+      src="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+  <p class="site-author-name" itemprop="name">我叫李铁柱</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo        : 'likaihz.github.io',
+      owner       : 'likaihz',
+      admin       : ['likaihz'],
+      id          : 'd99e9c8decf807e1477e9c5b2338442e',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

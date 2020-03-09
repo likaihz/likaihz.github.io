@@ -15,36 +15,10 @@
 
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
-
 <script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    hostname: new URL('https://blog.litiezhu.cn').hostname,
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.7.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    comments: {"style":"tabs","active":null,"storage":true,"nav":null},
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
-  };
-</script>
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
   <meta name="description" content="Map接口&amp;#160;&amp;#160;&amp;#160;&amp;#160;Map用于保存键值对（key-value），其中key不允许重复。Map接口的继承树如下：">
 <meta name="keywords" content="Java">
@@ -55,7 +29,7 @@
 <meta property="og:description" content="Map接口&amp;#160;&amp;#160;&amp;#160;&amp;#160;Map用于保存键值对（key-value），其中key不允许重复。Map接口的继承树如下：">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2366166279&#x2F;map.png">
-<meta property="og:updated_time" content="2020-03-09T02:21:53.234Z">
+<meta property="og:updated_time" content="2020-03-09T14:54:33.947Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;2366166279&#x2F;map.png">
 
@@ -66,8 +40,8 @@
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: false,
-    isPost: true
+    isHome : false,
+    isPost : true
   };
 </script>
 
@@ -128,6 +102,14 @@
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
   <div class="site-meta">
 
     <div>
@@ -140,11 +122,8 @@
         <p class="site-subtitle">Be perfect.</p>
   </div>
 
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
   </div>
 </div>
@@ -243,7 +222,7 @@
 <a id="more"></a>
 <p>可以看到，<code>Map</code>的子类层次与<code>Set</code>很像，<code>Set</code>接口下有<code>HashSet</code>，<code>LinkedHashSet</code>，<code>SorterdSet</code>，<code>TreeSet</code>，<code>EnumSet</code>；相应的，<code>Map</code>接口下有<code>HashMap</code>，<code>LinkedHashMap</code>，<code>SortedMap</code>，<code>TreeMap</code>，<code>EnumMap</code>。<code>Map</code>的这些实现类中key集的存储形式和对应的<code>Set</code>中的元素的存储形式完全相同。</p>
 <blockquote>
-<p>实际上，从源码看，Java是先实现了<code>Map</code>，然后通过包装一个所有value都为<code>null</code>的<code>Map</code>就实现了<code>Set</code></p>
+<p>实际上，从源码看，Java是先实现了<code>Map</code>，然后通过包装一个所有value都为一个空对象的<code>Map</code>就实现了<code>Set</code></p>
 </blockquote>
 <h2 id="Java8改进的HashMap和Hashtable实现类"><a href="#Java8改进的HashMap和Hashtable实现类" class="headerlink" title="Java8改进的HashMap和Hashtable实现类"></a>Java8改进的HashMap和Hashtable实现类</h2><ul>
 <li><p>两个实现类的区别：</p>
@@ -289,8 +268,8 @@
       <i class="fa fa-chevron-left"></i> Java笔记3：Collection接口
     </a></div>
       <div class="post-nav-item">
-    <a href="/2415743415/" rel="next" title="JVM笔记1：Java内存区域">
-      JVM笔记1：Java内存区域 <i class="fa fa-chevron-right"></i>
+    <a href="/487642189/" rel="next" title="Java笔记4.1：HashMap源码探索">
+      Java笔记4.1：HashMap源码探索 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -309,7 +288,7 @@
 
 <script>
   window.addEventListener('tabs:register', () => {
-    let activeClass = CONFIG.comments.activeClass;
+    let { activeClass } = CONFIG.comments;
     if (CONFIG.comments.storage) {
       activeClass = localStorage.getItem('comments_active') || activeClass;
     }
@@ -368,14 +347,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -417,7 +396,7 @@
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
   </div>
 
         
@@ -491,12 +470,12 @@
 NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
     var gitalk = new Gitalk({
-      clientID: 'd1ec07d70ba69c8b5706',
+      clientID    : 'd1ec07d70ba69c8b5706',
       clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
-      repo: 'likaihz.github.io',
-      owner: 'likaihz',
-      admin: ['likaihz'],
-      id: '41d8c7371caef997ee52c68fa4781fdf',
+      repo        : 'likaihz.github.io',
+      owner       : 'likaihz',
+      admin       : ['likaihz'],
+      id          : '41d8c7371caef997ee52c68fa4781fdf',
         language: '',
       distractionFreeMode: true
     });

@@ -32,6 +32,8 @@ date: 2019-07-18 13:30:07
 
 &#160;&#160;&#160;&#160;在JDK1.5版本时，JVM对`synchronized`关键字优化相当有限，只使用了最传统的锁机制（现在也称为重量级锁机制）。每个对象都会有一个对应的监视器（monitor）负责监视该对象的上锁、解锁过程，JVM在实现时监视器中的操作就可以认为是直接使用系统调用，从用户态切换到核心态，利用系统的互斥量实现同步。这个过程中涉及了用户态、核心态的切换以及线程的阻塞和唤醒，开销很大，因此监视器也称为重量级锁。这个过程有很大的优化空间，本文的第二部分锁优化就是JVM针对`synchronzied`关键字的优化。
 
+> 监视器的实现在JVM中，以HotSpot为例，`objectMonitor`的定义与实现在 hotspot/src/share/vm/runtime 路径下，是C++实现的。等待该锁的线程会被保存到`objectMonitor`类实例中的`_WaitSet`属性里，在锁被释放时，从`_WaitSet`中再取出一个等待线程并将其唤醒。唤醒等待线程的顺序并不是按照放入的顺序，因此监视器实现的是一个非公平锁。
+
 ### 非阻塞同步
 
 &#160;&#160;&#160;&#160; **非阻塞同步（Non-Blocking Synchronization）** 指的是访问共享数据时，先进行操作；如果没有其他线程争用共享数据，操作会直接成功，如果有其他的线程在争用共享数据，那么再进行其他的补偿措施。最常用的补偿措施是不断地重试，直到出现没有其他线程竞争共享数据为止。
@@ -39,6 +41,28 @@ date: 2019-07-18 13:30:07
 > 非阻塞同步是一种乐观的并发策略，即处理时认为冲突发生的可能性很小。相对的，互斥同步是一种悲观的并发策略，其总是认为只要不去做正确的同步措施就一定会出现问题，无论共享数据是否真的会出现竞争，都会进行加锁。
 
 &#160;&#160;&#160;&#160;非阻塞同步的实现需要依赖硬件指令集的支持，需要在硬件层面将“冲突检测”和“操作”两个步骤封装为一个具有原子性的指令。虽然在不同的硬件平台上有不同的硬件实现，但是在JVM中暴露出来的是统一的CAS（比较并交换，Compare and Swap）操作，通过使用该操作指令能够实现“尝试直接操作共享数据”的功能。
+
+&#160;&#160;&#160;&#160;在`java.util.concurrent`（J.U.C）包下的`AtomicInteger`类的实现就是基于CAS操作的非阻塞同步。如`AtomicInteger.getAndIncrement()`的实现如下：
+
+```java
+public final int getAndIncrement() {
+    return unsafe.getAndAddInt(this, valueOffset, 1);
+}
+```
+
+其中`unsafe`是一个`sun.misc.Unsafe`类型的对象，该类型可以理解为jvm为Java类库开的一个直通CPU的后门类，可以调用一些很底层的功能。其中的`getAndAddInt`的实现经过反编译如下：
+
+```java
+public final int getAndAddInt(Object var1, long var2, int var4) {
+    int var5;
+    do {
+        var5 = this.getIntVolatile(var1, var2);
+    } while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));
+
+    return var5;
+}
+```
+可以看出，该方法的实现就是依赖于`Unsafe.compareAndSwapInt()`方法，该方法经过JVM的处理，将会直接翻译成CPU相关的CAS操作指令。
 
 > 在JDK5之后，Java类库中才开始使用CAS操作（在`sun.misc.Unsafe`类中）；在JDK9之后，才在`VarHandle`类中开放了面向用户程序使用的CAS操作
 

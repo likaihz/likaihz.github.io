@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 4.2.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -17,21 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="线程安全&amp;#160;&amp;#160;&amp;#160;&amp;#160;给“线程安全”下一个严谨且可操作的定义：当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果。 Java代码与JVM实现线程安全&amp;#160;&amp;#160;&amp;#160;&amp;#160;在编写Java代码时，有一些不同的方法保证">
-<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM笔记3：线程安全与锁优化">
-<meta property="og:url" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;1856879742&#x2F;index.html">
+<meta property="og:url" content="https://blog.litiezhu.cn/1856879742/index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
 <meta property="og:description" content="线程安全&amp;#160;&amp;#160;&amp;#160;&amp;#160;给“线程安全”下一个严谨且可操作的定义：当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果。 Java代码与JVM实现线程安全&amp;#160;&amp;#160;&amp;#160;&amp;#160;在编写Java代码时，有一些不同的方法保证">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;1856879742&#x2F;mark-word.png">
-<meta property="og:updated_time" content="2020-03-09T14:54:37.156Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.litiezhu.cn/1856879742/mark-word.png">
+<meta property="article:published_time" content="2019-07-18T13:30:07.000Z">
+<meta property="article:modified_time" content="2020-03-10T14:21:29.999Z">
+<meta property="article:author" content="我叫李铁柱">
+<meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;blog.litiezhu.cn&#x2F;1856879742&#x2F;mark-word.png">
+<meta name="twitter:image" content="https://blog.litiezhu.cn/1856879742/mark-word.png">
 
 <link rel="canonical" href="https://blog.litiezhu.cn/1856879742/">
 
@@ -92,12 +94,12 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+  <div class="container use-motion">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -137,14 +139,14 @@
     <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
   </ul>
@@ -233,11 +235,19 @@
 <li>同步方法：如果是实例方法，那么锁定的对象就是实例对象；如果是类方法，那么锁定的对象就是对应的Class对象</li>
 </ul>
 <p>&#160;&#160;&#160;&#160;在JDK1.5版本时，JVM对<code>synchronized</code>关键字优化相当有限，只使用了最传统的锁机制（现在也称为重量级锁机制）。每个对象都会有一个对应的监视器（monitor）负责监视该对象的上锁、解锁过程，JVM在实现时监视器中的操作就可以认为是直接使用系统调用，从用户态切换到核心态，利用系统的互斥量实现同步。这个过程中涉及了用户态、核心态的切换以及线程的阻塞和唤醒，开销很大，因此监视器也称为重量级锁。这个过程有很大的优化空间，本文的第二部分锁优化就是JVM针对<code>synchronzied</code>关键字的优化。</p>
+<blockquote>
+<p>监视器的实现在JVM中，以HotSpot为例，<code>objectMonitor</code>的定义与实现在 hotspot/src/share/vm/runtime 路径下，是C++实现的。等待该锁的线程会被保存到<code>objectMonitor</code>类实例中的<code>_WaitSet</code>属性里，在锁被释放时，从<code>_WaitSet</code>中再取出一个等待线程并将其唤醒。唤醒等待线程的顺序并不是按照放入的顺序，因此监视器实现的是一个非公平锁。</p>
+</blockquote>
 <h3 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h3><p>&#160;&#160;&#160;&#160; <strong>非阻塞同步（Non-Blocking Synchronization）</strong> 指的是访问共享数据时，先进行操作；如果没有其他线程争用共享数据，操作会直接成功，如果有其他的线程在争用共享数据，那么再进行其他的补偿措施。最常用的补偿措施是不断地重试，直到出现没有其他线程竞争共享数据为止。</p>
 <blockquote>
 <p>非阻塞同步是一种乐观的并发策略，即处理时认为冲突发生的可能性很小。相对的，互斥同步是一种悲观的并发策略，其总是认为只要不去做正确的同步措施就一定会出现问题，无论共享数据是否真的会出现竞争，都会进行加锁。</p>
 </blockquote>
 <p>&#160;&#160;&#160;&#160;非阻塞同步的实现需要依赖硬件指令集的支持，需要在硬件层面将“冲突检测”和“操作”两个步骤封装为一个具有原子性的指令。虽然在不同的硬件平台上有不同的硬件实现，但是在JVM中暴露出来的是统一的CAS（比较并交换，Compare and Swap）操作，通过使用该操作指令能够实现“尝试直接操作共享数据”的功能。</p>
+<p>&#160;&#160;&#160;&#160;在<code>java.util.concurrent</code>（J.U.C）包下的<code>AtomicInteger</code>类的实现就是基于CAS操作的非阻塞同步。如<code>AtomicInteger.getAndIncrement()</code>的实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>unsafe</code>是一个<code>sun.misc.Unsafe</code>类型的对象，该类型可以理解为jvm为Java类库开的一个直通CPU的后门类，可以调用一些很底层的功能。其中的<code>getAndAddInt</code>的实现经过反编译如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> var5;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，该方法的实现就是依赖于<code>Unsafe.compareAndSwapInt()</code>方法，该方法经过JVM的处理，将会直接翻译成CPU相关的CAS操作指令。</p>
 <blockquote>
 <p>在JDK5之后，Java类库中才开始使用CAS操作（在<code>sun.misc.Unsafe</code>类中）；在JDK9之后，才在<code>VarHandle</code>类中开放了面向用户程序使用的CAS操作</p>
 </blockquote>
@@ -386,7 +396,7 @@
         <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
       </span>
   </div>
 
@@ -415,7 +425,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
   <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
@@ -458,9 +468,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/pisces.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -504,7 +522,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
     gitalk.render('gitalk-container');
   }, window.Gitalk);
 });
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script>
 
 </body>
 </html>

@@ -14,12 +14,12 @@ mathjax: true
 
 ```java
 static class Node<K,V> implements Map.Entry<K,V> {
-        final int hash;
-        final K key;
-        V value;
-        Node<K,V> next;
+    final int hash;
+    final K key;
+    V value;
+    Node<K,V> next;
 
-        // methods
+    // methods
 }
 ```
 
@@ -42,9 +42,9 @@ static class Node<K,V> implements Map.Entry<K,V> {
 
 ```java
 static final int hash(Object key) {
-        int h;
-        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
-    }
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
 ```
 
 从中可以得到以下两方面的信息：

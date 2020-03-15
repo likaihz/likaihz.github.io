@@ -3,7 +3,7 @@ title: JVM笔记1：Java内存区域
 tags:
   - JVM
 abbrlink: 2415743415
-date: 2019-07-15 00:00:00
+date: 2019-08-15 00:00:00
 ---
 
 

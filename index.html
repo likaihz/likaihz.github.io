@@ -430,12 +430,12 @@
 <script type="math/tex; mode=display">
 P(x^{(t+1)}|x^{(t)},...,x^{(1)}) \tag{1}</script><p>其中<script type="math/tex">x^{(t+1)}</script>可以是词汇表 <script type="math/tex">V</script> 中的任意一个词。</p>
 </blockquote>
-<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：<script type="math/tex">x^{(1)},...,x^{(T)}</script> ，其出现的概率是：</p>
+<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：<script type="math/tex">x^{(1)},...,x^{(T)}</script>，其出现的概率是：</p>
 <script type="math/tex; mode=display">
 \begin{align}
 P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^{(T)}|x^{(T-1)},...,x^{(1)}) \tag{2} \\
 &=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},...,x^{(1)}) \tag{3}
-\end{align}</script><script type="math/tex; mode=display">(3)$$中的概率就是由语言模型给出的。
+\end{align}</script><p>(3)中的概率就是由语言模型给出的。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/3906993302/#more" rel="contents">

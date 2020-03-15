@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://blog.litiezhu.cn/3906993302/tagging.png">
 <meta property="og:image" content="https://blog.litiezhu.cn/3906993302/sentence.png">
 <meta property="article:published_time" content="2019-12-06T15:15:46.000Z">
-<meta property="article:modified_time" content="2020-03-10T14:21:29.991Z">
+<meta property="article:modified_time" content="2020-03-15T15:28:37.002Z">
 <meta property="article:author" content="我叫李铁柱">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="NLP">
@@ -225,69 +225,81 @@
         <p>&#8195;&#8195;斯坦福深度自然语言处理课程CS224N Lecture 6课程笔记，Language Models and Recurrent Neural Networks.</p>
 <h2 id="语言模型，Language-Model"><a href="#语言模型，Language-Model" class="headerlink" title="语言模型，Language Model"></a>语言模型，Language Model</h2><p>&#8195;&#8195;<strong>语言模型</strong>是用来预测“下一个词”的模型。即给模型输入一个词语序列，输出应该是下一个词（的概率分布）。对这个问题进行形式化的描述如下：</p>
 <blockquote>
-<p>给定一个词语序列$x^{(1)}, x^{(2)},…,x^{(t)}$，计算下一个词$x^{(t+1)}$的概率分布：</p>
+<p>给定一个词语序列<script type="math/tex">x^{(1)}, x^{(2)},...,x^{(t)}</script>，计算下一个词<script type="math/tex">x^{(t+1)}</script>的概率分布：</p>
 <script type="math/tex; mode=display">
-P(x^{(t+1)}|x^{(t)},...,x^{(1)}) \tag{1}</script><p>其中$x^{(t+1)}$可以是词汇表 $V$ 中的任意一个词。</p>
+P(x^{(t+1)}|x^{(t)},...,x^{(1)}) \tag{1}</script><p>其中<script type="math/tex">x^{(t+1)}</script>可以是词汇表 <script type="math/tex">V</script> 中的任意一个词。</p>
 </blockquote>
 <p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：<script type="math/tex">x^{(1)},...,x^{(T)}</script> ，其出现的概率是：</p>
 <script type="math/tex; mode=display">
 \begin{align}
 P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^{(T)}|x^{(T-1)},...,x^{(1)}) \tag{2} \\
 &=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},...,x^{(1)}) \tag{3}
-\end{align}</script><p>$(3)$中的概率就是由语言模型给出的。</p>
+\end{align}</script><script type="math/tex; mode=display">(3)$$中的概率就是由语言模型给出的。
+
+
+
 <a id="more"></a>
-<h2 id="n-gram语言模型"><a href="#n-gram语言模型" class="headerlink" title="n-gram语言模型"></a>n-gram语言模型</h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><ul>
-<li>假设：$x^{(t+1)}$的概率分布仅与其前$n-1$个词有关</li>
-<li>那么就可以得到其概率分布为：</li>
-</ul>
+
+
+
+## n-gram语言模型
+
+### 模型
+
+* 假设：$$x^{(t+1)}$$的概率分布仅与其前$$n-1$$个词有关
+* 那么就可以得到其概率分布为：</script><p>\begin{align}<br>P(x^{(t+1)}|x^{(t)},…,x^{(1)})&amp;=P(x^{(t+1)}|x^{(t)},…,x^{(t-n+2)}) \tag{4} \<br>&amp;=\frac{P(x^{(t+1)},x^{(t)},…,x^{(t-n+2)})}{P(x^{(t)},…,x^{(t-n+2)})}\tag{5} \<br>&amp;\approx \frac{count(x^{(t+1)},x^{(t)},…,x^{(t-n+2)})}{count(x^{(t)},…,x^{(t-n+2)})}\tag{6}<br>\end{align}</p>
 <script type="math/tex; mode=display">
-\begin{align}
-P(x^{(t+1)}|x^{(t)},...,x^{(1)})&=P(x^{(t+1)}|x^{(t)},...,x^{(t-n+2)}) \tag{4} \\
-&=\frac{P(x^{(t+1)},x^{(t)},...,x^{(t-n+2)})}{P(x^{(t)},...,x^{(t-n+2)})}\tag{5} \\
-&\approx \frac{count(x^{(t+1)},x^{(t)},...,x^{(t-n+2)})}{count(x^{(t)},...,x^{(t-n+2)})}\tag{6}
-\end{align}</script><h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
-<li><p>模型缺陷1：稀疏性问题</p>
-<ul>
-<li>公式$(6)$中，如果某个词序列在语料库中从来没有出现过，那么分子可能为0。为了解决这个问题，可以在每个计数值上加一个很小的平滑量（smoothing value）。</li>
-<li>分母也可能为0（即在语料库中未出现过这样的上文），为了解决该问题，可以缩小上文的长度。</li>
-</ul>
-</li>
-<li><p>模型缺陷2：容量问题</p>
-<ul>
-<li>模型需要计算并保存在语料库中出现的所有n-gram，那么随着n的增长，模型的大小也快速增长。</li>
-</ul>
-</li>
-</ul>
-<h2 id="固定窗口大小的神经网络语言模型"><a href="#固定窗口大小的神经网络语言模型" class="headerlink" title="固定窗口大小的神经网络语言模型"></a>固定窗口大小的神经网络语言模型</h2><ul>
-<li>基本假设与n-gram模型类似，预测某个位置的词的概率分布只与前n个词有关。</li>
-<li>构建一个基本的多层感知机(MLP)，输入前n个词，输出为下一个词。</li>
-<li>仍存在问题。。。</li>
-</ul>
-<h2 id="循环神经网络，Recurrent-Neural-Network"><a href="#循环神经网络，Recurrent-Neural-Network" class="headerlink" title="循环神经网络，Recurrent Neural Network"></a>循环神经网络，Recurrent Neural Network</h2><h3 id="模型-1"><a href="#模型-1" class="headerlink" title="模型"></a>模型</h3><ul>
-<li>基本做法：重复地调用相同的权重矩阵。</li>
-<li>RNN的基本结构及展开结构如下图</li>
-</ul>
+
+### 缺陷
+
+* 模型缺陷1：稀疏性问题
+  * 公式$$(6)$$中，如果某个词序列在语料库中从来没有出现过，那么分子可能为0。为了解决这个问题，可以在每个计数值上加一个很小的平滑量（smoothing value）。
+  * 分母也可能为0（即在语料库中未出现过这样的上文），为了解决该问题，可以缩小上文的长度。
+
+* 模型缺陷2：容量问题
+  * 模型需要计算并保存在语料库中出现的所有n-gram，那么随着n的增长，模型的大小也快速增长。
+
+
+
+## 固定窗口大小的神经网络语言模型
+
+* 基本假设与n-gram模型类似，预测某个位置的词的概率分布只与前n个词有关。
+* 构建一个基本的多层感知机(MLP)，输入前n个词，输出为下一个词。
+* 仍存在问题。。。
+
+
+
+## 循环神经网络，Recurrent Neural Network
+
+### 模型
+
+* 基本做法：重复地调用相同的权重矩阵。
+* RNN的基本结构及展开结构如下图
+
 <img src="/3906993302/rnn.png" class="" title="rnn">
-<p>可以看到，其基本结构就类似一个一维的多层感知机，每层有各自的权重矩阵。区别在于，隐藏层有两个输入来源——输入层的激活输出和上一个时间步的隐藏层激活输出，（$W_e$和$W_h$是各自的权重矩阵。）</p>
-<h3 id="Pros-and-cons"><a href="#Pros-and-cons" class="headerlink" title="Pros and cons"></a>Pros and cons</h3><ul>
-<li>优点<ul>
-<li>可以处理任意长度的输入</li>
-<li>理论上来说，计算每一步的输出时都是基于前面所有的信息</li>
-<li>模型的大小不会随着输入增长而变大</li>
-<li>因为使用的是同一个权重矩阵，因此处理输入时是类似的</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>循环计算非常慢</li>
-<li>实践中，很难使用到很多步之前的信息。</li>
-</ul>
-</li>
-</ul>
-<h2 id="评价语言模型"><a href="#评价语言模型" class="headerlink" title="评价语言模型"></a>评价语言模型</h2><ul>
-<li>标准的语言模型评价指标——perplextiy，该指标越小，模型表现越好。</li>
-</ul>
-<script type="math/tex; mode=display">
-\prod_{t=1}^{T}(\frac{1}{P_{LM}(x^{(t+1)}|x^{(t)},...,x^{(1)})})^{1/T}</script><h2 id="RNN的应用"><a href="#RNN的应用" class="headerlink" title="RNN的应用"></a>RNN的应用</h2><h3 id="打标签"><a href="#打标签" class="headerlink" title="打标签"></a>打标签</h3><ul>
+
+可以看到，其基本结构就类似一个一维的多层感知机，每层有各自的权重矩阵。区别在于，隐藏层有两个输入来源——输入层的激活输出和上一个时间步的隐藏层激活输出，（$$W_e$$和$$W_h$$是各自的权重矩阵。）
+
+
+
+### Pros and cons
+
+* 优点
+  * 可以处理任意长度的输入
+  * 理论上来说，计算每一步的输出时都是基于前面所有的信息
+  * 模型的大小不会随着输入增长而变大
+  * 因为使用的是同一个权重矩阵，因此处理输入时是类似的
+* 缺点
+  * 循环计算非常慢
+  * 实践中，很难使用到很多步之前的信息。
+
+
+
+## 评价语言模型
+
+* 标准的语言模型评价指标——perplextiy，该指标越小，模型表现越好。</script><p>\prod<em>{t=1}^{T}(\frac{1}{P</em>{LM}(x^{(t+1)}|x^{(t)},…,x^{(1)})})^{1/T}</p>
+<p>$$</p>
+<h2 id="RNN的应用"><a href="#RNN的应用" class="headerlink" title="RNN的应用"></a>RNN的应用</h2><h3 id="打标签"><a href="#打标签" class="headerlink" title="打标签"></a>打标签</h3><ul>
 <li>如词性分类、命名体识别等</li>
 </ul>
 <img src="/3906993302/tagging.png" class="" title="tagging">
@@ -385,7 +397,7 @@ P(x^{(t+1)}|x^{(t)},...,x^{(1)})&=P(x^{(t+1)}|x^{(t)},...,x^{(t-n+2)}) \tag{4} \
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型，Language-Model"><span class="nav-number">1.</span> <span class="nav-text">语言模型，Language Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#n-gram语言模型"><span class="nav-number">2.</span> <span class="nav-text">n-gram语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型"><span class="nav-number">2.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺陷"><span class="nav-number">2.2.</span> <span class="nav-text">缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#固定窗口大小的神经网络语言模型"><span class="nav-number">3.</span> <span class="nav-text">固定窗口大小的神经网络语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环神经网络，Recurrent-Neural-Network"><span class="nav-number">4.</span> <span class="nav-text">循环神经网络，Recurrent Neural Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型-1"><span class="nav-number">4.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pros-and-cons"><span class="nav-number">4.2.</span> <span class="nav-text">Pros and cons</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评价语言模型"><span class="nav-number">5.</span> <span class="nav-text">评价语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN的应用"><span class="nav-number">6.</span> <span class="nav-text">RNN的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#打标签"><span class="nav-number">6.1.</span> <span class="nav-text">打标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#句子（文本）分类"><span class="nav-number">6.2.</span> <span class="nav-text">句子（文本）分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为编码模块"><span class="nav-number">6.3.</span> <span class="nav-text">作为编码模块</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型，Language-Model"><span class="nav-number">1.</span> <span class="nav-text">语言模型，Language Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN的应用"><span class="nav-number">2.</span> <span class="nav-text">RNN的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#打标签"><span class="nav-number">2.1.</span> <span class="nav-text">打标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#句子（文本）分类"><span class="nav-number">2.2.</span> <span class="nav-text">句子（文本）分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为编码模块"><span class="nav-number">2.3.</span> <span class="nav-text">作为编码模块</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

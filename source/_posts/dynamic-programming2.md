@@ -96,33 +96,33 @@ int minPathSum(int[][] grid) {
 
 ```java
 public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
+    int[] dp = new int[amount + 1];
 
-        Arrays.fill(dp, -1);
-        dp[0] = 0;
-        for (int i : coins) {
-            if(i <= amount) {
-                dp[i] = 1;
-            }
+    Arrays.fill(dp, -1);
+    dp[0] = 0;
+    for (int i : coins) {
+        if(i <= amount) {
+            dp[i] = 1;
         }
-
-        for (int i = 1; i <= amount; i++) {
-            if (dp[i] < 0) {
-                int min = Integer.MAX_VALUE;
-                for (int coin : coins) {
-                    if(coin < i && dp[i-coin] > 0) {
-                        min = Math.min(min, dp[i-coin]);
-                    }
-                }
-                if(min < Integer.MAX_VALUE) {
-                    dp[i] = min+1;
-                }
-                else dp[i] = -1;
-            }
-        }
-
-        return dp[amount];
     }
+
+    for (int i = 1; i <= amount; i++) {
+        if (dp[i] < 0) {
+            int min = Integer.MAX_VALUE;
+            for (int coin : coins) {
+                if(coin < i && dp[i-coin] > 0) {
+                    min = Math.min(min, dp[i-coin]);
+                }
+            }
+            if(min < Integer.MAX_VALUE) {
+                dp[i] = min+1;
+            }
+            else dp[i] = -1;
+        }
+    }
+
+    return dp[amount];
+}
 ```
 
 #### 其他
@@ -161,18 +161,18 @@ public int coinChange(int[] coins, int amount) {
 
 ```java
 public int uniquePaths(int m, int n) {
-        int[][] dp = new int[m][n];
-        for (int i = 0; i < m; i++) {
-            dp[i][0] = 1;
-        }
-        Arrays.fill(dp[0], 1);
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
-            }
-        }
-        return dp[m - 1][n - 1];
+    int[][] dp = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        dp[i][0] = 1;
     }
+    Arrays.fill(dp[0], 1);
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
 ```
 
 ### 其他
@@ -241,41 +241,41 @@ for (int i = 1; i <= n; ++i) {
 
 ```java
 public int longestCommonSubsequence(String text1, String text2) {
-        int l1 = text1.length(), l2 = text2.length();
-        int[][] dp = new int[l1][l2];
+    int l1 = text1.length(), l2 = text2.length();
+    int[][] dp = new int[l1][l2];
 
-        if (text1.charAt(0) == text2.charAt(0)) dp[0][0] = 1;
-        else dp[0][0] = 0;
+    if (text1.charAt(0) == text2.charAt(0)) dp[0][0] = 1;
+    else dp[0][0] = 0;
 
-        int max = 0;
-        for (int i = 1; i < l1; i++) {
-            if (text1.charAt(i) == text2.charAt(0)) {
-                dp[i][0] = 1;
-                max = 1;
-            } else {
-                dp[i][0] = dp[i-1][0];
-            }
+    int max = 0;
+    for (int i = 1; i < l1; i++) {
+        if (text1.charAt(i) == text2.charAt(0)) {
+            dp[i][0] = 1;
+            max = 1;
+        } else {
+            dp[i][0] = dp[i-1][0];
         }
-
-        for (int i = 1; i < l2; i++) {
-            if (text1.charAt(0) == text2.charAt(i)) {
-                dp[0][i] = 1;
-                max = 1;
-            } else {
-                dp[0][i] = dp[0][i-1];
-            }
-        }
-
-        for (int i = 1; i < l1; i++) {
-            for (int j = 1; j < l2; j++) {
-                if (text1.charAt(i) == text2.charAt(j)) {
-                    dp[i][j] = dp[i-1][j-1]+1;
-                    max = Math.max(max, dp[i][j]);
-                } else dp[i][j] = Math.max(dp[i][j-1], dp[i-1][j]);
-            }
-        }
-        return max;
     }
+
+    for (int i = 1; i < l2; i++) {
+        if (text1.charAt(0) == text2.charAt(i)) {
+            dp[0][i] = 1;
+            max = 1;
+        } else {
+            dp[0][i] = dp[0][i-1];
+        }
+    }
+
+    for (int i = 1; i < l1; i++) {
+        for (int j = 1; j < l2; j++) {
+            if (text1.charAt(i) == text2.charAt(j)) {
+                dp[i][j] = dp[i-1][j-1]+1;
+                max = Math.max(max, dp[i][j]);
+            } else dp[i][j] = Math.max(dp[i][j-1], dp[i-1][j]);
+        }
+    }
+    return max;
+}
 ```
 
 ### 其他

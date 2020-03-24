@@ -58,22 +58,22 @@ public class AppConfig {
 
 ```java
 public class DemoApp {
-	public static void main(String[] args) {
-		ApplicationContext context =
-				new AnnotationConfigApplicationContext(AppConfig.class);
+    public static void main(String[] args) {
+        ApplicationContext context =
+            new AnnotationConfigApplicationContext(AppConfig.class);
 
-		DemoComponent component = context.getBean(DemoComponent.class);
-		component.foo();
-	}
+        DemoComponent component = context.getBean(DemoComponent.class);
+        component.foo();
+    }
 }
 ```
 
 ```java
 @Component
 public class DemoComponent {
-	public void foo() {
-		System.out.println("DemoComponent.foo()");
-	}
+    public void foo() {
+        System.out.println("DemoComponent.foo()");
+    }
 }
 ```
 

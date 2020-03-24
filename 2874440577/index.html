@@ -20,24 +20,28 @@
     var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="JVM的垃圾收集器（Garbage Collector）管理的是Java堆和方法区的垃圾回收。 GC需要完成三件事：哪些内存需要回收（即判定垃圾）？什么时候回收？如何回收（垃圾收集算法）？">
+  <meta name="description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;从源码构建出Spring框架运行，方便探索Spring源码。 构建环境 OS: MacOS 10.15.2 JDK 1.8 Spring 源码版本：5.1.x Gradle: 项目源码自带的Gardle Wrapper（gradlew） IntelliJ IDEA Ultimate 2019.3.3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM笔记2：垃圾收集器">
-<meta property="og:url" content="https://blog.litiezhu.cn/3601937677/index.html">
+<meta property="og:title" content="Spring探秘1：源码构建">
+<meta property="og:url" content="https://blog.litiezhu.cn/2874440577/index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
-<meta property="og:description" content="JVM的垃圾收集器（Garbage Collector）管理的是Java堆和方法区的垃圾回收。 GC需要完成三件事：哪些内存需要回收（即判定垃圾）？什么时候回收？如何回收（垃圾收集算法）？">
+<meta property="og:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;从源码构建出Spring框架运行，方便探索Spring源码。 构建环境 OS: MacOS 10.15.2 JDK 1.8 Spring 源码版本：5.1.x Gradle: 项目源码自带的Gardle Wrapper（gradlew） IntelliJ IDEA Ultimate 2019.3.3">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog.litiezhu.cn/3601937677/jvm2-gc-sweep.png">
-<meta property="og:image" content="https://blog.litiezhu.cn/3601937677/jvm2-gc-copying.png">
-<meta property="og:image" content="https://blog.litiezhu.cn/3601937677/jvm2-gc-compact.png">
-<meta property="article:published_time" content="2019-08-16T20:41:41.000Z">
-<meta property="article:modified_time" content="2020-03-24T10:05:01.819Z">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/success.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/startup.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/import.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/newmodule.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/modulename.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/dependencies.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/2874440577/structure.png">
+<meta property="article:published_time" content="2019-12-10T15:21:22.000Z">
+<meta property="article:modified_time" content="2020-03-24T10:05:01.823Z">
 <meta property="article:author" content="我叫李铁柱">
-<meta property="article:tag" content="JVM">
+<meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog.litiezhu.cn/3601937677/jvm2-gc-sweep.png">
+<meta name="twitter:image" content="https://blog.litiezhu.cn/2874440577/success.png">
 
-<link rel="canonical" href="https://blog.litiezhu.cn/3601937677/">
+<link rel="canonical" href="https://blog.litiezhu.cn/2874440577/">
 
 
 <script id="page-configurations">
@@ -49,7 +53,7 @@
   };
 </script>
 
-  <title>JVM笔记2：垃圾收集器 | Tiezhu Blog</title>
+  <title>Spring探秘1：源码构建 | Tiezhu Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
     <script>
@@ -177,7 +181,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3601937677/">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2874440577/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
@@ -190,7 +194,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          JVM笔记2：垃圾收集器
+          Spring探秘1：源码构建
         </h1>
 
         <div class="post-meta">
@@ -200,7 +204,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-08-16 20:41:41" itemprop="dateCreated datePublished" datetime="2019-08-16T20:41:41+00:00">2019-08-16</time>
+              <time title="创建时间：2019-12-10 15:21:22" itemprop="dateCreated datePublished" datetime="2019-12-10T15:21:22+00:00">2019-12-10</time>
             </span>
 
           
@@ -221,76 +225,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <ul>
-<li>JVM的垃圾收集器（Garbage Collector）管理的是<strong>Java堆</strong>和<strong>方法区</strong>的垃圾回收。</li>
-<li>GC需要完成三件事：哪些内存需要回收（即判定垃圾）？什么时候回收？如何回收（垃圾收集算法）？</li>
+        <p>&#160; &#160; &#160; &#160;从源码构建出Spring框架运行，方便探索Spring源码。</p>
+<h2 id="构建环境"><a href="#构建环境" class="headerlink" title="构建环境"></a>构建环境</h2><ul>
+<li>OS: MacOS 10.15.2</li>
+<li>JDK 1.8</li>
+<li>Spring 源码版本：5.1.x</li>
+<li>Gradle: 项目源码自带的Gardle Wrapper（gradlew）</li>
+<li>IntelliJ IDEA Ultimate 2019.3.3</li>
 </ul>
 <a id="more"></a>
-<h2 id="垃圾判定算法"><a href="#垃圾判定算法" class="headerlink" title="垃圾判定算法"></a>垃圾判定算法</h2><h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><ul>
-<li>对指向对象的引用进行计数，当计数器值归零时则删除该对象。</li>
-<li>但是当出现循环引用时，相关的对象永远无法被判定为垃圾。</li>
-</ul>
-<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>&#160; &#160; &#160; &#160;该算法基本思路如下：</p>
-<ul>
-<li>选定一系列对象作为根对象“GC Roots”，根据引用关系向下搜索，搜索走过的路径称为“引用链”</li>
-<li>如果某个对象到“GC Roots”之间没有任何引用链相连，则证明此对象是不可能再被使用的</li>
-</ul>
-<p>&#160; &#160; &#160; &#160;固定选为“GC Roots”的对象有以下几类：</p>
-<ul>
-<li>在虚拟机栈中引用的对象。（局部变量、临时变量等）</li>
-<li>在方法区中类静态变量和常量引用的对象</li>
-<li>在本地方法栈中JNI（即本地方法）引用的对象</li>
-<li>JVM内部的引用</li>
-<li>所有被同步锁持有的对象</li>
-</ul>
-<p>&#160; &#160; &#160; &#160;除此以外，不同的垃圾收集器还有自己的选择。</p>
-<blockquote>
-<p><strong>引用的类型</strong>：无论哪一种垃圾判定算法都与引用有关，在JDK1.2版本之后扩充了引用的概念：</p>
-<ul>
-<li>强引用：即平时最常见的引用关系，有强引用的对象一定不会被回收</li>
-<li>软引用：在首次回收后如果还没有足够的内存，才会回收只有软引用的对象（<code>SoftReference</code>类）</li>
-<li>弱引用：比软引用更弱，在垃圾收集器开始工作时，无论内存是否足够，只有弱引用的对象都会被回收（<code>WeakReference</code>类）</li>
-<li>虚引用：最弱的引用关系，甚至无法从虚引用获取对象实例，更无法对对象的生存时间构成影响。（<code>PhantomReference</code>类）</li>
-</ul>
-</blockquote>
-<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="分代收集理论"><a href="#分代收集理论" class="headerlink" title="分代收集理论"></a>分代收集理论</h3><p>&#160; &#160; &#160; &#160;当前商业虚拟机的垃圾收集器大部分都基于“分代收集（Generational Collection）”的理论。分代收集理论基于以下假说：</p>
-<ol>
-<li>弱分代假说（Weak Generational Hypothesis）:绝大多数对象都是朝生夕灭的。</li>
-<li>强分代假说（Strong Generational Hypothesis）:熬过越多次垃圾收集过程的对象就越难以消亡。</li>
-<li>跨代引用假说（Intergenerational Reference Hypothesis）:跨代引用相对于同代引用来说仅占极少数。</li>
+<h2 id="构建过程"><a href="#构建过程" class="headerlink" title="构建过程"></a>构建过程</h2><ol>
+<li>下载源码：直接从GitHub下载Srping-framework的源码，项目地址为<a href="https://github.com/spring-projects/spring-framework" target="_blank" rel="noopener">https://github.com/spring-projects/spring-framework</a> ，下载源码压缩包时要注意选择正确的版本分支。</li>
+<li>解压源码压缩包后，在源码目录下执行以下命令，进行构建（排除了test和javadoc两个任务，因为这两个任务都很耗时间而且没用）：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew build -x <span class="built_in">test</span> -x javadoc</span><br></pre></td></tr></table></figure></li>
+<li>等待构建完成，如果某个任务卡了很久，可以ctrl-c停掉，再重新开始，之前的构建记录会有保存；如果下载依赖的速度很慢，可以在build.gradle中配置本地的镜像，或者开启科学上网。</li>
+<li>构建成功会有以下提示：<img src="/2874440577/success.png" class="" title="success"></li>
+<li>构建成功后可以导入到IntelliJ IDEA中。（通过Start up 界面或者 File -&gt; New -&gt; Project from Exsisting Sources… ）<img src="/2874440577/startup.png" class="" title="startup">
+<img src="/2874440577/import.png" class="" title="import"></li>
+<li>稍等片刻，等待其配置完成，构建过程就结束了。</li>
 </ol>
-<p>&#160; &#160; &#160; &#160;基于以上假说的垃圾收集器会将其管理的内存划分为不同的区域，并根据各区域的特点以不同的频率各自执行不同的<strong>垃圾收集算法</strong>。具体来说，至少会有“新生代（Young Generation）”和“老年代（Old Generation）”两类区域。在新生代中，每次垃圾收集时都会有大批对象被回收，存活的少量对象会逐渐被移动到老年代中。据此可以总结以下特点：</p>
-<ul>
-<li>新生代中的大部分对象都很容易被回收，因此需要以较高的频率执行垃圾收集算法；同时每次垃圾收集后的新生代区域中的对象会很稀疏。</li>
-<li>老年代中的大部分对象难以消亡，因此垃圾回收的频率比较低；并且每次垃圾收集后会产生较小的碎片。</li>
-</ul>
-<p>&#160; &#160; &#160; &#160;因此在不同的区域中需要执行不同的垃圾收集算法。常见的垃圾收集算法有以下几种。</p>
-<h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><ul>
-<li>标记-清除（Mark-Sweep）算法是最早最基础的垃圾收集算法（算法示意图如下）</li>
-<li><strong>过程</strong>：第一阶段根据垃圾判定算法标记出需要回收（或需要存活）的对象；第二阶段清除（或保留）被标记的对象。</li>
-<li><strong>缺点</strong>：一是执行效率不稳定，容易随着对象数量增长而降低；二是内存会产生较多的碎片，导致触发过多不必要的GC动作。</li>
-</ul>
-<img src="/3601937677/jvm2-gc-sweep.png" class="" title="jvm2-gc-sweep">
-<h3 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h3><h4 id="半区复制，Semispace-Copying"><a href="#半区复制，Semispace-Copying" class="headerlink" title="半区复制，Semispace Copying"></a>半区复制，Semispace Copying</h4><ul>
-<li><strong>过程</strong>：将内存分为大小相等的两半，每次只使用其中一半。当执行垃圾收集时，就把仍存活的对象依次复制到另一半，再把已使用过的一半直接清理掉。</li>
-<li><strong>缺点</strong>：一是如果内存中多数对象是存活的，就会产生大量的复制开销；二是可用内存缩小了一半。</li>
-</ul>
-<img src="/3601937677/jvm2-gc-copying.png" class="" title="jvm2-gc-copying">
-<h4 id="Appel式回收"><a href="#Appel式回收" class="headerlink" title="Appel式回收"></a>Appel式回收</h4><blockquote>
-<p>根据IBM一项研究，新生代中的对象98%都熬不过第一轮收集，因此并不需要按照半区复制中1:1的比例来划分新生代的内存空间。</p>
-</blockquote>
-<ul>
-<li>为了优化半区复制的空间代价，可以将新生代分为一块较大的<strong>Eden空间</strong>和两块较小的<strong>Survivor空间</strong>。每次分配内存只使用Eden和其中一块Survivor，垃圾收集时将所有的存活对象复制到另一块Survivor中，然后清理掉已使用的两块空间。</li>
-<li>HotSpot虚拟机默认的Eden和Survivor大小比例为8:1，即只有10%的空间是被浪费的。</li>
-<li>如果垃圾收集后有大于10%的对象存活，需要依赖其他内存区域（实际上大多就是老年代）保存多出来的存活对象。</li>
-</ul>
-<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><ul>
-<li>由于标记-复制算法需要其他内存区域的担保，因此老年代不能直接用这种算法。标记-整理（Mark-Compact）算法就是针对老年代提出的。</li>
-<li><strong>过程</strong>：标记阶段后，让所有存活的对象向内存空间的一端移动。</li>
-<li><strong>缺点</strong>：与简单的标记-清除算法比，移动操作有较重的负担，会延长GC的延迟。（相应的，由于没有碎片，内存分配会更加简单）。</li>
-<li>Compromise：在老年代上，平时多数时间都采用标记-清除算法；直到内存空间的碎片化程度已经大到影响对象分配时，在采用标记-整理算法收集一次以清理碎片。</li>
-</ul>
-<img src="/3601937677/jvm2-gc-compact.png" class="" title="jvm2-gc-compact">
+<p>（如果直接在IDEA中构建，会出现各种各样奇怪的问题，上面的过程我试了几次，比较稳定。）</p>
+<h2 id="基于源码运行Spring框架"><a href="#基于源码运行Spring框架" class="headerlink" title="基于源码运行Spring框架"></a>基于源码运行Spring框架</h2><p>&#160; &#160; &#160; &#160;构建成功后，可以基于源码运行一个Spring的应用。</p>
+<ol>
+<li>在源码根项目下新建一个模块：File -&gt; New -&gt; Module…<img src="/2874440577/newmodule.png" class="" title="newmodule">
+<img src="/2874440577/modulename.png" class="" title="modulename"></li>
+<li>稍等片刻，在IDEA设置完成后，在新建模块的build.gradle文件中的dependencies块中添加对spring-context的依赖，并在Gradle工具栏中刷新依赖（reimport）：<img src="/2874440577/dependencies.png" class="" title="dependencies"></li>
+<li>完成后，就可以在新模块中使用Spring-framework提供的类了。在该模块下新建三个类，分别是配置类、启动类和一个Bean：<img src="/2874440577/structure.png" class="" title="structure">
+三个类的代码：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(<span class="string">"cn.litiezhu.springdemo"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		ApplicationContext context =</span><br><span class="line">				<span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">		DemoComponent component = context.getBean(DemoComponent<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">		component.foo();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoComponent</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"DemoComponent.foo()"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行<code>DemoApp.main()</code>，能够得到正确的输出，构建过程就正式宣告成功了！接下来就可以在这个项目中调试Spring源码了。</p>
+
     </div>
 
     
@@ -299,7 +265,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/JVM/" rel="tag"># JVM</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
           </div>
 
         
@@ -308,12 +274,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2415743415/" rel="prev" title="JVM笔记1：Java内存区域">
-      <i class="fa fa-chevron-left"></i> JVM笔记1：Java内存区域
+    <a href="/3906993302/" rel="prev" title="CS224N笔记-语言模型与循环神经网络">
+      <i class="fa fa-chevron-left"></i> CS224N笔记-语言模型与循环神经网络
     </a></div>
       <div class="post-nav-item">
-    <a href="/1856879742/" rel="next" title="JVM笔记3：线程安全与锁优化">
-      JVM笔记3：线程安全与锁优化 <i class="fa fa-chevron-right"></i>
+    <a href="/2158068979/" rel="next" title="算法笔记：并查集（union-find算法）">
+      算法笔记：并查集（union-find算法） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -375,7 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾判定算法"><span class="nav-number">1.</span> <span class="nav-text">垃圾判定算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引用计数算法"><span class="nav-number">1.1.</span> <span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">1.2.</span> <span class="nav-text">可达性分析算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">2.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集理论"><span class="nav-number">2.1.</span> <span class="nav-text">分代收集理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">2.2.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-复制算法"><span class="nav-number">2.3.</span> <span class="nav-text">标记-复制算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#半区复制，Semispace-Copying"><span class="nav-number">2.3.1.</span> <span class="nav-text">半区复制，Semispace Copying</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Appel式回收"><span class="nav-number">2.3.2.</span> <span class="nav-text">Appel式回收</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">2.4.</span> <span class="nav-text">标记-整理算法</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#构建环境"><span class="nav-number">1.</span> <span class="nav-text">构建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建过程"><span class="nav-number">2.</span> <span class="nav-text">构建过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于源码运行Spring框架"><span class="nav-number">3.</span> <span class="nav-text">基于源码运行Spring框架</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -527,7 +493,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'likaihz.github.io',
       owner       : 'likaihz',
       admin       : ['likaihz'],
-      id          : '6535ab725d2dde01621f36b352dba15a',
+      id          : 'c6193bc42b20866b28e210fd71bc0447',
         language: '',
       distractionFreeMode: true
     });

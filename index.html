@@ -385,6 +385,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1621531412/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/1621531412/" class="post-title-link" itemprop="url">Spring探秘1：BeanFactory与FactoryBean</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-11 14:43:48" itemprop="dateCreated datePublished" datetime="2019-12-11T14:43:48+00:00">2019-12-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>&#160; &#160; &#160; &#160; <code>BeanFactory</code>和<code>FactoryBean</code>都是Spring框架中重要的接口，名字很像，但是功能上是有很大的不同的。</p>
+<h2 id="先上结论"><a href="#先上结论" class="headerlink" title="先上结论"></a>先上结论</h2><h3 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h3><ul>
+<li>都是接口</li>
+<li>都没有父接口，是Spring框架中比较基础的接口</li>
+</ul>
+<h3 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h3><ul>
+<li><code>BeanFactory</code>正如其接口名的暗示，是一个工厂类，用于管理（生成）Bean。也可以认为其实现类就是一个IOC容器。</li>
+<li><code>FactoryBean</code>是一个Bean, 而该Bean的功能是控制其他Bean实例化的逻辑。</li>
+<li>因此，<code>FactoryBean</code>类型的对象也是由<code>BeanFactory</code>管理的</li>
+</ul>
+<h2 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h2><ul>
+<li>BeanFactory定义了IOC容器的最基本形式，并提供了IOC容器应遵守的的最基本的接口，也就是Spring IOC容器所遵守的最底层和最基本的编程规范。</li>
+<li>它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。</li>
+<li>在Spring源码中，BeanFactory只是个接口，并不是IOC容器的具体实现。但是Spring框架给出了很多种实现，如 DefaultListableBeanFactory，XmlBeanFactory， <strong>ApplicationContext</strong>等，都是附加了某种功能的实现。</li>
+<li>该接口的方法如下，可以看出该接口实现的主要功能就是从IOC容器中获取Bean：<img src="/1621531412/BeanFactory.png" class="" title="BeanFactory">
+</li>
+</ul>
+<h2 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h2><p>&#160; &#160; &#160; &#160;一般情况下，Spring通过反射机制利用<bean>标签的class属性指定实现类实例化Bean，但是在某些情况下，实例化Bean过程比较复杂，如果按照传统的方式，则需要在<bean>标签中提供大量的配置信息。配置方式的灵活性是受限的，这时采用代码的方式可能会得到一个简单的方案。<br>&#160; &#160; &#160; &#160;另外还有一些情况下，要使用第三方库/框架提供的Bean时，这些Bean的实例化过程不应该由使用者插手，而Spring框架本身又无从得知这些第三方Bean的实例化逻辑，因此需要某种方式将Bean的实例化逻辑引入到Spring框架中。<br>&#160; &#160; &#160; &#160;Spring为此提供了一个<code>org.springframework.bean.factory.FactoryBean</code>的工厂类接口，用户/第三方库设计者可以通过实现该接口定制实例化Bean的逻辑。<br>&#160; &#160; &#160; &#160;实现 <code>FactoryBean</code> 接口需要实现三个方法，分别是<code>isSingleton()</code>， <code>getObject()</code>， <code>getObjectType()</code>，其中 <code>getObject()</code> 方法返回的就是它产生的Bean实例。<br>&#160; &#160; &#160; &#160;FactoryBean的设计体现了“<strong>装饰者模式</strong>”的设计模式，其一个典型的实现是是Mybaits中的<code>SqlSessionFactory</code>类。</p>
+<h3 id="FactoryBean生成的Bean的名字"><a href="#FactoryBean生成的Bean的名字" class="headerlink" title="FactoryBean生成的Bean的名字"></a>FactoryBean生成的Bean的名字</h3><p>&#160; &#160; &#160; &#160;对于实现了<code>FactoryBean</code>接口的Bean，Spring框架对其命名稍有不同。即代码中为实现了<code>FactoryBean</code>接口的Bean指定的名字将会命名给该<code>FactoryBean</code>生产出的Bean，而这个<code>FactoryBean</code>实例的Bean name是在指定的名字前加一个”&amp;”符号。</p>
+<h3 id="对Bean-name的实验"><a href="#对Bean-name的实验" class="headerlink" title="对Bean name的实验"></a>对Bean name的实验</h3><ol>
+<li>创建一个Bean类Foo<img src="/1621531412/exp1.png" class="" title="exp1"></li>
+<li>创建一个FactoryBean的实现类CustomFactoryBean，其中getObject()方法就返回一个Foo实例，并通过@Component实例将该类交给IOC容器管理<img src="/1621531412/exp2.png" class="" title="exp2"></li>
+<li>在启动类中，按名称获取该工厂Bean，并执行其方法。但是却有报错。<strong>说明，在IOC容器中，名为”customFactoryBean”的Bean并不是CustomFactoryBean类型的。</strong><img src="/1621531412/exp3.png" class="" title="exp3">
+<img src="/1621531412/exp3.2.png" class="" title="exp3.2"></li>
+<li>那究竟是什么类型？在启动类中用以下代码探究名为”customFactoryBean”的Bean到底是什么类型<img src="/1621531412/exp4.png" class="" title="exp4">
+输出为：<code>The class of bean is: class cn.litiezhu.explorespring.dao.Foo</code>。是在<code>CustomFactoryBean.getObject()</code>方法的返回类型。</li>
+<li>通过以下代码探索CustomFactoryBean类型的Bean在容器中的名字<img src="/1621531412/exp5.png" class="" title="exp5">
+输出为：<code>&amp;customFactoryBean</code></li>
+<li>那么如果不给CustomFactoryBean指定名字呢？通过实验会发现，结果还是一样的，即将<code>CustomFactoryBean</code>的默认名字<code>customFactoryBean</code>命名给了其生产的<code>Foo</code>类型的Bean。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2874440577/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -399,7 +486,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2874440577/" class="post-title-link" itemprop="url">Spring探秘1：源码构建</a>
+            <a href="/2874440577/" class="post-title-link" itemprop="url">Spring探秘0：源码构建</a>
         </h1>
 
         <div class="post-meta">
@@ -797,77 +884,6 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/4141265970/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
-      <meta itemprop="name" content="我叫李铁柱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiezhu Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/4141265970/" class="post-title-link" itemprop="url">个人博客建站实录1：Hexo的安装与配置</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-22 00:00:00" itemprop="dateCreated datePublished" datetime="2019-09-22T00:00:00+00:00">2019-09-22</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="个人博客站与Hexo"><a href="#个人博客站与Hexo" class="headerlink" title="个人博客站与Hexo"></a>个人博客站与Hexo</h2><h3 id="为什么选择个人博客站"><a href="#为什么选择个人博客站" class="headerlink" title="为什么选择个人博客站"></a>为什么选择个人博客站</h3><p>&#160; &#160; &#160; &#160;个人建站确实有一些缺点，比如要花一些不必要的时间在站点的建设上，以及功能上会有一定的限制等。但是最终还是选择了尝试个人建站，是因为有一些不可忽视的优点：一是资源管理形式上的自由和统一，所有的博文都自然地以文件形式保存，不用担心以后的迁移问题；二是版权问题，如果在博客平台上写，无法保证平台不会滥用，与其发生版权纠纷后再去扯皮，还不如从一开始就避免这种可能；最后一点也算是强行优点，作为技术人员，花时间在这种“技术周边”上应该不亏吧。</p>
-<h3 id="如何将博文转换为网页"><a href="#如何将博文转换为网页" class="headerlink" title="如何将博文转换为网页"></a>如何将博文转换为网页</h3><p>&#160; &#160; &#160; &#160;博客大部分的功能其实都是静态网页，能够做到把我们写的文章在浏览器上显示就可以了，交互上的需求还是比较弱的，所以从理论上来说，我们可以自己写前端代码，把每一篇博文的内容排好版，再做一些链接，然后把这一堆静态的HTML文件放在服务器上就能够实现个人建站的需求了。</p>
-<p>&#160; &#160; &#160; &#160;但是！重复造轮子是不可取的，除非专职前端方向，否则手撸一个个人博客的框架是很不明智也很浪费时间的，所以我们就需要一个这样的框架，能够让我们专注于写博文本身，至于把文章转换为静态的网页文件，甚至是部署到服务器上这些工作，就让框架去完成吧。<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a>就是这样一个框架：</p>
-<blockquote>
-<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;也就是说，我们只要把文章写成<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener">Markdown</a>格式的文件，Hexo就能够生成我们的博客站网页。如果把这些网页放到服务器上，就能实现从互联网访问我们的博客的功能了。当然除此之外，Hexo也有其他功能，如部署、插件等，但是<em>one step at a time</em>，先尝试一下Hexo的基本功能吧。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/4141265970/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -940,14 +956,14 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

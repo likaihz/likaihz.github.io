@@ -20,20 +20,29 @@
     var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="信息熵，Information entropy熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。 信息量&amp;#160; &amp;#160; &amp;#160; &amp;#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一">
+  <meta name="description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160; BeanFactory和FactoryBean都是Spring框架中重要的接口，名字很像，但是功能上是有很大的不同的。 先上结论相同点 都是接口 都没有父接口，是Spring框架中比较基础的接口  不同点 BeanFactory正如其接口名的暗示，是一个工厂类，用于管理（生成）Bean。也可以认为其实现类就是一个IOC容器。 FactoryB">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从信息熵到交叉熵">
-<meta property="og:url" content="https://blog.litiezhu.cn/2352984677/index.html">
+<meta property="og:title" content="Spring探秘1：BeanFactory与FactoryBean">
+<meta property="og:url" content="https://blog.litiezhu.cn/1621531412/index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
-<meta property="og:description" content="信息熵，Information entropy熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。 信息量&amp;#160; &amp;#160; &amp;#160; &amp;#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一">
+<meta property="og:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160; BeanFactory和FactoryBean都是Spring框架中重要的接口，名字很像，但是功能上是有很大的不同的。 先上结论相同点 都是接口 都没有父接口，是Spring框架中比较基础的接口  不同点 BeanFactory正如其接口名的暗示，是一个工厂类，用于管理（生成）Bean。也可以认为其实现类就是一个IOC容器。 FactoryB">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-11-15T14:57:22.000Z">
-<meta property="article:modified_time" content="2020-03-25T08:12:21.960Z">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/BeanFactory.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/exp1.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/exp2.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/exp3.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/exp3.2.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/exp4.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/1621531412/exp5.png">
+<meta property="article:published_time" content="2019-12-11T14:43:48.000Z">
+<meta property="article:modified_time" content="2020-03-25T08:12:21.976Z">
 <meta property="article:author" content="我叫李铁柱">
-<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.litiezhu.cn/1621531412/BeanFactory.png">
 
-<link rel="canonical" href="https://blog.litiezhu.cn/2352984677/">
+<link rel="canonical" href="https://blog.litiezhu.cn/1621531412/">
 
 
 <script id="page-configurations">
@@ -45,7 +54,7 @@
   };
 </script>
 
-  <title>从信息熵到交叉熵 | Tiezhu Blog</title>
+  <title>Spring探秘1：BeanFactory与FactoryBean | Tiezhu Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
     <script>
@@ -173,7 +182,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2352984677/">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1621531412/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
@@ -186,7 +195,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          从信息熵到交叉熵
+          Spring探秘1：BeanFactory与FactoryBean
         </h1>
 
         <div class="post-meta">
@@ -196,7 +205,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-11-15 14:57:22" itemprop="dateCreated datePublished" datetime="2019-11-15T14:57:22+00:00">2019-11-15</time>
+              <time title="创建时间：2019-12-11 14:43:48" itemprop="dateCreated datePublished" datetime="2019-12-11T14:43:48+00:00">2019-12-11</time>
             </span>
 
           
@@ -217,26 +226,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="信息熵，Information-entropy"><a href="#信息熵，Information-entropy" class="headerlink" title="信息熵，Information entropy"></a>信息熵，Information entropy</h2><p>熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。</p>
-<h3 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h3><p>&#160; &#160; &#160; &#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一个或多个事件。那么不严谨地说，一条信息描述的事件越多么，其信息量越大；再进一步说，当信息描述的事件发生的可能性越小时，其信息量越大。这个原理比较复杂，不过可以从直觉上进行简单的解释，因为在一个事件系统中，当一个可能性很小的事件发生时，其一般都产生于多个前提条件，因此描述了该事件的信息也可以认为携带了其前提条件的信息，因此信息量较大。举例来说，在当前时空下，有两条信息分别描述了事件A：“中国队获得2022年世界杯冠军。”和事件B：“德国队获得2022年世界杯冠军。”，显然（？）事件A的可能性很小，那么这条信息就包含了中国队经过换教练、换主力队员，国内足球运动改革等等举措以及天大的运气最终获得冠军。而描述事件B的信息就简单的多，常规操作就可以。</p>
-<a id="more"></a>
-<p>&#160; &#160; &#160; &#160;所以从直觉上来说，当信息描述的事件发生的可能性越小时，其信息量就越大（当然上面的推理过程并不严谨）；那么信息量应该和事件发生的概率有关。假设<script type="math/tex">X</script>是一个离散型随机变量，<script type="math/tex">p(x)</script>是其概率分布函数，那么可以定义事件<script type="math/tex">X = x_0</script>的信息量为：</p>
-<script type="math/tex; mode=display">
-I(x_0) = -\log(p(x_0))</script><h3 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h3><p>&#160; &#160; &#160; &#160;有了信息量的概念后，就可以定义信息熵了。根据Boltzmann’s H-theorem，香农把随机变量X的信息量的期望定义为熵值H，记X的值域为<script type="math/tex">\chi=\{x_1, x_2, ..., x_n\}</script>，那么有：</p>
-<script type="math/tex; mode=display">
-H(X) = - \sum_{i=1}^{n}p(x_i)\log(p(x_i))</script><script type="math/tex; mode=display">H(x)$$就被称为随机变量$$X$$的熵，表示随机变量不确定性的度量，是对所有可能发生的事件产生的信息量的期望。
-从公式可得，随机变量的取值个数越多，状态数也就越多，信息熵就越大，混乱程度就越大。当随机分布为均匀分布时，熵最大，且$$0 \le H(X) \le \log n$$。并且由于信息熵仅于变量分布有关，因此也可以记为$$H(P)</script><h2 id="相对熵（KL散度）"><a href="#相对熵（KL散度）" class="headerlink" title="相对熵（KL散度）"></a>相对熵（KL散度）</h2><p>&#160; &#160; &#160; &#160;相对熵（relative entropy）又称为KL散度（Kullback-Leibler divergence, KLD），它是两个概率分布<script type="math/tex">P</script>和<script type="math/tex">Q</script>的差别的非对称性的度量。从信息角度来说，KLD(P||Q)表示用<script type="math/tex">P</script>描述分布时，相对用<script type="math/tex">Q</script>描述分布的信息增量。在机器学习中，<script type="math/tex">P</script>表示样本的真实分布，<script type="math/tex">Q</script>表示模型所预测的分布，那么如果用P来描述样本分布，就不存在信息上的差异（因为P就是样本的实际分布）；但是如果用Q来描述，虽然已经近似，但是信息量仍然不足，需要一些额外的“信息增量”才能完美描述分布。训练过程实际就是缩小这一点“信息增量”的过程。</p>
-<p>&#160; &#160; &#160; &#160;KL散度的计算公式：</p>
-<script type="math/tex; mode=display">
-D_{KL}(P||Q)=\sum_{i=1}^{n}p(x_i)\log(\frac{p(x_i)}{q(x_i)})</script><p>KL散度的值越小，P和Q两种分布就越接近，在机器学习中，也就是训练出的Q模型越接近实际分布P。</p>
-<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><p>&#160; &#160; &#160; &#160;从相对熵的定义中可以看出，相对熵值越小，表示P和Q两种分布越接近，那么相对熵就可以作为机器学习的训练目标——即训练过程以最小化该值为目标。但是最小化相对熵还不是最简形式，对相对熵的计算公式简单变形：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-D_{KL}(P||Q) &= \sum_{i=1}^{n}p(x_i)\log(p(x_i))-\sum_{i=1}^{n}p(x_i)\log(q(x_i))\\
- &= -H(P)+[-\sum_{i=1}^{n}p(x_i)\log(q(x_i))]
-\end{split}</script><p>可以看到，等式的前半部分是P分布的信息熵，其不会改变，所以在训练的过程中，只要取等式的后半部分作为目标函数。对这一部分定义为交叉熵：</p>
-<script type="math/tex; mode=display">
-H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
+        <p>&#160; &#160; &#160; &#160; <code>BeanFactory</code>和<code>FactoryBean</code>都是Spring框架中重要的接口，名字很像，但是功能上是有很大的不同的。</p>
+<h2 id="先上结论"><a href="#先上结论" class="headerlink" title="先上结论"></a>先上结论</h2><h3 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h3><ul>
+<li>都是接口</li>
+<li>都没有父接口，是Spring框架中比较基础的接口</li>
+</ul>
+<h3 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h3><ul>
+<li><code>BeanFactory</code>正如其接口名的暗示，是一个工厂类，用于管理（生成）Bean。也可以认为其实现类就是一个IOC容器。</li>
+<li><code>FactoryBean</code>是一个Bean, 而该Bean的功能是控制其他Bean实例化的逻辑。</li>
+<li>因此，<code>FactoryBean</code>类型的对象也是由<code>BeanFactory</code>管理的</li>
+</ul>
+<h2 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h2><ul>
+<li>BeanFactory定义了IOC容器的最基本形式，并提供了IOC容器应遵守的的最基本的接口，也就是Spring IOC容器所遵守的最底层和最基本的编程规范。</li>
+<li>它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。</li>
+<li>在Spring源码中，BeanFactory只是个接口，并不是IOC容器的具体实现。但是Spring框架给出了很多种实现，如 DefaultListableBeanFactory，XmlBeanFactory， <strong>ApplicationContext</strong>等，都是附加了某种功能的实现。</li>
+<li>该接口的方法如下，可以看出该接口实现的主要功能就是从IOC容器中获取Bean：<img src="/1621531412/BeanFactory.png" class="" title="BeanFactory">
+</li>
+</ul>
+<h2 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h2><p>&#160; &#160; &#160; &#160;一般情况下，Spring通过反射机制利用<bean>标签的class属性指定实现类实例化Bean，但是在某些情况下，实例化Bean过程比较复杂，如果按照传统的方式，则需要在<bean>标签中提供大量的配置信息。配置方式的灵活性是受限的，这时采用代码的方式可能会得到一个简单的方案。<br>&#160; &#160; &#160; &#160;另外还有一些情况下，要使用第三方库/框架提供的Bean时，这些Bean的实例化过程不应该由使用者插手，而Spring框架本身又无从得知这些第三方Bean的实例化逻辑，因此需要某种方式将Bean的实例化逻辑引入到Spring框架中。<br>&#160; &#160; &#160; &#160;Spring为此提供了一个<code>org.springframework.bean.factory.FactoryBean</code>的工厂类接口，用户/第三方库设计者可以通过实现该接口定制实例化Bean的逻辑。<br>&#160; &#160; &#160; &#160;实现 <code>FactoryBean</code> 接口需要实现三个方法，分别是<code>isSingleton()</code>， <code>getObject()</code>， <code>getObjectType()</code>，其中 <code>getObject()</code> 方法返回的就是它产生的Bean实例。<br>&#160; &#160; &#160; &#160;FactoryBean的设计体现了“<strong>装饰者模式</strong>”的设计模式，其一个典型的实现是是Mybaits中的<code>SqlSessionFactory</code>类。</p>
+<h3 id="FactoryBean生成的Bean的名字"><a href="#FactoryBean生成的Bean的名字" class="headerlink" title="FactoryBean生成的Bean的名字"></a>FactoryBean生成的Bean的名字</h3><p>&#160; &#160; &#160; &#160;对于实现了<code>FactoryBean</code>接口的Bean，Spring框架对其命名稍有不同。即代码中为实现了<code>FactoryBean</code>接口的Bean指定的名字将会命名给该<code>FactoryBean</code>生产出的Bean，而这个<code>FactoryBean</code>实例的Bean name是在指定的名字前加一个”&amp;”符号。</p>
+<h3 id="对Bean-name的实验"><a href="#对Bean-name的实验" class="headerlink" title="对Bean name的实验"></a>对Bean name的实验</h3><ol>
+<li>创建一个Bean类Foo<img src="/1621531412/exp1.png" class="" title="exp1"></li>
+<li>创建一个FactoryBean的实现类CustomFactoryBean，其中getObject()方法就返回一个Foo实例，并通过@Component实例将该类交给IOC容器管理<img src="/1621531412/exp2.png" class="" title="exp2"></li>
+<li>在启动类中，按名称获取该工厂Bean，并执行其方法。但是却有报错。<strong>说明，在IOC容器中，名为”customFactoryBean”的Bean并不是CustomFactoryBean类型的。</strong><img src="/1621531412/exp3.png" class="" title="exp3">
+<img src="/1621531412/exp3.2.png" class="" title="exp3.2"></li>
+<li>那究竟是什么类型？在启动类中用以下代码探究名为”customFactoryBean”的Bean到底是什么类型<img src="/1621531412/exp4.png" class="" title="exp4">
+输出为：<code>The class of bean is: class cn.litiezhu.explorespring.dao.Foo</code>。是在<code>CustomFactoryBean.getObject()</code>方法的返回类型。</li>
+<li>通过以下代码探索CustomFactoryBean类型的Bean在容器中的名字<img src="/1621531412/exp5.png" class="" title="exp5">
+输出为：<code>&amp;customFactoryBean</code></li>
+<li>那么如果不给CustomFactoryBean指定名字呢？通过实验会发现，结果还是一样的，即将<code>CustomFactoryBean</code>的默认名字<code>customFactoryBean</code>命名给了其生产的<code>Foo</code>类型的Bean。</li>
+</ol>
+
     </div>
 
     
@@ -245,7 +265,8 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
           </div>
 
         
@@ -254,12 +275,12 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/3460100194/" rel="prev" title="Word2Vec Tutorial Part 2 - Negative Sampling">
-      <i class="fa fa-chevron-left"></i> Word2Vec Tutorial Part 2 - Negative Sampling
+    <a href="/2874440577/" rel="prev" title="Spring探秘0：源码构建">
+      <i class="fa fa-chevron-left"></i> Spring探秘0：源码构建
     </a></div>
       <div class="post-nav-item">
-    <a href="/3906993302/" rel="next" title="CS224N笔记-语言模型与循环神经网络">
-      CS224N笔记-语言模型与循环神经网络 <i class="fa fa-chevron-right"></i>
+    <a href="/2158068979/" rel="next" title="算法笔记：并查集（union-find算法）">
+      算法笔记：并查集（union-find算法） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -321,7 +342,7 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#信息熵，Information-entropy"><span class="nav-number">1.</span> <span class="nav-text">信息熵，Information entropy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信息量"><span class="nav-number">1.1.</span> <span class="nav-text">信息量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息熵"><span class="nav-number">1.2.</span> <span class="nav-text">信息熵</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相对熵（KL散度）"><span class="nav-number">2.</span> <span class="nav-text">相对熵（KL散度）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉熵"><span class="nav-number">3.</span> <span class="nav-text">交叉熵</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先上结论"><span class="nav-number">1.</span> <span class="nav-text">先上结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相同点"><span class="nav-number">1.1.</span> <span class="nav-text">相同点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同点"><span class="nav-number">1.2.</span> <span class="nav-text">不同点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BeanFactory"><span class="nav-number">2.</span> <span class="nav-text">BeanFactory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FactoryBean"><span class="nav-number">3.</span> <span class="nav-text">FactoryBean</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FactoryBean生成的Bean的名字"><span class="nav-number">3.1.</span> <span class="nav-text">FactoryBean生成的Bean的名字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对Bean-name的实验"><span class="nav-number">3.2.</span> <span class="nav-text">对Bean name的实验</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -459,61 +480,6 @@ H(P,Q)=-\sum_{i=1}^{n}p(x_i)\log(q(x_i))</script>
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
@@ -528,7 +494,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'likaihz.github.io',
       owner       : 'likaihz',
       admin       : ['likaihz'],
-      id          : '64c3d3c7ed8df018aea809e4c5dd595e',
+      id          : '4079a8a5df1ae193d3f1a98f706e4b03',
         language: '',
       distractionFreeMode: true
     });

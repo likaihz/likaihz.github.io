@@ -22,7 +22,7 @@ date: 2019-12-11 14:43:48
 * `FactoryBean`是一个Bean, 而该Bean的功能是控制其他Bean实例化的逻辑。
 * 因此，`FactoryBean`类型的对象也是由`BeanFactory`管理的
 
-
+<!--more-->
 ## BeanFactory
 
 * BeanFactory定义了IOC容器的最基本形式，并提供了IOC容器应遵守的的最基本的接口，也就是Spring IOC容器所遵守的最底层和最基本的编程规范。

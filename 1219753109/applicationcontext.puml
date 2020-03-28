@@ -1,0 +1,19 @@
+@startuml
+class AnnotationConfigApplicationContext
+class GenericApplicationContext
+abstract class AbstractApplicationContext
+interface ConfigurableApplicationContext
+interface ApplicationContext
+interface ListableBeanFactory
+interface HierarchicalBeanFactory
+interface BeanFactory
+
+GenericApplicationContext <|-- AnnotationConfigApplicationContext
+AbstractApplicationContext <|-- GenericApplicationContext
+ConfigurableApplicationContext <|.. AbstractApplicationContext
+ApplicationContext <|-- ConfigurableApplicationContext
+ListableBeanFactory <|-- ApplicationContext
+HierarchicalBeanFactory <|-- ApplicationContext
+BeanFactory <|-- ListableBeanFactory
+BeanFactory <|-- HierarchicalBeanFactory
+@enduml

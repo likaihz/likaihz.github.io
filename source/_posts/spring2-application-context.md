@@ -64,7 +64,30 @@ public class DemoApp {
 
 ## 启动流程原理分析
 
-&#160;&#160;&#160;&#160; `AnnotationConfigApplicationContext`的构造方法的调用层次如下图所示：
+`AnnotationConfigApplicationContext`的构造方法的源码如下：
+```java
+/**
+	 * Create a new AnnotationConfigApplicationContext that needs to be populated
+	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
+	 */
+public AnnotationConfigApplicationContext() {
+    this.reader = new AnnotatedBeanDefinitionReader(this);
+    this.scanner = new ClassPathBeanDefinitionScanner(this);
+}
+/**
+	 * Create a new AnnotationConfigApplicationContext, deriving bean definitions
+	 * from the given component classes and automatically refreshing the context.
+	 * @param componentClasses one or more component classes &mdash; for example,
+	 * {@link Configuration @Configuration} classes
+	 */
+public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
+    this();
+    register(componentClasses);
+    refresh();
+}
+```
+
+&#160;&#160;&#160;&#160; 下图总结了构造方法的调用层次：
 
 {% asset_img constructor.png constructor %}
 

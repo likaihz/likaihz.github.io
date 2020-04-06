@@ -385,6 +385,71 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2300181694/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2300181694/" class="post-title-link" itemprop="url">Spring探秘2.1：容器启动中的refresh方法</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-14 11:16:01" itemprop="dateCreated datePublished" datetime="2019-12-14T11:16:01+00:00">2019-12-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>&#160;&#160;&#160;&#160;在前一篇文章<a href="/1219753109/" title="Spring探秘2：ApplicationContext启动流程">Spring探秘2：ApplicationContext启动流程</a>中提到了Spring容器启动的最后一步是refresh，即配置的刷新，这是容器启动过程中一个核心的步骤，实现了启动容器的主要的功能。本文会简单介绍一下<code>AbstractApplicationContext#refresh()</code>方法的流程，其中涉及到的比较复杂的过程还需要另外详细分析。首先其源码如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2300181694/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1219753109/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -808,75 +873,6 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/863537285/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
-      <meta itemprop="name" content="我叫李铁柱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiezhu Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/863537285/" class="post-title-link" itemprop="url">Word2Vec教程： Skip-Gram模型</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-05 20:16:50" itemprop="dateCreated datePublished" datetime="2019-11-05T20:16:50+00:00">2019-11-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近在看CS224N，本文是第一周的阅读任务之一(<a href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/" target="_blank" rel="noopener">原文链接</a>)，以下是全文翻译。</p>
-<p>&#8195;&#8195;该教程讲解了Word2Vec中的Skip-Gram神经网络结构，教程的目标是深入讲解细节。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>&#8195;&#8195;Skip-Gram神经网络模型的基本形式非常简单，如果从细节上的调整和优化开始解释则会显得有些混乱。</p>
-<p>&#8195;&#8195;我们先从一个整体的视角去考虑，Word2Vec使用了机器学习中比较常见的的一个技巧，一般来说我们训练一个具有单个隐藏层的简单神经网络来执行特定任务，但是在训练出模型后并不会使用该神经网络来执行该任务，我们要的只是神经网络中隐藏层的权重——这些权重实际上就是我们想要得到的“词向量”。</p>
-<p>&#8195;&#8195;在无监督的特征学习中我们也见过该技巧，即训练自动编码器在隐藏层中压缩输入向量，然后将其解压缩回输出层中的原始向量。训练它之后，可以剥离输出层（解压步骤），而仅使用隐藏层-这是学习良好图像特征而无需标记训练数据的技巧。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/863537285/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -949,7 +945,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

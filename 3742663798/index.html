@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。 环境概览 云服务：阿里云ECS，1核&#x2F;2G&#x2F;40G&#x2F;1Mbps带宽 操作系统：CentOS7.8 64位 MySQL 5.6 Nginx 1.18 Tomcat 8.5  服务器重装系统在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7新系统安装以及用户管理">
+<meta property="og:url" content="https://blog.litiezhu.cn/3742663798/index.html">
+<meta property="og:site_name" content="Tiezhu Blog">
+<meta property="og:description" content="闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。 环境概览 云服务：阿里云ECS，1核&#x2F;2G&#x2F;40G&#x2F;1Mbps带宽 操作系统：CentOS7.8 64位 MySQL 5.6 Nginx 1.18 Tomcat 8.5  服务器重装系统在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.litiezhu.cn/3742663798/sudoers_raw.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/3742663798/sudoers_mod.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/3742663798/authorized_keys.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/3742663798/permission_denied.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/3742663798/chmod.png">
+<meta property="og:image" content="https://blog.litiezhu.cn/3742663798/login.png">
+<meta property="article:published_time" content="2020-09-07T13:46:58.000Z">
+<meta property="article:modified_time" content="2020-09-07T10:48:48.281Z">
+<meta property="article:author" content="我叫李铁柱">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="记录">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.litiezhu.cn/3742663798/sudoers_raw.png">
+
+<link rel="canonical" href="https://blog.litiezhu.cn/3742663798/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CentOS7新系统安装以及用户管理 | Tiezhu Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151746522-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-151746522-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?340027755bae6497ffdf645b2ca071db";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tiezhu Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Be perfect.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3742663798/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CentOS7新系统安装以及用户管理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-07 13:46:58" itemprop="dateCreated datePublished" datetime="2020-09-07T13:46:58+00:00">2020-09-07</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。</p>
+<h2 id="环境概览"><a href="#环境概览" class="headerlink" title="环境概览"></a>环境概览</h2><ul>
+<li>云服务：阿里云ECS，1核/2G/40G/1Mbps带宽</li>
+<li>操作系统：CentOS7.8 64位</li>
+<li>MySQL 5.6</li>
+<li>Nginx 1.18</li>
+<li>Tomcat 8.5</li>
+</ul>
+<h2 id="服务器重装系统"><a href="#服务器重装系统" class="headerlink" title="服务器重装系统"></a>服务器重装系统</h2><p>在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并且在安装新系统之前可以指定密钥，这样在新系统安装好以后就可以直接在有私钥的机器上以root用户登录了。</p>
+<h2 id="CentOS-7-用户管理"><a href="#CentOS-7-用户管理" class="headerlink" title="CentOS 7 用户管理"></a>CentOS 7 用户管理</h2><ul>
+<li>直接用root用户登录不太安全，还是要在重装系统后新建用户用于日常运维。</li>
+<li>以root登录后，新建一个用户：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adduser litiezhu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为新用户添加sudo权限：在/ect/sudoers中找到一行：</li>
+</ul>
+<img src="/3742663798/sudoers_raw.png" class="sudoers_raw" width="550" height="220">
+
+<p>在最后仿照上一行的格式为新用户配置sudo权限</p>
+<img src="/3742663798/sudoers_mod.png" class="sudoers_mod" width="552" height="235">
+
+<ul>
+<li>切换到新用户：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su litiezhu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>此时仍然无法直接从远程以新用户litiezhu的身份登录，因为还没有在服务器上的该用户下配置公钥匙。切换到litiezhu用户后，在其主目录（/home/litiezhu）下新建目录“.ssh”，在该目录下新建文件authorized_keys并把公钥的内容复制到这个文件里：</p>
+<img src="/3742663798/authorized_keys.png" class="authorized_keys" width="473" height="143">
+</li>
+<li><p>这时再试一下从以litiezhu的身份登录到服务器，登录失败，提示Permission denied (publickey,gssapi-keyex,gssapi-with-mic)：</p>
+</li>
+</ul>
+<img src="/3742663798/permission_denied.png" class="permission_denied" width="600" height="64">
+<ul>
+<li>应该是刚刚创建的.ssh目录的权限问题，再用root登录并改一下权限：</li>
+</ul>
+<img src="/3742663798/chmod.png" class="chmod" width="600" height="142">
+
+<ul>
+<li>尝试登录，成功：</li>
+</ul>
+<img src="/3742663798/login.png" class="login" width="600" height="110">
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag"># 记录</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/3471444102/" rel="prev" title="算法笔记：动态规划（2）">
+      <i class="fa fa-chevron-left"></i> 算法笔记：动态规划（2）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E6%A6%82%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">环境概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">服务器重装系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-7-%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">CentOS 7 用户管理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="我叫李铁柱"
+      src="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+  <p class="site-author-name" itemprop="name">我叫李铁柱</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd1ec07d70ba69c8b5706',
+      clientSecret: '4835ba13a21d920e076465c13ddcfc5105e651f8',
+      repo        : 'likaihz.github.io',
+      owner       : 'likaihz',
+      admin       : ['likaihz'],
+      id          : 'cdba8bc542a774f60a1cccab4998c067',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

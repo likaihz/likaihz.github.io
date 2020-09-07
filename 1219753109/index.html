@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
+<meta name="generator" content="Hexo 5.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160; ApplicationContext是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个ApplicationContext的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是AnnotationConfigApplicationConte">
@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://blog.litiezhu.cn/1219753109/constructor.png">
 <meta property="og:image" content="https://blog.litiezhu.cn/1219753109/bdmap1.png">
 <meta property="article:published_time" content="2019-12-12T14:28:46.000Z">
-<meta property="article:modified_time" content="2020-07-26T06:34:47.845Z">
+<meta property="article:modified_time" content="2020-09-07T10:48:48.309Z">
 <meta property="article:author" content="我叫李铁柱">
 <meta property="article:tag" content="Spring">
 <meta property="article:tag" content="设计模式">
@@ -47,7 +47,8 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true
+    isPost : true,
+    lang   : 'zh-CN'
   };
 </script>
 
@@ -118,14 +119,12 @@
 
   <div class="site-meta">
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Tiezhu Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">Be perfect.</p>
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tiezhu Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Be perfect.</p>
   </div>
 
   <div class="site-nav-right">
@@ -135,27 +134,31 @@
 </div>
 
 
+
+
 <nav class="site-nav">
-  
-  <ul id="menu" class="menu">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
 
   </li>
   </ul>
-
 </nav>
+
+
+
+
 </div>
     </header>
 
@@ -171,14 +174,13 @@
         <div class="content-wrap">
           
 
-          <div class="content">
+          <div class="content post posts-expand">
             
 
-  <div class="posts-expand">
-      
+    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1219753109/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -198,7 +200,7 @@
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -208,7 +210,7 @@
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
+                <i class="eye"></i>
               </span>
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
@@ -223,13 +225,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>&#160;&#160;&#160;&#160; <code>ApplicationContext</code>是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个<code>ApplicationContext</code>的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是<code>AnnotationConfigApplicationContext</code>，运行的代码为前文<a href="/2874440577/" title="Spring探秘0：源码构建">Spring探秘0：源码构建</a>中的测试代码，启动类的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context =</span><br><span class="line">                <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        DemoComponent component = context.getBean(DemoComponent<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        component.foo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>&#160;&#160;&#160;&#160; <code>ApplicationContext</code>是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个<code>ApplicationContext</code>的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是<code>AnnotationConfigApplicationContext</code>，运行的代码为前文<a href="/2874440577/" title="Spring探秘0：源码构建">Spring探秘0：源码构建</a>中的测试代码，启动类的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context =</span><br><span class="line">                <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">        DemoComponent component = context.getBean(DemoComponent.class);</span><br><span class="line">        component.foo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <a id="more"></a>
+
 <blockquote>
 <p>要区分的一个概念就是“容器”，本文中提到的容器都是指Spring框架的容器，即管理Service，Dao以及Component这些Bean的一个“环境”。与SpingMVC的容器不同，SpringMVC的容器是管理Controller的环境。与Tomcat这些Web容器就更不一样了。</p>
 </blockquote>
 <h2 id="相关的类与接口"><a href="#相关的类与接口" class="headerlink" title="相关的类与接口"></a>相关的类与接口</h2><h3 id="继承结构"><a href="#继承结构" class="headerlink" title="继承结构"></a>继承结构</h3><p>&#160;&#160;&#160;&#160; <code>AnnotationConfigApplicationContext</code>这个类从类名就可以看出，它是一个通过注解来配置的Spring容器，实例化该容器时，可以传入一个配置类，上面代码中的<code>AppConfig</code>就是我自定义的一个配置类，其中唯一的配置项就是通过<code>@ComponentScan</code>注解配置了扫描的包。<br>&#160;&#160;&#160;&#160;<code>AnnotationConfigApplicationContext</code>这个类的继承结构如下图（图中只包含了与启动容器关系较大的类和接口，实际的继承层次要复杂得多）：</p>
 <img src="/1219753109/applicationcontext.svg" class="" title="applicationcontext">
+
 <p>从中可以看出</p>
 <ol>
 <li><code>ApplicationContext</code>最终还是要实现<code>BeanFactory</code>，而这个父接口的含义可以参考<a href="/1621531412/" title="前一篇文章">前一篇文章</a>。因此可以说<code>ApplicationContext</code>是<code>BeanFactory</code>功能上的增强。</li>
@@ -237,6 +243,7 @@
 </ol>
 <h3 id="启动容器时涉及到的类"><a href="#启动容器时涉及到的类" class="headerlink" title="启动容器时涉及到的类"></a>启动容器时涉及到的类</h3><p>&#160;&#160;&#160;&#160; 容器的启动过程就是一个<code>ApplicationContext</code>的实例化过程，本文研究的容器实现类为<code>AnnotationConfigApplicationContext</code>，启动的过程中会涉及到许多其他的类，包括容器中的实例对象的实例化，向容器中注册的一些初始的处理器等。这里通过类图的形式总结了部分类以及这些类之间的关系。</p>
 <img src="/1219753109/startclass.svg" class="" title="startclass">
+
 <h3 id="各类的简介"><a href="#各类的简介" class="headerlink" title="各类的简介"></a>各类的简介</h3><p>自顶向下地简单介绍相关的类：</p>
 <ul>
 <li><code>BeanDefinition</code>: 用于描述一个Bean实例的信息；根据Bean的来源不同有具体的实现类，如<code>AnnotatedGenericBeanDefinition</code>，<code>RootBeanDefinition</code>，<code>ScannedGenericBeanDefinition</code>等。</li>
@@ -251,9 +258,12 @@
 <li><code>ClassPathBeanDefinitionScanner</code>: 是<code>AnnotationConfigApplicationContext</code>中一个重要的工具，用于扫描classpath上所有的Bean，并将相应的<code>BeanDefifnition</code>注册到给定的<code>BeanDefinitionRegistry</code>中。（一般registry就是一个<code>BeanFactory</code>或者是<code>ApplicationContext</code>，即当前的Spring容器）</li>
 <li><code>AnnotatedBeanDefinitionReader</code>：是<code>AnnotationConfigApplicationContext</code>中另一个重要的工具，也是用于接收一个Bean类，转换为<code>BeanDefifnition</code>并将其注册到registry中，但是不同点在于它只用于读取显式注册的类，即与<code>ClassPathBeanDefinitionScanner</code>相比没有扫描classpath的功能。</li>
 </ul>
-<h2 id="启动流程原理分析"><a href="#启动流程原理分析" class="headerlink" title="启动流程原理分析"></a>启动流程原理分析</h2><p><code>AnnotationConfigApplicationContext</code>的构造方法的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Create a new AnnotationConfigApplicationContext that needs to be populated</span></span><br><span class="line"><span class="comment">	 * through &#123;<span class="doctag">@link</span> #register&#125; calls and then manually &#123;<span class="doctag">@linkplain</span> #refresh refreshed&#125;.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AnnotationConfigApplicationContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.reader = <span class="keyword">new</span> AnnotatedBeanDefinitionReader(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.scanner = <span class="keyword">new</span> ClassPathBeanDefinitionScanner(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Create a new AnnotationConfigApplicationContext, deriving bean definitions</span></span><br><span class="line"><span class="comment">	 * from the given component classes and automatically refreshing the context.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> componentClasses one or more component classes &amp;mdash; for example,</span></span><br><span class="line"><span class="comment">	 * &#123;<span class="doctag">@link</span> Configuration <span class="doctag">@Configuration</span>&#125; classes</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AnnotationConfigApplicationContext</span><span class="params">(Class&lt;?&gt;... componentClasses)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>();</span><br><span class="line">    register(componentClasses);</span><br><span class="line">    refresh();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="启动流程原理分析"><a href="#启动流程原理分析" class="headerlink" title="启动流程原理分析"></a>启动流程原理分析</h2><p><code>AnnotationConfigApplicationContext</code>的构造方法的源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Create a new AnnotationConfigApplicationContext that needs to be populated</span></span><br><span class="line"><span class="comment">	 * through &#123;<span class="doctag">@link</span> #register&#125; calls and then manually &#123;<span class="doctag">@linkplain</span> #refresh refreshed&#125;.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AnnotationConfigApplicationContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.reader = <span class="keyword">new</span> AnnotatedBeanDefinitionReader(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.scanner = <span class="keyword">new</span> ClassPathBeanDefinitionScanner(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Create a new AnnotationConfigApplicationContext, deriving bean definitions</span></span><br><span class="line"><span class="comment">	 * from the given component classes and automatically refreshing the context.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> componentClasses one or more component classes &amp;mdash; for example,</span></span><br><span class="line"><span class="comment">	 * &#123;<span class="doctag">@link</span> Configuration <span class="doctag">@Configuration</span>&#125; classes</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AnnotationConfigApplicationContext</span><span class="params">(Class&lt;?&gt;... componentClasses)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>();</span><br><span class="line">    register(componentClasses);</span><br><span class="line">    refresh();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>&#160;&#160;&#160;&#160; 下图总结了构造方法的调用层次：</p>
 <img src="/1219753109/constructor.png" class="" title="constructor">
+
 <h3 id="构造父类GenericApplicationContext"><a href="#构造父类GenericApplicationContext" class="headerlink" title="构造父类GenericApplicationContext"></a>构造父类GenericApplicationContext</h3><ul>
 <li>再递归地构造父类<code>AbstractApplicationContext</code>，该父类中的<code>BeanFactoryPostProcessor</code>的list就是在此时实例化的</li>
 <li>实例化beanFactory属性为DefaultListableBeanFactory。</li>
@@ -262,7 +272,8 @@
 <p>工厂模式：<code>AbstractApplicationContext</code>类定义了一个抽象方法<code>getBeanFactory()</code>，通过该方法实现了<code>BeanFactory</code>接口。该方法就是需要子类去实现的工厂方法，不同的子类可能有不同的<code>BeanFactory</code>实现。</p>
 </blockquote>
 <h3 id="实例化reader属性"><a href="#实例化reader属性" class="headerlink" title="实例化reader属性"></a>实例化reader属性</h3><ul>
-<li>设置reader中的registry，conditionEvaluator属性</li>
+<li><p>设置reader中的registry，conditionEvaluator属性</p>
+</li>
 <li><p>调用 <code>AnnotationConfigUtils.registerAnnotationConfigProcessors()</code> 向容器注册一些后置处理器的<code>BeanDefinition</code>（并且其实现类均为<code>RootBeanDefinition</code>），包括：</p>
 <ul>
 <li><code>ConfigurationClassPostProcessor</code>：是一个<code>BeanDefinitionRegistryPostProcessor</code>实现类，用于处理配置类</li>
@@ -277,6 +288,7 @@
 </li>
 </ul>
 <img src="/1219753109/bdmap1.png" class="" title="bdmap1">
+
 <h3 id="实例化scanner属性"><a href="#实例化scanner属性" class="headerlink" title="实例化scanner属性"></a>实例化scanner属性</h3><ul>
 <li>该实例化过程比较简单，只是在scanner的扫描过滤器中添加了<code>@Component</code>这个注解。</li>
 </ul>
@@ -320,7 +332,6 @@
   
   
 
-  </div>
 
 
           </div>
@@ -372,7 +383,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关的类与接口"><span class="nav-number">1.</span> <span class="nav-text">相关的类与接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承结构"><span class="nav-number">1.1.</span> <span class="nav-text">继承结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动容器时涉及到的类"><span class="nav-number">1.2.</span> <span class="nav-text">启动容器时涉及到的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#各类的简介"><span class="nav-number">1.3.</span> <span class="nav-text">各类的简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动流程原理分析"><span class="nav-number">2.</span> <span class="nav-text">启动流程原理分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造父类GenericApplicationContext"><span class="nav-number">2.1.</span> <span class="nav-text">构造父类GenericApplicationContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例化reader属性"><span class="nav-number">2.2.</span> <span class="nav-text">实例化reader属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例化scanner属性"><span class="nav-number">2.3.</span> <span class="nav-text">实例化scanner属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册构造方法的参数传入的组件类"><span class="nav-number">2.4.</span> <span class="nav-text">注册构造方法的参数传入的组件类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刷新-refresh"><span class="nav-number">2.5.</span> <span class="nav-text">刷新 refresh()</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">相关的类与接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">继承结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8%E6%97%B6%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">启动容器时涉及到的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E7%B1%BB%E7%9A%84%E7%AE%80%E4%BB%8B"><span class="nav-number">1.3.</span> <span class="nav-text">各类的简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">启动流程原理分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E7%88%B6%E7%B1%BBGenericApplicationContext"><span class="nav-number">2.1.</span> <span class="nav-text">构造父类GenericApplicationContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96reader%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">实例化reader属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96scanner%E5%B1%9E%E6%80%A7"><span class="nav-number">2.3.</span> <span class="nav-text">实例化scanner属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E5%85%A5%E7%9A%84%E7%BB%84%E4%BB%B6%E7%B1%BB"><span class="nav-number">2.4.</span> <span class="nav-text">注册构造方法的参数传入的组件类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%B7%E6%96%B0-refresh"><span class="nav-number">2.5.</span> <span class="nav-text">刷新 refresh()</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -388,24 +399,24 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
       </span>
   </div>
 
@@ -425,19 +436,18 @@
       <div class="footer-inner">
         
 
+        
+
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -445,7 +455,7 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
+        <i class="user"></i>
       </span>
       <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
@@ -454,7 +464,7 @@
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
+        <i class="eye"></i>
       </span>
       <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>

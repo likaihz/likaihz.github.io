@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
+<meta name="generator" content="Hexo 5.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta property="og:type" content="website">
@@ -36,7 +36,8 @@
   CONFIG.page = {
     sidebar: "",
     isHome : true,
-    isPost : false
+    isPost : false,
+    lang   : 'zh-CN'
   };
 </script>
 
@@ -107,14 +108,12 @@
 
   <div class="site-meta">
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Tiezhu Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">Be perfect.</p>
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tiezhu Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Be perfect.</p>
   </div>
 
   <div class="site-nav-right">
@@ -124,27 +123,31 @@
 </div>
 
 
+
+
 <nav class="site-nav">
-  
-  <ul id="menu" class="menu">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
 
   </li>
   </ul>
-
 </nav>
+
+
+
+
 </div>
     </header>
 
@@ -160,14 +163,78 @@
         <div class="content-wrap">
           
 
-          <div class="content">
+          <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2352984677/">
 
-  <div class="posts-expand">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2352984677/" class="post-title-link" itemprop="url">从信息熵到交叉熵</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-15 14:57:22" itemprop="dateCreated datePublished" datetime="2019-11-15T14:57:22+00:00">2019-11-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="信息熵，Information-entropy"><a href="#信息熵，Information-entropy" class="headerlink" title="信息熵，Information entropy"></a>信息熵，Information entropy</h2><p>熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。</p>
+<h3 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h3><p>&#160; &#160; &#160; &#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一个或多个事件。那么不严谨地说，一条信息描述的事件越多么，其信息量越大；再进一步说，当信息描述的事件发生的可能性越小时，其信息量越大。这个原理比较复杂，不过可以从直觉上进行简单的解释，因为在一个事件系统中，当一个可能性很小的事件发生时，其一般都产生于多个前提条件，因此描述了该事件的信息也可以认为携带了其前提条件的信息，因此信息量较大。举例来说，在当前时空下，有两条信息分别描述了事件A：“中国队获得2022年世界杯冠军。”和事件B：“德国队获得2022年世界杯冠军。”，显然（？）事件A的可能性很小，那么这条信息就包含了中国队经过换教练、换主力队员，国内足球运动改革等等举措以及天大的运气最终获得冠军。而描述事件B的信息就简单的多，常规操作就可以。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2352984677/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3460100194/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -180,15 +247,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/3460100194/" class="post-title-link" itemprop="url">Word2Vec Tutorial Part 2 - Negative Sampling</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -209,7 +276,7 @@
           <p>&#8195;&#8195;在word2vec教程的第2部分（<a href="https://blog.litiezhu.cn/863537285/">第一部分链接</a>）中，我将介绍对基本Skip-gram模型的一些其他修改，这些修改对训练可行性非常重要。</p>
 <p>&#8195;&#8195;当你阅读有关Word2Vec中的skip-gram模型的教程时，可能会意识到一些问题——它是一个巨大的神经网络！</p>
 <p>&#8195;&#8195;在我给出的示例中，我们有包含300个成分的单词向量和10,000个单词的词汇。回想一下，神经网络有两个权重矩阵——隐藏层的权重矩阵和输出层的权重矩阵，每个矩阵的权重数量为三百万！在较大的神经网络上运行梯度下降会很慢，更糟的是，您需要大量的训练数据才足以训练这么多的权重并避免过拟合，数百万的权重乘以数十亿的训练样本意味着训练这种模型十分困难。</p>
-<p>&#8195;&#8195;Word2Vec的作者在第二篇<a href="https://arxiv.org/pdf/1310.4546.pdf" target="_blank" rel="noopener">论文</a>中通过以下两项创新解决了这些问题：</p>
+<p>&#8195;&#8195;Word2Vec的作者在第二篇<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1310.4546.pdf">论文</a>中通过以下两项创新解决了这些问题：</p>
 <ol>
 <li>对频繁的单词进行二次采样以减少训练示例的数量。</li>
 <li>他们使用称为“负采样”的技术来修改优化目标，该技术可使每个训练样本仅更新模型权重的一小部分。</li>
@@ -237,10 +304,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/863537285/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -253,15 +320,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/863537285/" class="post-title-link" itemprop="url">Word2Vec教程： Skip-Gram模型</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -279,7 +346,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>最近在看CS224N，本文是第一周的阅读任务之一(<a href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/" target="_blank" rel="noopener">原文链接</a>)，以下是全文翻译。</p>
+          <p>最近在看CS224N，本文是第一周的阅读任务之一(<a target="_blank" rel="noopener" href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/">原文链接</a>)，以下是全文翻译。</p>
 <p>&#8195;&#8195;该教程讲解了Word2Vec中的Skip-Gram神经网络结构，教程的目标是深入讲解细节。</p>
 <h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>&#8195;&#8195;Skip-Gram神经网络模型的基本形式非常简单，如果从细节上的调整和优化开始解释则会显得有些混乱。</p>
 <p>&#8195;&#8195;我们先从一个整体的视角去考虑，Word2Vec使用了机器学习中比较常见的的一个技巧，一般来说我们训练一个具有单个隐藏层的简单神经网络来执行特定任务，但是在训练出模型后并不会使用该神经网络来执行该任务，我们要的只是神经网络中隐藏层的权重——这些权重实际上就是我们想要得到的“词向量”。</p>
@@ -306,10 +373,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/212335613/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -322,15 +389,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/212335613/" class="post-title-link" itemprop="url">个人博客建站实录2：部署在Github上</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -349,7 +416,7 @@
 
       
           <h2 id="部署网站与Github-Pages服务"><a href="#部署网站与Github-Pages服务" class="headerlink" title="部署网站与Github Pages服务"></a>部署网站与Github Pages服务</h2><h3 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h3><p>&#160; &#160; &#160; &#160;在前一篇博文<a href="https://blog.litiezhu.cn/4141265970/">个人博客建站实录1：Hexo的安装与配置</a>中构建好的Hexo项目还是一个只能在本地访问的网站，本质上来说只是生成了一些网页文件，如果想要成为一个供别人访问的博客站点，就需要将网站部署到服务器上。所谓的部署网站简单来说就是指把网站的资源（包括网页、图片等文件）放在服务器上，这样所有人只要通过互联网就可以访问到我们的博客站点了。可以看出来，最简单的部署办法就是购买服务器（或者云服务器），那么就只需要将生成好的文件上传到服务器。这种方法虽然简单，但是要钱，其实还是有一些免费的方法的，只是实现起来有些复杂，但是没关系，贫穷催人勤奋，我还是用免费的方法把。</p>
-<h3 id="Github-Pages服务"><a href="#Github-Pages服务" class="headerlink" title="Github Pages服务"></a>Github Pages服务</h3><p>&#160; &#160; &#160; &#160;代码托管平台Github就提供了这样一项免费服务——<a href="https://pages.github.com" target="_blank" rel="noopener">Github Pages</a>，能够满足我们的静态页面建站需求，简单来说就是Github允许我们吧生成的站点文件放在它的服务器上并提供相应的网址，这个功能正好适用于建设博客网站。使用Github Pages服务的方式非常简单。首先在Github上新建一个项目，项目名称为username.github.io，其中username为自己在Github上的用户名。</p>
+<h3 id="Github-Pages服务"><a href="#Github-Pages服务" class="headerlink" title="Github Pages服务"></a>Github Pages服务</h3><p>&#160; &#160; &#160; &#160;代码托管平台Github就提供了这样一项免费服务——<a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>，能够满足我们的静态页面建站需求，简单来说就是Github允许我们吧生成的站点文件放在它的服务器上并提供相应的网址，这个功能正好适用于建设博客网站。使用Github Pages服务的方式非常简单。首先在Github上新建一个项目，项目名称为username.github.io，其中username为自己在Github上的用户名。</p>
 
       
     </div>
@@ -365,10 +432,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/4141265970/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -381,15 +448,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/4141265970/" class="post-title-link" itemprop="url">个人博客建站实录1：Hexo的安装与配置</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -409,11 +476,11 @@
       
           <h2 id="个人博客站与Hexo"><a href="#个人博客站与Hexo" class="headerlink" title="个人博客站与Hexo"></a>个人博客站与Hexo</h2><h3 id="为什么选择个人博客站"><a href="#为什么选择个人博客站" class="headerlink" title="为什么选择个人博客站"></a>为什么选择个人博客站</h3><p>&#160; &#160; &#160; &#160;个人建站确实有一些缺点，比如要花一些不必要的时间在站点的建设上，以及功能上会有一定的限制等。但是最终还是选择了尝试个人建站，是因为有一些不可忽视的优点：一是资源管理形式上的自由和统一，所有的博文都自然地以文件形式保存，不用担心以后的迁移问题；二是版权问题，如果在博客平台上写，无法保证平台不会滥用，与其发生版权纠纷后再去扯皮，还不如从一开始就避免这种可能；最后一点也算是强行优点，作为技术人员，花时间在这种“技术周边”上应该不亏吧。</p>
 <h3 id="如何将博文转换为网页"><a href="#如何将博文转换为网页" class="headerlink" title="如何将博文转换为网页"></a>如何将博文转换为网页</h3><p>&#160; &#160; &#160; &#160;博客大部分的功能其实都是静态网页，能够做到把我们写的文章在浏览器上显示就可以了，交互上的需求还是比较弱的，所以从理论上来说，我们可以自己写前端代码，把每一篇博文的内容排好版，再做一些链接，然后把这一堆静态的HTML文件放在服务器上就能够实现个人建站的需求了。</p>
-<p>&#160; &#160; &#160; &#160;但是！重复造轮子是不可取的，除非专职前端方向，否则手撸一个个人博客的框架是很不明智也很浪费时间的，所以我们就需要一个这样的框架，能够让我们专注于写博文本身，至于把文章转换为静态的网页文件，甚至是部署到服务器上这些工作，就让框架去完成吧。<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a>就是这样一个框架：</p>
+<p>&#160; &#160; &#160; &#160;但是！重复造轮子是不可取的，除非专职前端方向，否则手撸一个个人博客的框架是很不明智也很浪费时间的，所以我们就需要一个这样的框架，能够让我们专注于写博文本身，至于把文章转换为静态的网页文件，甚至是部署到服务器上这些工作，就让框架去完成吧。<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">Hexo</a>就是这样一个框架：</p>
 <blockquote>
 <p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
 </blockquote>
-<p>&#160; &#160; &#160; &#160;也就是说，我们只要把文章写成<a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener">Markdown</a>格式的文件，Hexo就能够生成我们的博客站网页。如果把这些网页放到服务器上，就能实现从互联网访问我们的博客的功能了。当然除此之外，Hexo也有其他功能，如部署、插件等，但是<em>one step at a time</em>，先尝试一下Hexo的基本功能吧。</p>
+<p>&#160; &#160; &#160; &#160;也就是说，我们只要把文章写成<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>格式的文件，Hexo就能够生成我们的博客站网页。如果把这些网页放到服务器上，就能实现从互联网访问我们的博客的功能了。当然除此之外，Hexo也有其他功能，如部署、插件等，但是<em>one step at a time</em>，先尝试一下Hexo的基本功能吧。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/4141265970/#more" rel="contents">
@@ -436,10 +503,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1856879742/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -452,15 +519,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/1856879742/" class="post-title-link" itemprop="url">JVM笔记3：线程安全与锁优化</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -502,10 +569,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3601937677/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -518,15 +585,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/3601937677/" class="post-title-link" itemprop="url">JVM笔记2：垃圾收集器</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -570,10 +637,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2415743415/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -586,15 +653,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2415743415/" class="post-title-link" itemprop="url">JVM笔记1：Java内存区域</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -636,10 +703,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2621507188/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -652,15 +719,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2621507188/" class="post-title-link" itemprop="url">Java笔记5：Thread基础</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -679,6 +746,7 @@
 
       
           <img src="/2621507188/thread.png" class="" title="thread">
+
 <img src="/2621507188/threadLifecycle.png" class="" title="threadLifecycle">
 
       
@@ -695,10 +763,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/487642189/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -711,15 +779,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/487642189/" class="post-title-link" itemprop="url">Java笔记4.1：HashMap源码探索</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -761,73 +829,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2366166279/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
-      <meta itemprop="name" content="我叫李铁柱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiezhu Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2366166279/" class="post-title-link" itemprop="url">Java笔记4：Map接口</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-05 19:46:02" itemprop="dateCreated datePublished" datetime="2019-07-05T19:46:02+00:00">2019-07-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a>Map接口</h2><p>&#160;&#160;&#160;&#160;<code>Map</code>用于保存键值对（key-value），其中key不允许重复。Map接口的继承树如下：</p>
-<img src="/2366166279/map.png" class="" title="map">
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2366166279/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-  </div>
 
   
   <nav class="pagination">
@@ -899,24 +900,24 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
       </span>
   </div>
 
@@ -936,19 +937,18 @@
       <div class="footer-inner">
         
 
+        
+
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -956,7 +956,7 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
+        <i class="user"></i>
       </span>
       <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
@@ -965,7 +965,7 @@
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
+        <i class="eye"></i>
       </span>
       <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>

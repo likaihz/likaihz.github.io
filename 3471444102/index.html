@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
+<meta name="generator" content="Hexo 5.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="问题类型&amp;#160; &amp;#160; &amp;#160; &amp;#160;在LeetCode上目前共有200道左右的动态规划相关的题，根据现有题目可以总结出一些题型，熟悉题型以及相关的描述能够帮助我们更准确地判断动态规划使用的场景。  通向目标点的最小（最大）路径 不同方法数 区间合并 字符串上的动态规划 决策类">
@@ -28,7 +28,7 @@
 <meta property="og:description" content="问题类型&amp;#160; &amp;#160; &amp;#160; &amp;#160;在LeetCode上目前共有200道左右的动态规划相关的题，根据现有题目可以总结出一些题型，熟悉题型以及相关的描述能够帮助我们更准确地判断动态规划使用的场景。  通向目标点的最小（最大）路径 不同方法数 区间合并 字符串上的动态规划 决策类">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-02-21T20:26:36.000Z">
-<meta property="article:modified_time" content="2020-07-26T06:34:47.825Z">
+<meta property="article:modified_time" content="2020-09-07T10:48:48.289Z">
 <meta property="article:author" content="我叫李铁柱">
 <meta property="article:tag" content="LeetCode">
 <meta property="article:tag" content="算法">
@@ -42,7 +42,8 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true
+    isPost : true,
+    lang   : 'zh-CN'
   };
 </script>
 
@@ -113,14 +114,12 @@
 
   <div class="site-meta">
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Tiezhu Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">Be perfect.</p>
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tiezhu Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Be perfect.</p>
   </div>
 
   <div class="site-nav-right">
@@ -130,27 +129,31 @@
 </div>
 
 
+
+
 <nav class="site-nav">
-  
-  <ul id="menu" class="menu">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
 
   </li>
   </ul>
-
 </nav>
+
+
+
+
 </div>
     </header>
 
@@ -166,14 +169,13 @@
         <div class="content-wrap">
           
 
-          <div class="content">
+          <div class="content post posts-expand">
             
 
-  <div class="posts-expand">
-      
+    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3471444102/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -193,7 +195,7 @@
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -203,7 +205,7 @@
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
+                <i class="eye"></i>
               </span>
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
@@ -218,7 +220,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="问题类型"><a href="#问题类型" class="headerlink" title="问题类型"></a>问题类型</h2><p>&#160; &#160; &#160; &#160;在<a href="https://leetcode-cn.com/problemset/all/?topicSlugs=dynamic-programming" target="_blank" rel="noopener">LeetCode</a>上目前共有200道左右的动态规划相关的题，根据现有题目可以总结出一些题型，熟悉题型以及相关的描述能够帮助我们更准确地判断动态规划使用的场景。</p>
+        <h2 id="问题类型"><a href="#问题类型" class="headerlink" title="问题类型"></a>问题类型</h2><p>&#160; &#160; &#160; &#160;在<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problemset/all/?topicSlugs=dynamic-programming">LeetCode</a>上目前共有200道左右的动态规划相关的题，根据现有题目可以总结出一些题型，熟悉题型以及相关的描述能够帮助我们更准确地判断动态规划使用的场景。</p>
 <ul>
 <li>通向目标点的最小（最大）路径</li>
 <li>不同方法数</li>
@@ -227,23 +229,25 @@
 <li>决策类</li>
 </ul>
 <a id="more"></a>
+
 <h2 id="通向目标点的最小（最大）路径"><a href="#通向目标点的最小（最大）路径" class="headerlink" title="通向目标点的最小（最大）路径"></a>通向目标点的最小（最大）路径</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>&#160; &#160; &#160; &#160;这一类问题通常是给定一个目标点（目标状态），要求到达该目标点的代价最小（或最大）的路径的代价。一般来说都是求“代价”，而不是求“路径”。这种题的建模技巧在于，首先要明确“目标点”是什么，“代价”是什么，以及在通向该目标点的过程中经过的“中间状态”是哪些，dp[]数组就保存这些状态就可以。创建状态转移方程的时候通常是从前面的状态中选一个最大（最小）的再加上当前状态的权值。</p>
 <h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><h4 id="最小路径和"><a href="#最小路径和" class="headerlink" title="最小路径和"></a>最小路径和</h4><blockquote>
-<p><a href="https://leetcode-cn.com/problems/minimum-path-sum/" target="_blank" rel="noopener">(LeetCode.64)</a>给定一个包含非负整数的 <script type="math/tex">m\times n</script>网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。<br>说明：每次只能向下或者向右移动一步。<br>示例：</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-path-sum/">(LeetCode.64)</a>给定一个包含非负整数的 $$m\times n$$网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。<br>说明：每次只能向下或者向右移动一步。<br>示例：</p>
 <blockquote>
-<p> 输入:<br>[<br>  [1,3,1],<br>  [1,5,1],<br>  [4,2,1]<br>]<br>输出: 7<br>解释: 因为路径 1→3→1→1→1 的总和最小。</p>
+<p> 输入:<br>[<br>  [1,3,1],<br>  [1,5,1],<br>  [4,2,1]<br>]<br>输出: 7<br>解释: 因为路径 1→3→1→1→1 的总和最小。</p>
 </blockquote>
 </blockquote>
 <p>&#160; &#160; &#160; &#160;此题的目标点很明确，就是grid[m-1][n-1]这个点，代价就是路径上经过的所有的点的权值，中间状态就是grid中的所有点，因为在走向目标点的过程中，所有其他的点都有可能经过，因此可以建立一个dp[m][n]的数组用以保存中间状态。</p>
 <ol>
-<li>确定状态：dp[i][j]表示的是到达<script type="math/tex">(i,j)</script>这个点的最小代价。</li>
-<li>边界值：本题的状态数组是二维的，边界值是两组，分别是dp[0][0]到dp[0][n-1]和dp[0][0]到dp[m-1][0]。可以看出就是dp数组的第0行和第0列。dp[0][j]的值应该是grid[0][0]到grid[0][j]的和（想要到达点<script type="math/tex">(0,j)</script>只能是从点<script type="math/tex">(0,0)</script>一路向右走），或者说dp[0][j] = dp[0][j-1]+grid[0][j]。同理有dp[i][0] = dp[i-1][0]+grid[i][0]</li>
-<li>状态转移方程：对于点<script type="math/tex">(i,j)</script>，达到该点之前的一个点只有两种可能：<script type="math/tex">(i-1, j)</script>和<script type="math/tex">(i,j-1)</script>。因此如果想要到该点的代价最小，那么只要其是从代价较小的前一个点到达即可。所以dp[i][j] = min(dp[i-1][j], dp[i][j-1])+grid[i][j]</li>
+<li>确定状态：dp[i][j]表示的是到达$$(i,j)$$这个点的最小代价。</li>
+<li>边界值：本题的状态数组是二维的，边界值是两组，分别是dp[0][0]到dp[0][n-1]和dp[0][0]到dp[m-1][0]。可以看出就是dp数组的第0行和第0列。dp[0][j]的值应该是grid[0][0]到grid[0][j]的和（想要到达点$$(0,j)$$只能是从点$$(0,0)$$一路向右走），或者说dp[0][j] = dp[0][j-1]+grid[0][j]。同理有dp[i][0] = dp[i-1][0]+grid[i][0]</li>
+<li>状态转移方程：对于点$$(i,j)$$，达到该点之前的一个点只有两种可能：$$(i-1, j)$$和$$(i,j-1)$$。因此如果想要到该点的代价最小，那么只要其是从代价较小的前一个点到达即可。所以dp[i][j] = min(dp[i-1][j], dp[i][j-1])+grid[i][j]</li>
 </ol>
 <p>最终实现代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minPathSum</span><span class="params">(<span class="keyword">int</span>[][] grid)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = grid.length, n = grid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>] + grid[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i - <span class="number">1</span>] + grid[<span class="number">0</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = Math.min(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]) + grid[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[m - <span class="number">1</span>][n - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="零钱兑换"><a href="#零钱兑换" class="headerlink" title="零钱兑换"></a>零钱兑换</h4><blockquote>
-<p>给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。</p>
+<p>给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。</p>
 <p>示例1:</p>
 <blockquote>
 <p>输入: coins = [1, 2, 5], amount = 11<br>输出: 3<br>解释: 11 = 5 + 5 + 1</p>
@@ -258,22 +262,23 @@
 <ol>
 <li>确定状态：创建数组dp[amount+1]，其中dp[i]表示总面值为i的最少硬币数目，如果无法组成该数目，则为-1</li>
 <li>边界值：对于coins中所有的硬币面值c，都应该有dp[c]=1。</li>
-<li>状态转移方程：<script type="math/tex">dp[i]= \min_{c \in coins, dp[i-c]>0}{dp[i-c]}+1</script>，即对于总面值i，扫描coins中所有的单个面值c，找出代价最小的前一个状态。</li>
+<li>状态转移方程：$$dp[i]= \min_{c \in coins, dp[i-c]&gt;0}{dp[i-c]}+1$$，即对于总面值i，扫描coins中所有的单个面值c，找出代价最小的前一个状态。</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">coinChange</span><span class="params">(<span class="keyword">int</span>[] coins, <span class="keyword">int</span> amount)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[amount + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    Arrays.fill(dp, -<span class="number">1</span>);</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i : coins) &#123;</span><br><span class="line">        <span class="keyword">if</span>(i &lt;= amount) &#123;</span><br><span class="line">            dp[i] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= amount; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> min = Integer.MAX_VALUE;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> coin : coins) &#123;</span><br><span class="line">                <span class="keyword">if</span>(coin &lt; i &amp;&amp; dp[i-coin] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    min = Math.min(min, dp[i-coin]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(min &lt; Integer.MAX_VALUE) &#123;</span><br><span class="line">                dp[i] = min+<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> dp[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dp[amount];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
-<li><a href="https://leetcode-cn.com/problems/min-cost-climbing-stairs/" target="_blank" rel="noopener">746.使用最小花费爬楼梯</a></li>
-<li><a href="https://leetcode-cn.com/problems/minimum-falling-path-sum/" target="_blank" rel="noopener">931.下降路径最小和</a></li>
-<li><a href="https://leetcode-cn.com/problems/minimum-cost-for-tickets/" target="_blank" rel="noopener">983. 最低票价</a></li>
-<li><a href="https://leetcode-cn.com/problems/2-keys-keyboard/" target="_blank" rel="noopener">650. 只有两个键的键盘</a></li>
-<li><a href="https://leetcode-cn.com/problems/perfect-squares/" target="_blank" rel="noopener">279. 完全平方数</a></li>
-<li><a href="https://leetcode-cn.com/problems/last-stone-weight-ii/" target="_blank" rel="noopener">1049. 最后一块石头的重量 II</a></li>
-<li><a href="https://leetcode-cn.com/problems/dungeon-game/" target="_blank" rel="noopener">174. 地下城游戏</a></li>
-<li><a href="https://leetcode-cn.com/problems/minimum-number-of-refueling-stops/" target="_blank" rel="noopener">871. 最低加油次数</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/min-cost-climbing-stairs/">746.使用最小花费爬楼梯</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-falling-path-sum/">931.下降路径最小和</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-cost-for-tickets/">983. 最低票价</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/2-keys-keyboard/">650. 只有两个键的键盘</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-squares/">279. 完全平方数</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/last-stone-weight-ii/">1049. 最后一块石头的重量 II</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/dungeon-game/">174. 地下城游戏</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-number-of-refueling-stops/">871. 最低加油次数</a></li>
 </ul>
 <h2 id="不同方法数"><a href="#不同方法数" class="headerlink" title="不同方法数"></a>不同方法数</h2><p>&#160; &#160; &#160; &#160; 这一类问题的描述通常是给定一个目标要求我们计算达到该目标的方法（路径）数有多少。创建状态转移方程的时候通常是找出所有前置状态，将其路径数相加，即dp[i]的含义一般是到达状态i的方法数。</p>
 <h3 id="不同路径"><a href="#不同路径" class="headerlink" title="不同路径"></a>不同路径</h3><blockquote>
-<p><a href="https://leetcode-cn.com/problems/unique-paths/" target="_blank" rel="noopener">LeetCode.62 不同路径</a>一个机器人位于一个<script type="math/tex">m\times n</script>网格的左上角。机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。<br>问总共有多少条不同的路径？<br>说明：m 和 n 的值均不超过 100。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/unique-paths/">LeetCode.62 不同路径</a>一个机器人位于一个$$m\times n$$网格的左上角。机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。<br>问总共有多少条不同的路径？<br>说明：m 和 n 的值均不超过 100。</p>
 <blockquote>
 <p>示例：<br>输入: m = 3, n = 2<br>输出: 3<br>解释:<br>从左上角开始，总共有 3 条路径可以到达右下角。</p>
 <ol>
@@ -289,24 +294,27 @@
 <li>状态转移方程：在到达点(i,j)之前，一定是在点(i-1,j)或者(i,j-1)，所以dp[i][j] = dp[i][j-1]+dp[i-1][j]</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">uniquePaths</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Arrays.fill(dp[<span class="number">0</span>], <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i - <span class="number">1</span>][j] + dp[i][j - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[m - <span class="number">1</span>][n - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="其他-1"><a href="#其他-1" class="headerlink" title="其他"></a>其他</h3><ul>
-<li><a href="https://leetcode-cn.com/problems/unique-paths-ii/" target="_blank" rel="noopener">63. 不同路径 II</a></li>
-<li><a href="https://leetcode-cn.com/problems/number-of-longest-increasing-subsequence/" target="_blank" rel="noopener">673. 最长递增子序列的个数</a></li>
-<li><a href="https://leetcode-cn.com/problems/number-of-dice-rolls-with-target-sum/" target="_blank" rel="noopener">1155. 掷骰子的N种方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/unique-paths-ii/">63. 不同路径 II</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-longest-increasing-subsequence/">673. 最长递增子序列的个数</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-dice-rolls-with-target-sum/">1155. 掷骰子的N种方法</a></li>
 </ul>
 <h2 id="区间合并"><a href="#区间合并" class="headerlink" title="区间合并"></a>区间合并</h2><p>&#160; &#160; &#160; &#160; 这类问题的描述一般为给定一列数，求解过程中要考虑的是数列中的某个数以及其左侧的子列和右侧的子列分别能得出的某些结论。一般有如下解题思路</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> l = <span class="number">1</span>; l&lt;n; l++) &#123;</span><br><span class="line">   <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n-l; i++) &#123;</span><br><span class="line">       <span class="keyword">int</span> j = i+l;</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> k = i; k&lt;j; k++) &#123;</span><br><span class="line">           dp[i][j] = max(dp[i][j], dp[i][k] + result[k] + dp[k+<span class="number">1</span>][j]);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> dp[<span class="number">0</span>][n-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
 <h3 id="例题-1"><a href="#例题-1" class="headerlink" title="例题"></a>例题</h3><ul>
-<li><a href="https://leetcode-cn.com/problems/unique-binary-search-trees/" target="_blank" rel="noopener">96.不同的二叉搜索树</a></li>
-<li><a href="https://leetcode-cn.com/problems/guess-number-higher-or-lower-ii/" target="_blank" rel="noopener">375. 猜数字大小 II</a></li>
-<li><a href="https://leetcode-cn.com/problems/minimum-cost-tree-from-leaf-values/" target="_blank" rel="noopener">1130. 叶值的最小代价生成树</a></li>
-<li><a href="https://leetcode-cn.com/problems/minimum-cost-to-merge-stones/" target="_blank" rel="noopener">1000. 合并石头的最低成本</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/unique-binary-search-trees/">96.不同的二叉搜索树</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/guess-number-higher-or-lower-ii/">375. 猜数字大小 II</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-cost-tree-from-leaf-values/">1130. 叶值的最小代价生成树</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-cost-to-merge-stones/">1000. 合并石头的最低成本</a></li>
 </ul>
 <h2 id="字符串上的动态规划"><a href="#字符串上的动态规划" class="headerlink" title="字符串上的动态规划"></a>字符串上的动态规划</h2><p>&#160; &#160; &#160; &#160; 这一类题目一般都是给定两个字符串s1和s2，求一些值。一般来说要构建一个二维数组dp[][]，其中dp[i][j]表示在s1的第i个字符以及s2的第j个字符这样的状态的值。通常的解题过程为</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// i - indexing string s1</span></span><br><span class="line"><span class="comment">// j - indexing string s2</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">   <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; ++j) &#123;</span><br><span class="line">       <span class="keyword">if</span> (s1[i-<span class="number">1</span>] == s2[j-<span class="number">1</span>]) &#123;</span><br><span class="line">           dp[i][j] = <span class="comment">/*code*/</span>;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           dp[i][j] = <span class="comment">/*code*/</span>;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h3><blockquote>
-<p><a href="https://leetcode-cn.com/problems/longest-common-subsequence/" target="_blank" rel="noopener">1143. 最长公共子序列</a>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列。</p>
-<p>一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。<br>例如，”ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde” 的子序列。两个字符串的「公共子序列」是这两个字符串所共同拥有的子序列。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-common-subsequence/">1143. 最长公共子序列</a>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列。</p>
+<p>一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。<br>例如，”ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde” 的子序列。两个字符串的「公共子序列」是这两个字符串所共同拥有的子序列。</p>
 <p>若这两个字符串没有公共子序列，则返回 0。<br>示例：</p>
 <blockquote>
 <p> 输入：text1 = “abcde”, text2 = “ace”<br>输出：3<br>解释：最长公共子序列是 “ace”，它的长度为 3。</p>
@@ -318,18 +326,19 @@
 <li>状态转移方程：如果text1[i]==text2[j]，dp[i][j] = dp[i-1][j-1]+1，否则dp[i][j]=max(dp[i][j-1], dp[i-1][j]);</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(String text1, String text2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> l1 = text1.length(), l2 = text2.length();</span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[l1][l2];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (text1.charAt(<span class="number">0</span>) == text2.charAt(<span class="number">0</span>)) dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; l1; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (text1.charAt(i) == text2.charAt(<span class="number">0</span>)) &#123;</span><br><span class="line">            dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">            max = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            dp[i][<span class="number">0</span>] = dp[i-<span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; l2; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (text1.charAt(<span class="number">0</span>) == text2.charAt(i)) &#123;</span><br><span class="line">            dp[<span class="number">0</span>][i] = <span class="number">1</span>;</span><br><span class="line">            max = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; l1; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; l2; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (text1.charAt(i) == text2.charAt(j)) &#123;</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">                max = Math.max(max, dp[i][j]);</span><br><span class="line">            &#125; <span class="keyword">else</span> dp[i][j] = Math.max(dp[i][j-<span class="number">1</span>], dp[i-<span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="其他-2"><a href="#其他-2" class="headerlink" title="其他"></a>其他</h3><ul>
-<li><a href="https://leetcode-cn.com/problems/palindromic-substrings/" target="_blank" rel="noopener">647. 回文子串</a></li>
-<li><a href="https://leetcode-cn.com/problems/longest-palindromic-subsequence/" target="_blank" rel="noopener">516. 最长回文子序列</a></li>
-<li><a href="https://leetcode-cn.com/problems/edit-distance/" target="_blank" rel="noopener">72. 编辑距离</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/palindromic-substrings/">647. 回文子串</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-palindromic-subsequence/">516. 最长回文子序列</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/edit-distance/">72. 编辑距离</a></li>
 </ul>
 <h2 id="决策类问题"><a href="#决策类问题" class="headerlink" title="决策类问题"></a>决策类问题</h2><p>&#160; &#160; &#160; &#160;此模式的一般问题描述是针对给定情况决定是否使用当前状态。因此，问题需要您在当前状态下做出决定。一般的创建数组的思路是创建一个二维数组dp[n][k]，其中n为候选状态的数目，k为对状态能够采取的操作的数目。这样就可以保存对每一种状态采取所有不同措施的状态值。</p>
 <h3 id="例题-2"><a href="#例题-2" class="headerlink" title="例题"></a>例题</h3><ul>
-<li><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">121. 买卖股票的最佳时机</a></li>
-<li><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/" target="_blank" rel="noopener">714. 买卖股票的最佳时机含手续费</a></li>
-<li><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" rel="noopener">309. 最佳买卖股票时机含冷冻期</a></li>
-<li><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">123. 买卖股票的最佳时机 III</a></li>
-<li><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">188. 买卖股票的最佳时机 IV</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/">121. 买卖股票的最佳时机</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/">714. 买卖股票的最佳时机含手续费</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/">309. 最佳买卖股票时机含冷冻期</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/">123. 买卖股票的最佳时机 III</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/">188. 买卖股票的最佳时机 IV</a></li>
 </ul>
 
     </div>
@@ -353,7 +362,10 @@
     <a href="/3697256296/" rel="prev" title="算法笔记：动态规划（1）">
       <i class="fa fa-chevron-left"></i> 算法笔记：动态规划（1）
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/3742663798/" rel="next" title="CentOS7新系统安装以及用户管理">
+      CentOS7新系统安装以及用户管理 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -362,7 +374,6 @@
   
   
 
-  </div>
 
 
           </div>
@@ -414,7 +425,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题类型"><span class="nav-number">1.</span> <span class="nav-text">问题类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通向目标点的最小（最大）路径"><span class="nav-number">2.</span> <span class="nav-text">通向目标点的最小（最大）路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例题"><span class="nav-number">2.2.</span> <span class="nav-text">例题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最小路径和"><span class="nav-number">2.2.1.</span> <span class="nav-text">最小路径和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#零钱兑换"><span class="nav-number">2.2.2.</span> <span class="nav-text">零钱兑换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">2.2.3.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同方法数"><span class="nav-number">3.</span> <span class="nav-text">不同方法数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不同路径"><span class="nav-number">3.1.</span> <span class="nav-text">不同路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他-1"><span class="nav-number">3.2.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区间合并"><span class="nav-number">4.</span> <span class="nav-text">区间合并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例题-1"><span class="nav-number">4.1.</span> <span class="nav-text">例题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串上的动态规划"><span class="nav-number">5.</span> <span class="nav-text">字符串上的动态规划</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最长公共子序列"><span class="nav-number">5.1.</span> <span class="nav-text">最长公共子序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他-2"><span class="nav-number">5.2.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策类问题"><span class="nav-number">6.</span> <span class="nav-text">决策类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例题-2"><span class="nav-number">6.1.</span> <span class="nav-text">例题</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">问题类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E5%90%91%E7%9B%AE%E6%A0%87%E7%82%B9%E7%9A%84%E6%9C%80%E5%B0%8F%EF%BC%88%E6%9C%80%E5%A4%A7%EF%BC%89%E8%B7%AF%E5%BE%84"><span class="nav-number">2.</span> <span class="nav-text">通向目标点的最小（最大）路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">例题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C"><span class="nav-number">2.2.1.</span> <span class="nav-text">最小路径和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2"><span class="nav-number">2.2.2.</span> <span class="nav-text">零钱兑换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.2.3.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E6%96%B9%E6%B3%95%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">不同方法数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84"><span class="nav-number">3.1.</span> <span class="nav-text">不同路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-1"><span class="nav-number">3.2.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6"><span class="nav-number">4.</span> <span class="nav-text">区间合并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98-1"><span class="nav-number">4.1.</span> <span class="nav-text">例题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8A%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="nav-number">5.</span> <span class="nav-text">字符串上的动态规划</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97"><span class="nav-number">5.1.</span> <span class="nav-text">最长公共子序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-2"><span class="nav-number">5.2.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E7%B1%BB%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">决策类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98-2"><span class="nav-number">6.1.</span> <span class="nav-text">例题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -430,24 +441,24 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
       </span>
   </div>
 
@@ -467,19 +478,18 @@
       <div class="footer-inner">
         
 
+        
+
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -487,7 +497,7 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
+        <i class="user"></i>
       </span>
       <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
@@ -496,7 +506,7 @@
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
+        <i class="eye"></i>
       </span>
       <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.0">
+<meta name="generator" content="Hexo 5.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta property="og:type" content="website">
@@ -36,7 +36,8 @@
   CONFIG.page = {
     sidebar: "",
     isHome : true,
-    isPost : false
+    isPost : false,
+    lang   : 'zh-CN'
   };
 </script>
 
@@ -107,14 +108,12 @@
 
   <div class="site-meta">
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Tiezhu Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">Be perfect.</p>
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tiezhu Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Be perfect.</p>
   </div>
 
   <div class="site-nav-right">
@@ -124,27 +123,31 @@
 </div>
 
 
+
+
 <nav class="site-nav">
-  
-  <ul id="menu" class="menu">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
 
   </li>
   </ul>
-
 </nav>
+
+
+
+
 </div>
     </header>
 
@@ -160,14 +163,114 @@
         <div class="content-wrap">
           
 
-          <div class="content">
+          <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3742663798/">
 
-  <div class="posts-expand">
-        
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
+      <meta itemprop="name" content="我叫李铁柱">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiezhu Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/3742663798/" class="post-title-link" itemprop="url">CentOS7新系统安装以及用户管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-07 13:46:58" itemprop="dateCreated datePublished" datetime="2020-09-07T13:46:58+00:00">2020-09-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。</p>
+<h2 id="环境概览"><a href="#环境概览" class="headerlink" title="环境概览"></a>环境概览</h2><ul>
+<li>云服务：阿里云ECS，1核/2G/40G/1Mbps带宽</li>
+<li>操作系统：CentOS7.8 64位</li>
+<li>MySQL 5.6</li>
+<li>Nginx 1.18</li>
+<li>Tomcat 8.5</li>
+</ul>
+<h2 id="服务器重装系统"><a href="#服务器重装系统" class="headerlink" title="服务器重装系统"></a>服务器重装系统</h2><p>在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并且在安装新系统之前可以指定密钥，这样在新系统安装好以后就可以直接在有私钥的机器上以root用户登录了。</p>
+<h2 id="CentOS-7-用户管理"><a href="#CentOS-7-用户管理" class="headerlink" title="CentOS 7 用户管理"></a>CentOS 7 用户管理</h2><ul>
+<li>直接用root用户登录不太安全，还是要在重装系统后新建用户用于日常运维。</li>
+<li>以root登录后，新建一个用户：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adduser litiezhu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为新用户添加sudo权限：在/ect/sudoers中找到一行：</li>
+</ul>
+<img src="/3742663798/sudoers_raw.png" class="sudoers_raw" width="550" height="220">
+
+<p>在最后仿照上一行的格式为新用户配置sudo权限</p>
+<img src="/3742663798/sudoers_mod.png" class="sudoers_mod" width="552" height="235">
+
+<ul>
+<li>切换到新用户：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su litiezhu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>此时仍然无法直接从远程以新用户litiezhu的身份登录，因为还没有在服务器上的该用户下配置公钥匙。切换到litiezhu用户后，在其主目录（/home/litiezhu）下新建目录“.ssh”，在该目录下新建文件authorized_keys并把公钥的内容复制到这个文件里：</p>
+<img src="/3742663798/authorized_keys.png" class="authorized_keys" width="473" height="143">
+</li>
+<li><p>这时再试一下从以litiezhu的身份登录到服务器，登录失败，提示Permission denied (publickey,gssapi-keyex,gssapi-with-mic)：</p>
+</li>
+</ul>
+<img src="/3742663798/permission_denied.png" class="permission_denied" width="600" height="64">
+<ul>
+<li>应该是刚刚创建的.ssh目录的权限问题，再用root登录并改一下权限：</li>
+</ul>
+<img src="/3742663798/chmod.png" class="chmod" width="600" height="142">
+
+<ul>
+<li>尝试登录，成功：</li>
+</ul>
+<img src="/3742663798/login.png" class="login" width="600" height="110">
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3471444102/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -180,15 +283,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/3471444102/" class="post-title-link" itemprop="url">算法笔记：动态规划（2）</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -206,7 +309,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="问题类型"><a href="#问题类型" class="headerlink" title="问题类型"></a>问题类型</h2><p>&#160; &#160; &#160; &#160;在<a href="https://leetcode-cn.com/problemset/all/?topicSlugs=dynamic-programming" target="_blank" rel="noopener">LeetCode</a>上目前共有200道左右的动态规划相关的题，根据现有题目可以总结出一些题型，熟悉题型以及相关的描述能够帮助我们更准确地判断动态规划使用的场景。</p>
+          <h2 id="问题类型"><a href="#问题类型" class="headerlink" title="问题类型"></a>问题类型</h2><p>&#160; &#160; &#160; &#160;在<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problemset/all/?topicSlugs=dynamic-programming">LeetCode</a>上目前共有200道左右的动态规划相关的题，根据现有题目可以总结出一些题型，熟悉题型以及相关的描述能够帮助我们更准确地判断动态规划使用的场景。</p>
 <ul>
 <li>通向目标点的最小（最大）路径</li>
 <li>不同方法数</li>
@@ -236,10 +339,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3697256296/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -252,15 +355,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/3697256296/" class="post-title-link" itemprop="url">算法笔记：动态规划（1）</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -306,10 +409,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2158068979/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -322,15 +425,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2158068979/" class="post-title-link" itemprop="url">算法笔记：并查集（union-find算法）</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -381,10 +484,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2299005582/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -397,15 +500,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2299005582/" class="post-title-link" itemprop="url">Spring Bean的生命周期</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -446,10 +549,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2300181694/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -462,15 +565,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2300181694/" class="post-title-link" itemprop="url">Spring探秘2.1：容器启动中的refresh方法</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -511,10 +614,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1219753109/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -527,15 +630,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/1219753109/" class="post-title-link" itemprop="url">Spring探秘2：ApplicationContext启动流程</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -553,7 +656,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>&#160;&#160;&#160;&#160; <code>ApplicationContext</code>是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个<code>ApplicationContext</code>的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是<code>AnnotationConfigApplicationContext</code>，运行的代码为前文<a href="/2874440577/" title="Spring探秘0：源码构建">Spring探秘0：源码构建</a>中的测试代码，启动类的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context =</span><br><span class="line">                <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        DemoComponent component = context.getBean(DemoComponent<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        component.foo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+          <p>&#160;&#160;&#160;&#160; <code>ApplicationContext</code>是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个<code>ApplicationContext</code>的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是<code>AnnotationConfigApplicationContext</code>，运行的代码为前文<a href="/2874440577/" title="Spring探秘0：源码构建">Spring探秘0：源码构建</a>中的测试代码，启动类的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context =</span><br><span class="line">                <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">        DemoComponent component = context.getBean(DemoComponent.class);</span><br><span class="line">        component.foo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/1219753109/#more" rel="contents">
@@ -576,10 +680,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/1621531412/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -592,15 +696,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/1621531412/" class="post-title-link" itemprop="url">Spring探秘1：BeanFactory与FactoryBean</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -650,10 +754,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2874440577/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -666,15 +770,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2874440577/" class="post-title-link" itemprop="url">Spring探秘0：源码构建</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -722,10 +826,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/3906993302/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -738,15 +842,15 @@
       <meta itemprop="name" content="Tiezhu Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/3906993302/" class="post-title-link" itemprop="url">CS224N笔记-语言模型与循环神经网络</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
@@ -767,16 +871,11 @@
           <p>&#8195;&#8195;斯坦福深度自然语言处理课程CS224N Lecture 6课程笔记，Language Models and Recurrent Neural Networks.</p>
 <h2 id="语言模型，Language-Model"><a href="#语言模型，Language-Model" class="headerlink" title="语言模型，Language Model"></a>语言模型，Language Model</h2><p>&#8195;&#8195;<strong>语言模型</strong>是用来预测“下一个词”的模型。即给模型输入一个词语序列，输出应该是下一个词（的概率分布）。对这个问题进行形式化的描述如下：</p>
 <blockquote>
-<p>给定一个词语序列<script type="math/tex">x^{(1)}, x^{(2)},...,x^{(t)}</script>，计算下一个词<script type="math/tex">x^{(t+1)}</script>的概率分布：</p>
-<script type="math/tex; mode=display">
-P(x^{(t+1)}|x^{(t)},...,x^{(1)}) \tag{1}</script><p>其中<script type="math/tex">x^{(t+1)}</script>可以是词汇表 <script type="math/tex">V</script> 中的任意一个词。</p>
+<p>给定一个词语序列$$x^{(1)}, x^{(2)},…,x^{(t)}$$，计算下一个词$$x^{(t+1)}$$的概率分布：<br>$$<br>P(x^{(t+1)}|x^{(t)},…,x^{(1)}) \tag{1}<br>$$<br>其中$$x^{(t+1)}$$可以是词汇表 $$V$$ 中的任意一个词。</p>
 </blockquote>
-<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：<script type="math/tex">x^{(1)},...,x^{(T)}</script>，其出现的概率是：</p>
-<script type="math/tex; mode=display">
-\begin{align}
-P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^{(T)}|x^{(T-1)},...,x^{(1)}) \tag{2} \\
-&=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},...,x^{(1)}) \tag{3}
-\end{align}</script><p>(3)中的概率就是由语言模型给出的。</p>
+<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：$$x^{(1)},…,x^{(T)}$$，其出现的概率是：</p>
+<p>$$<br>\begin{align}<br>P(x^{(1)},…x^{(T)})&amp;=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times … \times P(x^{(T)}|x^{(T-1)},…,x^{(1)}) \tag{2} \<br>&amp;=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},…,x^{(1)}) \tag{3}<br>\end{align}<br>$$</p>
+<p>(3)中的概率就是由语言模型给出的。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/3906993302/#more" rel="contents">
@@ -799,73 +898,6 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.litiezhu.cn/2352984677/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://github.com/likaihz/tuchuang/raw/master/hailhydra.jpg">
-      <meta itemprop="name" content="我叫李铁柱">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiezhu Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2352984677/" class="post-title-link" itemprop="url">从信息熵到交叉熵</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-15 14:57:22" itemprop="dateCreated datePublished" datetime="2019-11-15T14:57:22+00:00">2019-11-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="信息熵，Information-entropy"><a href="#信息熵，Information-entropy" class="headerlink" title="信息熵，Information entropy"></a>信息熵，Information entropy</h2><p>熵的概念最早起源于物理学，用于度量一个热力学系统的无序程度。1948年，克劳德·爱尔伍德·香农将热力学中的熵引入信息论，所以信息熵也被称为香农熵 (Shannon entropy)，用来度量信息量的大小。</p>
-<h3 id="信息量"><a href="#信息量" class="headerlink" title="信息量"></a>信息量</h3><p>&#160; &#160; &#160; &#160;信息(Information)是一个很抽象的概念，其定义不统一，这里简单认为信息描述了一个或多个事件。那么不严谨地说，一条信息描述的事件越多么，其信息量越大；再进一步说，当信息描述的事件发生的可能性越小时，其信息量越大。这个原理比较复杂，不过可以从直觉上进行简单的解释，因为在一个事件系统中，当一个可能性很小的事件发生时，其一般都产生于多个前提条件，因此描述了该事件的信息也可以认为携带了其前提条件的信息，因此信息量较大。举例来说，在当前时空下，有两条信息分别描述了事件A：“中国队获得2022年世界杯冠军。”和事件B：“德国队获得2022年世界杯冠军。”，显然（？）事件A的可能性很小，那么这条信息就包含了中国队经过换教练、换主力队员，国内足球运动改革等等举措以及天大的运气最终获得冠军。而描述事件B的信息就简单的多，常规操作就可以。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2352984677/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-  </div>
 
   
   <nav class="pagination">
@@ -937,24 +969,24 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/likaihz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;likaihz" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+        <a href="mailto:likaihz@126.com" title="E-Mail → mailto:likaihz@126.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
       </span>
   </div>
 
@@ -974,19 +1006,18 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
       <div class="footer-inner">
         
 
+        
+
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">我叫李铁柱</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -994,7 +1025,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
+        <i class="user"></i>
       </span>
       <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
@@ -1003,7 +1034,7 @@ P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
+        <i class="eye"></i>
       </span>
       <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>

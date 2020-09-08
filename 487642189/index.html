@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog.litiezhu.cn/487642189/hashmap.png">
 <meta property="article:published_time" content="2019-07-06T00:00:00.000Z">
-<meta property="article:modified_time" content="2020-09-07T10:48:48.289Z">
+<meta property="article:modified_time" content="2020-09-08T15:23:11.796Z">
 <meta property="article:author" content="我叫李铁柱">
 <meta property="article:tag" content="源码">
 <meta property="article:tag" content="Java">
@@ -224,9 +224,7 @@
       
         <h2 id="基本数据模型"><a href="#基本数据模型" class="headerlink" title="基本数据模型"></a>基本数据模型</h2><p>&#160;&#160;&#160;&#160;在<code>HashMap</code>的实现中，最基本的数据模型有两个，分别是用来表示一个键值对的类<code>Node&lt;K, V&gt;</code>和用于保存所有键值对的数组<code>transient Node&lt;K,V&gt;[] table;</code>。<code>Node&lt;K, V&gt;</code>的部分定义如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// methods</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <a id="more"></a>
-
 <p>在向<code>HashMap</code>中添加键值对时，会先根据key的哈希值进行再一次的哈希运算，得到该键值对在<code>table</code>中的位置（源码中对<code>table</code>中的一个位置称为一个桶，bucket）。该过程不可避免地会产生哈希冲突，即出现计算出的位置上已经有其他键值对存在的情况。为了兼顾时间性能与空间性能，<code>HashMap</code>采用了以下两个主要的优化手段：</p>
 <ul>
 <li>适当的时机<strong>扩容</strong>以降低冲突：当向表中插入的键值对太多时，发生哈希冲突的概率会提高。因此在<code>HashMap</code>中的键值对数量超过阈值时进行扩容与重新哈希。</li>
@@ -234,10 +232,8 @@
 </ul>
 <p>&#160;&#160;&#160;&#160;综上，<code>HashMap</code>内部的结构如下：</p>
 <img src="/487642189/hashmap.png" class="" title="hashmap">
-
 <h2 id="哈希与扩容"><a href="#哈希与扩容" class="headerlink" title="哈希与扩容"></a>哈希与扩容</h2><h3 id="哈希值计算——为什么要右移16位？"><a href="#哈希值计算——为什么要右移16位？" class="headerlink" title="哈希值计算——为什么要右移16位？"></a>哈希值计算——为什么要右移16位？</h3><p>&#160;&#160;&#160;&#160;<code>HashMap</code>中会根据key对象的hashCode重新计算哈希值，计算哈希值的方法如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>从中可以得到以下两方面的信息：</p>
 <ul>
 <li><code>HashMap</code>是允许<code>null</code>作为key的，并且<code>null</code>的哈希为0</li>
@@ -250,7 +246,6 @@
 </blockquote>
 <p>&#160;&#160;&#160;&#160;扩容相关的方法<code>resize()</code>中的部分代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Node&lt;K,V&gt;[] resize() &#123;</span><br><span class="line">    Node&lt;K,V&gt;[] oldTab = table;</span><br><span class="line">    <span class="keyword">int</span> oldCap = (oldTab == <span class="keyword">null</span>) ? <span class="number">0</span> : oldTab.length;</span><br><span class="line">    <span class="keyword">int</span> oldThr = threshold;</span><br><span class="line">    <span class="keyword">int</span> newCap, newThr = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (oldCap &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (oldCap &gt;= MAXIMUM_CAPACITY) &#123;</span><br><span class="line">            threshold = Integer.MAX_VALUE;</span><br><span class="line">            <span class="keyword">return</span> oldTab;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((newCap = oldCap &lt;&lt; <span class="number">1</span>) &lt; MAXIMUM_CAPACITY &amp;&amp;</span><br><span class="line">                    oldCap &gt;= DEFAULT_INITIAL_CAPACITY)</span><br><span class="line">            newThr = oldThr &lt;&lt; <span class="number">1</span>; <span class="comment">// double threshold</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (oldThr &gt; <span class="number">0</span>) <span class="comment">// initial capacity was placed in threshold</span></span><br><span class="line">            newCap = oldThr;</span><br><span class="line">    <span class="keyword">else</span> &#123;               <span class="comment">// zero initial threshold signifies using defaults</span></span><br><span class="line">        newCap = DEFAULT_INITIAL_CAPACITY;</span><br><span class="line">        newThr = (<span class="keyword">int</span>)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newThr == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">float</span> ft = (<span class="keyword">float</span>)newCap * loadFactor;</span><br><span class="line">            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY ?</span><br><span class="line">                      (<span class="keyword">int</span>)ft : Integer.MAX_VALUE);</span><br><span class="line">        &#125;</span><br><span class="line">        threshold = newThr;</span><br><span class="line">        <span class="meta">@SuppressWarnings(&#123;&quot;rawtypes&quot;,&quot;unchecked&quot;&#125;)</span></span><br><span class="line">        Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])<span class="keyword">new</span> Node[newCap];</span><br><span class="line">        table = newTab;</span><br><span class="line">    <span class="comment">// something else...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>在构造<code>HashMap</code>时，<code>table</code>为<code>null</code>，只有在第一次向表中放入对象时才会触发<code>resize()</code>方法，构建一个容量为16（即代码中的<code>DEFAULT_INITIAL_CAPACITY</code>）的数组。</li>
 <li>每一次触发扩容时，都会将数组的大小扩充为原来的两倍。这就保证了数组的大小一定是2的次幂。</li>
@@ -263,6 +258,7 @@
 </blockquote>
 <h3 id="为什么不直接用红黑树？"><a href="#为什么不直接用红黑树？" class="headerlink" title="为什么不直接用红黑树？"></a>为什么不直接用红黑树？</h3><p>&#160;&#160;&#160;&#160;对于这一点，源码注释用也有提到，因为在用红黑树组织对象时，树的节点所用的类为<code>HashMap.TreeNode</code>，该类的大小几乎为其祖先类<code>HashMap.Node</code>的两倍，而在链表很小的时候，其实其查找性能的差异并不是特别大，因此这是一个空间换时间的决定。</p>
 <h3 id="为什么树化的默认阈值为8？"><a href="#为什么树化的默认阈值为8？" class="headerlink" title="为什么树化的默认阈值为8？"></a>为什么树化的默认阈值为8？</h3><p>&#160;&#160;&#160;&#160;源码的注释中有提到，假设hashCode真的分布很均匀，那么数组中每个位置出现的对象数符合泊松分布，在负载因子为0.75的前提下，分布为：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -270,7 +266,8 @@
 <th>概率</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>0</td>
 <td>0.60653066</td>
 </tr>
@@ -310,7 +307,9 @@
 <td>大于8</td>
 <td>小于一千万分之一</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>可见其实当阈值定为8时，需要树化的概率已经相当低了，大于8的概率更是低到可以忽略不及。因此阈值取8已经有很好的时间和空间性能了。</p>
 
     </div>

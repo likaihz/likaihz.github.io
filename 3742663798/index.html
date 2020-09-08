@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"blog.litiezhu.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。 环境概览 云服务：阿里云ECS，1核&#x2F;2G&#x2F;40G&#x2F;1Mbps带宽 操作系统：CentOS7.8 64位 MySQL 5.6 Nginx 1.18 Tomcat 8.5  服务器重装系统在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并">
+  <meta name="description" content="闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。 环境概览 云服务：阿里云ECS，1核&#x2F;2G&#x2F;40G&#x2F;1Mbps带宽 操作系统：CentOS7.8 64位 MySQL 5.6 Nginx 1.18 Tomcat 8.5">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS7新系统安装以及用户管理">
 <meta property="og:url" content="https://blog.litiezhu.cn/3742663798/index.html">
 <meta property="og:site_name" content="Tiezhu Blog">
-<meta property="og:description" content="闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。 环境概览 云服务：阿里云ECS，1核&#x2F;2G&#x2F;40G&#x2F;1Mbps带宽 操作系统：CentOS7.8 64位 MySQL 5.6 Nginx 1.18 Tomcat 8.5  服务器重装系统在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并">
+<meta property="og:description" content="闲来无事，想做个小项目玩玩，也可以趁此机会亲身体验开发的每一个环节。第一步就是搭建环境：一个应用服务器，用于部署后台代码。 环境概览 云服务：阿里云ECS，1核&#x2F;2G&#x2F;40G&#x2F;1Mbps带宽 操作系统：CentOS7.8 64位 MySQL 5.6 Nginx 1.18 Tomcat 8.5">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog.litiezhu.cn/3742663798/sudoers_raw.png">
 <meta property="og:image" content="https://blog.litiezhu.cn/3742663798/sudoers_mod.png">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://blog.litiezhu.cn/3742663798/chmod.png">
 <meta property="og:image" content="https://blog.litiezhu.cn/3742663798/login.png">
 <meta property="article:published_time" content="2020-09-07T13:46:58.000Z">
-<meta property="article:modified_time" content="2020-09-07T10:48:48.281Z">
+<meta property="article:modified_time" content="2020-09-08T15:23:11.792Z">
 <meta property="article:author" content="我叫李铁柱">
 <meta property="article:tag" content="运维">
 <meta property="article:tag" content="记录">
@@ -235,26 +235,23 @@
 <li>Nginx 1.18</li>
 <li>Tomcat 8.5</li>
 </ul>
+<a id="more"></a>
 <h2 id="服务器重装系统"><a href="#服务器重装系统" class="headerlink" title="服务器重装系统"></a>服务器重装系统</h2><p>在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并且在安装新系统之前可以指定密钥，这样在新系统安装好以后就可以直接在有私钥的机器上以root用户登录了。</p>
 <h2 id="CentOS-7-用户管理"><a href="#CentOS-7-用户管理" class="headerlink" title="CentOS 7 用户管理"></a>CentOS 7 用户管理</h2><ul>
 <li>直接用root用户登录不太安全，还是要在重装系统后新建用户用于日常运维。</li>
 <li>以root登录后，新建一个用户：</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adduser litiezhu</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>为新用户添加sudo权限：在/ect/sudoers中找到一行：</li>
 </ul>
 <img src="/3742663798/sudoers_raw.png" class="sudoers_raw" width="550" height="220">
-
 <p>在最后仿照上一行的格式为新用户配置sudo权限</p>
 <img src="/3742663798/sudoers_mod.png" class="sudoers_mod" width="552" height="235">
-
 <ul>
 <li>切换到新用户：</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su litiezhu</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>此时仍然无法直接从远程以新用户litiezhu的身份登录，因为还没有在服务器上的该用户下配置公钥匙。切换到litiezhu用户后，在其主目录（/home/litiezhu）下新建目录“.ssh”，在该目录下新建文件authorized_keys并把公钥的内容复制到这个文件里：</p>
 <img src="/3742663798/authorized_keys.png" class="authorized_keys" width="473" height="143">
@@ -267,11 +264,15 @@
 <li>应该是刚刚创建的.ssh目录的权限问题，再用root登录并改一下权限：</li>
 </ul>
 <img src="/3742663798/chmod.png" class="chmod" width="600" height="142">
-
 <ul>
 <li>尝试登录，成功：</li>
 </ul>
 <img src="/3742663798/login.png" class="login" width="600" height="110">
+<h2 id="远程登录到服务器"><a href="#远程登录到服务器" class="headerlink" title="远程登录到服务器"></a>远程登录到服务器</h2><p>远程登录到允许Linux系统的服务器上有两种认证方式：密码认证和密钥认证。密码认证不太安全（我也不知道为啥，但是人家都这么说，可能要本什么书来看看了），所以一般可以选择禁止一些用户以密码方式登录（比如root）。除此以外，登录到服务器有以下一些实践细节。</p>
+<ul>
+<li>登录命令： ssh &lt;用户名&gt;@&lt;服务器ip&gt;</li>
+<li>配置Host：为了不用记服务器的ip地址，可以在host文件中把为ip地址添加一个容易记的名字（如aliyun？），这样在登录的时候命令就可以简化为 ssh litiezhu@aliyun</li>
+</ul>
 
     </div>
 
@@ -354,7 +355,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E6%A6%82%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">环境概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">服务器重装系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-7-%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">CentOS 7 用户管理</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E6%A6%82%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">环境概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">服务器重装系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-7-%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">CentOS 7 用户管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">远程登录到服务器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

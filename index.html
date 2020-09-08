@@ -215,44 +215,14 @@
 <li>Nginx 1.18</li>
 <li>Tomcat 8.5</li>
 </ul>
-<h2 id="服务器重装系统"><a href="#服务器重装系统" class="headerlink" title="服务器重装系统"></a>服务器重装系统</h2><p>在阿里云控制台可以直接为服务器更换操作系统，阿里云提供各种Linux发行版可以直接安装，并且在安装新系统之前可以指定密钥，这样在新系统安装好以后就可以直接在有私钥的机器上以root用户登录了。</p>
-<h2 id="CentOS-7-用户管理"><a href="#CentOS-7-用户管理" class="headerlink" title="CentOS 7 用户管理"></a>CentOS 7 用户管理</h2><ul>
-<li>直接用root用户登录不太安全，还是要在重装系统后新建用户用于日常运维。</li>
-<li>以root登录后，新建一个用户：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adduser litiezhu</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>为新用户添加sudo权限：在/ect/sudoers中找到一行：</li>
-</ul>
-<img src="/3742663798/sudoers_raw.png" class="sudoers_raw" width="550" height="220">
-
-<p>在最后仿照上一行的格式为新用户配置sudo权限</p>
-<img src="/3742663798/sudoers_mod.png" class="sudoers_mod" width="552" height="235">
-
-<ul>
-<li>切换到新用户：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su litiezhu</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>此时仍然无法直接从远程以新用户litiezhu的身份登录，因为还没有在服务器上的该用户下配置公钥匙。切换到litiezhu用户后，在其主目录（/home/litiezhu）下新建目录“.ssh”，在该目录下新建文件authorized_keys并把公钥的内容复制到这个文件里：</p>
-<img src="/3742663798/authorized_keys.png" class="authorized_keys" width="473" height="143">
-</li>
-<li><p>这时再试一下从以litiezhu的身份登录到服务器，登录失败，提示Permission denied (publickey,gssapi-keyex,gssapi-with-mic)：</p>
-</li>
-</ul>
-<img src="/3742663798/permission_denied.png" class="permission_denied" width="600" height="64">
-<ul>
-<li>应该是刚刚创建的.ssh目录的权限问题，再用root登录并改一下权限：</li>
-</ul>
-<img src="/3742663798/chmod.png" class="chmod" width="600" height="142">
-
-<ul>
-<li>尝试登录，成功：</li>
-</ul>
-<img src="/3742663798/login.png" class="login" width="600" height="110">
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/3742663798/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -656,8 +626,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>&#160;&#160;&#160;&#160; <code>ApplicationContext</code>是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个<code>ApplicationContext</code>的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是<code>AnnotationConfigApplicationContext</code>，运行的代码为前文<a href="/2874440577/" title="Spring探秘0：源码构建">Spring探秘0：源码构建</a>中的测试代码，启动类的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context =</span><br><span class="line">                <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">        DemoComponent component = context.getBean(DemoComponent.class);</span><br><span class="line">        component.foo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>&#160;&#160;&#160;&#160; <code>ApplicationContext</code>是Spring框架中最基础的接口之一，可以认为其实现类就是一个Spring的环境（容器），而一个简单的Spring应用的启动过程就是一个<code>ApplicationContext</code>的实现类的实例化过程，是研究Spring源码的很好的切入点。这里研究的实现类是<code>AnnotationConfigApplicationContext</code>，运行的代码为前文<a href="/2874440577/" title="Spring探秘0：源码构建">Spring探秘0：源码构建</a>中的测试代码，启动类的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context =</span><br><span class="line">                <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">        DemoComponent component = context.getBean(DemoComponent.class);</span><br><span class="line">        component.foo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/1219753109/#more" rel="contents">
@@ -871,11 +840,16 @@
           <p>&#8195;&#8195;斯坦福深度自然语言处理课程CS224N Lecture 6课程笔记，Language Models and Recurrent Neural Networks.</p>
 <h2 id="语言模型，Language-Model"><a href="#语言模型，Language-Model" class="headerlink" title="语言模型，Language Model"></a>语言模型，Language Model</h2><p>&#8195;&#8195;<strong>语言模型</strong>是用来预测“下一个词”的模型。即给模型输入一个词语序列，输出应该是下一个词（的概率分布）。对这个问题进行形式化的描述如下：</p>
 <blockquote>
-<p>给定一个词语序列$$x^{(1)}, x^{(2)},…,x^{(t)}$$，计算下一个词$$x^{(t+1)}$$的概率分布：<br>$$<br>P(x^{(t+1)}|x^{(t)},…,x^{(1)}) \tag{1}<br>$$<br>其中$$x^{(t+1)}$$可以是词汇表 $$V$$ 中的任意一个词。</p>
+<p>给定一个词语序列<script type="math/tex">x^{(1)}, x^{(2)},...,x^{(t)}</script>，计算下一个词<script type="math/tex">x^{(t+1)}</script>的概率分布：</p>
+<script type="math/tex; mode=display">
+P(x^{(t+1)}|x^{(t)},...,x^{(1)}) \tag{1}</script><p>其中<script type="math/tex">x^{(t+1)}</script>可以是词汇表 <script type="math/tex">V</script> 中的任意一个词。</p>
 </blockquote>
-<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：$$x^{(1)},…,x^{(T)}$$，其出现的概率是：</p>
-<p>$$<br>\begin{align}<br>P(x^{(1)},…x^{(T)})&amp;=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times … \times P(x^{(T)}|x^{(T-1)},…,x^{(1)}) \tag{2} \<br>&amp;=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},…,x^{(1)}) \tag{3}<br>\end{align}<br>$$</p>
-<p>(3)中的概率就是由语言模型给出的。</p>
+<p>&#8195;&#8195;也可以从另一个角度看待语言模型，将其看作是计算“一条文本”出现的概率。（一条文本指的就是一串词语）。即对于一条文本：<script type="math/tex">x^{(1)},...,x^{(T)}</script>，其出现的概率是：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+P(x^{(1)},...x^{(T)})&=P(x^{(1)})\times P(x^{(2)}|x^{(1)})\times ... \times P(x^{(T)}|x^{(T-1)},...,x^{(1)}) \tag{2} \\
+&=\prod_{t=1}^{T}P(x^{(t)}|x^{(t-1)},...,x^{(1)}) \tag{3}
+\end{align}</script><p>(3)中的概率就是由语言模型给出的。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/3906993302/#more" rel="contents">

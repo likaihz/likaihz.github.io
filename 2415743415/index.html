@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog.litiezhu.cn/2415743415/jvm-runtimedata.png">
 <meta property="article:published_time" content="2019-08-15T00:00:00.000Z">
-<meta property="article:modified_time" content="2020-09-07T10:48:48.297Z">
+<meta property="article:modified_time" content="2020-09-08T15:23:11.804Z">
 <meta property="article:author" content="我叫李铁柱">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -223,9 +223,7 @@
       
         <h2 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h2><p>&#160; &#160; &#160; &#160;在Java程序运行时，Java虚拟机将其管理的内存划分为不同的运行时数据区域：</p>
 <img src="/2415743415/jvm-runtimedata.png" class="" title="jvm-runtimedata">
-
 <a id="more"></a>
-
 <h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>&#160; &#160; &#160; &#160;如果对计算机组成有所了解的话，应该很容易理解程序计数器(PC)，可以认为其中的数据就是下一条指令的地址（字节码行号），在当前指令执行完毕后，JVM会根据PC中的数据找到下一条指令。除此以外，在当前线程被中断后恢复时，JVM也要根据PC中的值恢复现场。该内存区域并没有规定任何OOM的情况。</p>
 <h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p>&#160; &#160; &#160; &#160;在一个线程中，每当开始执行一个普通的Java方法时，虚拟机会为该线程创建一个<strong>栈帧（Stack Frame）</strong>，并将其放入该线程所属的虚拟机栈中。当该方法执行完成后，对应的栈帧就会出栈。<br>&#160; &#160; &#160; &#160;栈帧中保存了方法的局部变量表、操作数栈、动态连接、方法出口等信息。</p>
 <ul>
@@ -246,7 +244,8 @@
 <p>&#160; &#160; &#160; &#160;其中，类型信息包含：类的元信息（类的完整名称，修饰符，父类，接口等），类型的常量池，字段信息，方法信息，类变量，指向加载器的引用，指向Class实例的引用等。</p>
 <p>&#160; &#160; &#160; &#160;如果方法区无法满足新的内存分配需求时，将抛出OutOfMemoryError异常。</p>
 <h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>&#160; &#160; &#160; &#160;运行时常量池是方法区的一部分，用于存放编译时期产生的各种字面量（常量）与符号引用。这些常量在编译时期由编译器生成在Class文件中的常量池表中，JVM在运行时将其复制到运行时常量池中。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>数据区域</th>
@@ -256,35 +255,38 @@
 <th>异常状况</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>程序计数器</td>
 <td>下一条指令“地址”</td>
 <td>线程生成/线程销毁</td>
 <td>不可扩展</td>
-<td>无</td>
+<td>无 </td>
 </tr>
 <tr>
 <td>虚拟机栈</td>
 <td>栈帧</td>
 <td>线程生成/线程销毁</td>
 <td>允许扩展</td>
-<td>StackOverflowError, OutOfMemoryError</td>
+<td>StackOverflowError, OutOfMemoryError </td>
 </tr>
 <tr>
 <td>Java堆</td>
 <td>对象实例</td>
 <td>虚拟机启动/虚拟机关闭</td>
 <td>允许扩展</td>
-<td>OutOfMemoryError</td>
+<td>OutOfMemoryError </td>
 </tr>
 <tr>
 <td>方法区（包括运行时常量池）</td>
 <td>已加载的类信息，静态变量等（常量保存在运行时常量池中）</td>
 <td>虚拟机启动/虚拟机关闭</td>
 <td>允许扩展</td>
-<td>OutOfMemoryError</td>
+<td>OutOfMemoryError </td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 
     </div>
 
